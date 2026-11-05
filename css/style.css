@@ -855,11 +855,20 @@ button {
   width: 30px;
   height: 30px;
   color: var(--color-black);
-  transition: color var(--dur-hover) var(--ease-figma), opacity var(--dur-hover) var(--ease-figma);
+  transition: color var(--dur-hover) var(--ease-figma), opacity var(--dur-hover) var(--ease-figma), scale 0.15s var(--ease-soft);
 }
 
-.reviews__arrow:hover {
-  color: var(--color-sand);
+/* Hover colour only for a real mouse: on phones a tap leaves :hover "stuck",
+   and the sand colour made an active arrow look disabled */
+@media (hover: hover) {
+  .reviews__arrow:hover:not(:disabled) {
+    color: var(--color-sand);
+  }
+}
+
+/* Touch feedback: a short press-in instead of the hover colour */
+.reviews__arrow:active:not(:disabled) {
+  scale: 0.9;
 }
 
 .reviews__arrow:disabled {
