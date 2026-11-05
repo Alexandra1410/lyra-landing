@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.otf" as="font" type="font/otf" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=30">
+  <link rel="stylesheet" href="css/style.css?v=32">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -360,12 +360,11 @@
               </div>
               <label class="visually-hidden" for="request-comment">Комментарий</label>
               <textarea class="field field--muted" id="request-comment" name="comment" rows="1" placeholder="комментарий"></textarea>
-              <!-- TODO: заменить href="#" на страницы оферты и политики конфиденциальности -->
               <div class="form__consents">
                 <label class="check">
                   <input class="check__input" type="checkbox" name="consent_personal_data" value="yes" required>
                   <span class="check__box" aria-hidden="true"></span>
-                  <span class="check__text">Принимаю <a href="#" target="_blank" rel="noopener">условия оферты</a> и даю согласие на обработку персональных данных по <a href="#" target="_blank" rel="noopener">политике конфиденциальности</a></span>
+                  <span class="check__text">Принимаю <a href="oferta.html" target="_blank" rel="noopener">условия оферты</a> и даю <a href="personal-data.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a> по <a href="privacy.html" target="_blank" rel="noopener">политике конфиденциальности</a></span>
                 </label>
                 <label class="check">
                   <input class="check__input" type="checkbox" name="consent_marketing" value="yes">
@@ -405,7 +404,14 @@
               <label class="footer__subscribe-text" for="subscribe-email">Подпишитесь на нашу рассылку и узнавайте первыми об акциях и скидках</label>
               <input class="field" id="subscribe-email" name="email" type="email" autocomplete="email" placeholder="ваш email" required>
             </form>
-            <p class="footer__tagline">LYRA |  Интерьеры, которые вдохновляют</p>
+            <div class="footer__bottom">
+              <p class="footer__tagline">LYRA |  Интерьеры, которые вдохновляют</p>
+              <nav class="footer__legal" aria-label="Документы">
+                <a href="privacy.html">Политика конфиденциальности</a>
+                <a href="personal-data.html">Персональные данные</a>
+                <a href="oferta.html">Публичная оферта</a>
+              </nav>
+            </div>
           </div>
         </div>
 
@@ -422,6 +428,7 @@
   </div>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=8" defer></script>
+  <script src="js/main.js?v=9" defer></script>
+  <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

@@ -9,6 +9,7 @@
       wheelMultiplier: 0.9,
       anchors: { duration: 1.2 }
     });
+    window.lyraLenis = lenis;
     if (document.documentElement.classList.contains('is-loading')) lenis.stop(); // no scrolling under the preloader
   }
   var burger = document.querySelector('[data-menu-toggle]');
@@ -175,6 +176,16 @@
       }
       phone.setSelectionRange(pos, pos);
       phone.setCustomValidity('');
+    });
+    // Letters and symbols are refused before they even reach the field (digits only)
+    phone.addEventListener('beforeinput', function (e) {
+      // a chunk with no digits at all is refused; a mixed one goes through and the mask keeps only its digits
+      if ((e.inputType === 'insertText' || e.inputType === 'insertCompositionText') && e.data && !/\d/.test(e.data)) {
+        e.preventDefault();
+      }
+    });
+    phone.addEventListener('keypress', function (e) {
+      if (e.key.length === 1 && /\D/.test(e.key) && !e.ctrlKey && !e.metaKey) e.preventDefault();
     });
     phone.addEventListener('focus', function () {
       if (!phone.value) phone.value = PREFIX;
