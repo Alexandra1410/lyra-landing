@@ -1,4 +1,16 @@
 (function () {
+  // Smooth page scrolling (Lenis): soft, inertial wheel scroll and smooth jumps to #anchors.
+  // Off for people who asked the system to reduce motion — they get the normal scroll.
+  var lenis = null;
+  if (window.Lenis && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    lenis = new window.Lenis({
+      autoRaf: true,
+      lerp: 0.09,       // lower = softer, longer glide
+      wheelMultiplier: 0.9,
+      anchors: { duration: 1.2 }
+    });
+    if (document.documentElement.classList.contains('is-loading')) lenis.stop(); // no scrolling under the preloader
+  }
   var burger = document.querySelector('[data-menu-toggle]');
   var nav = document.getElementById('site-nav');
   var closeBtn = document.querySelector('[data-menu-close]');
@@ -9,6 +21,7 @@
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
     document.body.classList.toggle('is-locked', open);
+    if (lenis) { if (open) lenis.stop(); else lenis.start(); }
     if (open) closeBtn.focus();
   }
 
@@ -70,6 +83,7 @@
         scrollAnim = null;
         track.style.scrollBehavior = '';
         updateArrows();
+        activateVisibleReview();
       }
     }
     scrollAnim = requestAnimationFrame(step);
@@ -79,6 +93,41 @@
     prevBtn.disabled = track.scrollLeft <= 0;
     nextBtn.disabled = track.scrollLeft >= max;
   }
+  // Touch screens have no hover: one review at a time is "open" (.is-active) —
+  // the first on load, then the one an arrow or a swipe brings into view, or the one tapped
+  var reviewItems = track.querySelectorAll('.review');
+  var touchMq = window.matchMedia('(hover: none)');
+  function setActiveReview(item) {
+    reviewItems.forEach(function (r) { r.classList.toggle('is-active', touchMq.matches && r === item); });
+  }
+  function visibleReview() {
+    var max = track.scrollWidth - track.clientWidth;
+    if (track.scrollLeft >= max - 2) return reviewItems[reviewItems.length - 1]; // at the end: the last one
+    var anchor = track.getBoundingClientRect().left + (parseFloat(getComputedStyle(track).paddingLeft) || 0);
+    var best = reviewItems[0];
+    var bestDist = Infinity;
+    reviewItems.forEach(function (r) {
+      var d = Math.abs(r.getBoundingClientRect().left - anchor);
+      if (d < bestDist) { bestDist = d; best = r; }
+    });
+    return best;
+  }
+  function activateVisibleReview() {
+    if (touchMq.matches) setActiveReview(visibleReview());
+  }
+  reviewItems.forEach(function (r) {
+    r.addEventListener('click', function () { if (touchMq.matches) setActiveReview(r); });
+  });
+  // after a finger swipe settles
+  var swipeTimer = null;
+  track.addEventListener('scroll', function () {
+    if (scrollAnim) return; // arrow animation handles it itself
+    clearTimeout(swipeTimer);
+    swipeTimer = setTimeout(activateVisibleReview, 150);
+  }, { passive: true });
+  touchMq.addEventListener('change', function () { setActiveReview(touchMq.matches ? visibleReview() : null); });
+  setActiveReview(reviewItems[0]);
+
   prevBtn.addEventListener('click', function () { scrollReviews(-1); });
   nextBtn.addEventListener('click', function () { scrollReviews(1); });
   track.addEventListener('scroll', updateArrows, { passive: true });
@@ -116,6 +165,7 @@
     var wait = Math.max(0, 600 - (Date.now() - preloaderShownAt));
     setTimeout(function () {
       document.documentElement.classList.remove('is-loading');
+      if (lenis) lenis.start();
       if (!preloader) { playHero(); return; }
       preloader.classList.add('is-hidden');
       playHero();

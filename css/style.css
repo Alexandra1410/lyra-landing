@@ -416,8 +416,10 @@ button {
   position: absolute;
   top: 140px;
   left: 50%;
-  width: 420px;
-  height: 520px;
+  /* 420×520 by design; on narrow tablets it shrinks to fit its half with 20px each side */
+  width: min(420px, calc(100% - 40px));
+  height: auto;
+  aspect-ratio: 420 / 520;
   transform: translateX(-50%);
 }
 
@@ -922,8 +924,11 @@ button {
   --review-card-x: -56px;
 }
 
-/* Hover (Figma variant "pressed"): the card fades in, 300ms */
-.review:hover,
+/* Open state (Figma variant "pressed"): colour photo + text card, 300ms.
+   Mouse: on hover. Touch screens (no hover): JS marks one review .is-active —
+   the first one on load, the one that slides into view after an arrow/swipe, or the one tapped.
+   :hover is limited to real mouse devices, otherwise a tap would leave a second card "stuck" open. */
+.review.is-active,
 .review:focus-within {
   z-index: 2;
   transition-delay: 0s;
@@ -944,7 +949,7 @@ button {
   transition: opacity 0.3s var(--ease-out) 0.08s;
 }
 
-.review:hover .review__photo--sketch,
+.review.is-active .review__photo--sketch,
 .review:focus-within .review__photo--sketch {
   opacity: 0;
   transition: opacity var(--dur-hover) var(--ease-figma) 0s;
@@ -972,7 +977,7 @@ button {
   transition: opacity var(--review-out) var(--ease-out), visibility 0s var(--review-out);
 }
 
-.review:hover .review__card,
+.review.is-active .review__card,
 .review:focus-within .review__card {
   opacity: 1;
   visibility: visible;
@@ -980,33 +985,21 @@ button {
   transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
 }
 
-/* Touch screens have no hover: keep the first card open until another review is tapped */
-@media (hover: none) {
-  /* the card shown by default must sit above the next circle, like a hovered one */
-  .review--1 {
+@media (hover: hover) {
+  .review:hover {
     z-index: 2;
+    transition-delay: 0s;
   }
 
-  .reviews__track:has(.review:hover) .review--1:not(:hover) {
-    z-index: 1;
+  .review:hover .review__photo--sketch {
+    opacity: 0;
+    transition: opacity var(--dur-hover) var(--ease-figma) 0s;
   }
 
-  .review--1 .review__card {
+  .review:hover .review__card {
     opacity: 1;
     visibility: visible;
-  }
-
-  .review--1 .review__photo--sketch {
-    opacity: 0;
-  }
-
-  .reviews__track:has(.review:hover) .review--1:not(:hover) .review__photo--sketch {
-    opacity: 1;
-  }
-
-  .reviews__track:has(.review:hover) .review--1:not(:hover) .review__card {
-    opacity: 0;
-    visibility: hidden;
+    transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
   }
 }
 
@@ -1638,10 +1631,10 @@ textarea.field {
     height: 396px;
   }
 
+  /* full-size arch, centred: it bleeds past both screen edges equally on any phone */
   .hero__arch {
     top: 108px;
-    left: -21px;
-    transform: none;
+    width: 420px;
   }
 
   .hero__title {
@@ -2176,5 +2169,30 @@ textarea.field {
 
   .preloader__bar::after {
     transform: none;
+  }
+}
+
+/* ---------- Smooth scroll (Lenis) ---------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Without Lenis (reduced motion / no JS) anchor jumps are still smooth, unless motion is reduced */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.lenis) {
+    scroll-behavior: smooth;
   }
 }
