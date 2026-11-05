@@ -6,12 +6,10 @@
   <title>LYRA — Интерьеры, которые вдохновляют</title>
   <meta name="description" content="Дизайн-студия LYRA: уникальные интерьеры, отражающие ваш характер и образ жизни. Более 10 лет опыта и десятки реализованных проектов.">
   <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.otf" as="font" type="font/otf" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=35">
+  <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css?v=37">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -402,7 +400,12 @@
           <div class="footer__aside">
             <form class="footer__subscribe" action="#" method="post">
               <label class="footer__subscribe-text" for="subscribe-email">Подпишитесь на нашу рассылку и узнавайте первыми об акциях и скидках</label>
-              <input class="field" id="subscribe-email" name="email" type="email" autocomplete="email" placeholder="ваш email" required>
+              <div class="footer__subscribe-field">
+                <input class="field" id="subscribe-email" name="email" type="email" autocomplete="email" placeholder="ваш email" required>
+                <button class="footer__subscribe-submit" type="submit" aria-label="Подписаться">
+                  <span class="footer__subscribe-arrow" aria-hidden="true"></span>
+                </button>
+              </div>
             </form>
             <div class="footer__bottom">
               <p class="footer__tagline">LYRA |  Интерьеры, которые вдохновляют</p>
