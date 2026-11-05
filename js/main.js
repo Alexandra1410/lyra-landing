@@ -136,6 +136,69 @@
 
   /* Motion from the Figma prototype (Smart Animate, cubic-bezier(0.7, 0, 0.42, 1)) */
 
+  // Phone mask: +7-(999)-999-99-99
+  var phone = document.querySelector('[data-phone-mask]');
+  if (phone) {
+    var PREFIX = '+7-(';
+    var digitsOf = function (value) {
+      var raw = value.replace(/^\+7/, '');
+      var d = raw.replace(/\D/g, '');
+      // pasted "8 999 ..." or "7 999 ..." without +7: drop the country digit
+      if (raw === value && d.length === 11 && /^[78]/.test(d)) d = d.slice(1);
+      return d.slice(0, 10);
+    };
+    var formatPhone = function (d) {
+      var s = PREFIX + d.slice(0, 3);
+      if (d.length >= 3) s += ')';
+      if (d.length > 3) s += '-' + d.slice(3, 6);
+      if (d.length > 6) s += '-' + d.slice(6, 8);
+      if (d.length > 8) s += '-' + d.slice(8, 10);
+      return s;
+    };
+    var lastDigits = '';
+    phone.addEventListener('input', function (e) {
+      var caret = phone.selectionStart;
+      var before = phone.value.slice(0, caret);
+      var d = digitsOf(phone.value);
+      var digitsBeforeCaret = digitsOf(before).length;
+      // Backspace over ")" or "-" removes the digit before it, not just the symbol
+      if (e.inputType === 'deleteContentBackward' && d === lastDigits && digitsBeforeCaret > 0) {
+        d = d.slice(0, digitsBeforeCaret - 1) + d.slice(digitsBeforeCaret);
+        digitsBeforeCaret -= 1;
+      }
+      phone.value = formatPhone(d);
+      lastDigits = d;
+      // put the caret back right after the same digit
+      var pos = PREFIX.length;
+      for (var seen = 0; pos < phone.value.length && seen < digitsBeforeCaret; pos++) {
+        if (/\d/.test(phone.value[pos])) seen++;
+      }
+      phone.setSelectionRange(pos, pos);
+      phone.setCustomValidity('');
+    });
+    phone.addEventListener('focus', function () {
+      if (!phone.value) phone.value = PREFIX;
+      requestAnimationFrame(function () { phone.setSelectionRange(phone.value.length, phone.value.length); });
+    });
+    phone.addEventListener('blur', function () {
+      if (!digitsOf(phone.value)) { phone.value = ''; lastDigits = ''; }
+    });
+    phone.addEventListener('invalid', function () {
+      phone.setCustomValidity(phone.validity.valueMissing ? 'Введите номер телефона' : 'Введите номер полностью: +7-(999)-999-99-99');
+    });
+  }
+
+  // Consent checkbox: clear message, and highlight it once a send was attempted
+  var requestForm = document.getElementById('request-form');
+  if (requestForm) {
+    var consent = requestForm.querySelector('[name="consent_personal_data"]');
+    consent.addEventListener('invalid', function () {
+      consent.setCustomValidity('Чтобы отправить заявку, нужно согласие на обработку персональных данных');
+      requestForm.classList.add('is-submitted');
+    });
+    consent.addEventListener('change', function () { consent.setCustomValidity(''); });
+  }
+
   // Hero intro: "After delay 10ms" → 2000ms. Starts when the preloader goes away
   var hero = document.querySelector('.hero');
   function playHero() {

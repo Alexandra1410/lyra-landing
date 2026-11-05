@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.otf" as="font" type="font/otf" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=29">
+  <link rel="stylesheet" href="css/style.css?v=30">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -356,10 +356,23 @@
                 <label class="visually-hidden" for="request-name">Ваше имя</label>
                 <input class="field" id="request-name" name="name" type="text" autocomplete="name" placeholder="ваше имя" required>
                 <label class="visually-hidden" for="request-phone">Номер телефона</label>
-                <input class="field" id="request-phone" name="phone" type="tel" autocomplete="tel" placeholder="номер телефона" required>
+                <input class="field" id="request-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="номер телефона" pattern="\+7-\(\d{3}\)-\d{3}-\d{2}-\d{2}" maxlength="18" required data-phone-mask>
               </div>
               <label class="visually-hidden" for="request-comment">Комментарий</label>
               <textarea class="field field--muted" id="request-comment" name="comment" rows="1" placeholder="комментарий"></textarea>
+              <!-- TODO: заменить href="#" на страницы оферты и политики конфиденциальности -->
+              <div class="form__consents">
+                <label class="check">
+                  <input class="check__input" type="checkbox" name="consent_personal_data" value="yes" required>
+                  <span class="check__box" aria-hidden="true"></span>
+                  <span class="check__text">Принимаю <a href="#" target="_blank" rel="noopener">условия оферты</a> и даю согласие на обработку персональных данных по <a href="#" target="_blank" rel="noopener">политике конфиденциальности</a></span>
+                </label>
+                <label class="check">
+                  <input class="check__input" type="checkbox" name="consent_marketing" value="yes">
+                  <span class="check__box" aria-hidden="true"></span>
+                  <span class="check__text">Хочу получать полезные материалы, новости и рекламные рассылки</span>
+                </label>
+              </div>
             </form>
           </div>
           <button class="button button--dark" type="submit" form="request-form">
@@ -409,6 +422,6 @@
   </div>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=7" defer></script>
+  <script src="js/main.js?v=8" defer></script>
 </body>
 </html>

@@ -1228,6 +1228,94 @@ textarea.field {
   height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 2px);
 }
 
+/* Consent checkboxes under the form */
+.form__consents {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+  margin-top: calc(var(--s-28) - var(--s-64)); /* closer to the fields than the form's 64px gap */
+}
+
+.check {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-12);
+  font-size: var(--fs-small);
+  line-height: 1.4;
+  color: var(--color-black);
+  cursor: pointer;
+}
+
+/* the real checkbox stays in the page for keyboards and screen readers, drawn by .check__box */
+.check__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.check__box {
+  position: relative;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-black);
+  transition: background-color 0.2s var(--ease-soft), border-color 0.2s var(--ease-soft);
+}
+
+/* tick */
+.check__box::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 11px;
+  border: solid var(--color-white);
+  border-width: 0 2px 2px 0;
+  rotate: 45deg;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-soft);
+}
+
+.check__input:checked + .check__box {
+  background: var(--color-black);
+}
+
+.check__input:checked + .check__box::after {
+  opacity: 1;
+}
+
+.check__input:focus-visible + .check__box {
+  outline: 2px solid var(--color-brown);
+  outline-offset: 2px;
+}
+
+/* the required box turns red if someone tries to send without it */
+.form.is-submitted .check__input:invalid + .check__box {
+  border-color: #b3261e;
+}
+
+.check__text {
+  padding-top: 2px; /* first line centred against the 20px box */
+}
+
+.check__text a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .check__text a:hover {
+    color: var(--color-brown);
+  }
+}
+
 /* ---------- Section 8: Footer ---------- */
 .footer {
   margin-top: var(--s-128);
