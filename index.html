@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=38">
+  <link rel="stylesheet" href="css/style.css?v=39">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -361,15 +361,30 @@
                     <span class="phone-field__code" aria-hidden="true" data-phone-code>+7</span>
                     <span class="phone-field__chevron" aria-hidden="true"></span>
                     <select class="phone-field__select" name="phone_country" aria-label="Код страны" data-phone-country>
-                      <option value="ru" data-flag="🇷🇺" data-code="7" data-mask="(999)-999-99-99" selected>Россия +7</option>
-                      <option value="kz" data-flag="🇰🇿" data-code="7" data-mask="(999)-999-99-99">Казахстан +7</option>
-                      <option value="by" data-flag="🇧🇾" data-code="375" data-mask="(99)-999-99-99">Беларусь +375</option>
-                      <option value="uz" data-flag="🇺🇿" data-code="998" data-mask="(99)-999-99-99">Узбекистан +998</option>
-                      <option value="kg" data-flag="🇰🇬" data-code="996" data-mask="(999)-99-99-99">Кыргызстан +996</option>
-                      <option value="tj" data-flag="🇹🇯" data-code="992" data-mask="(99)-999-99-99">Таджикистан +992</option>
-                      <option value="am" data-flag="🇦🇲" data-code="374" data-mask="(99)-99-99-99">Армения +374</option>
-                      <option value="az" data-flag="🇦🇿" data-code="994" data-mask="(99)-999-99-99">Азербайджан +994</option>
-                      <option value="ge" data-flag="🇬🇪" data-code="995" data-mask="(999)-99-99-99">Грузия +995</option>
+                      <option value="ru" data-flag="🇷🇺" data-code="7" data-mask="(999)-999-99-99" selected>🇷🇺 Россия +7</option>
+                      <option value="kz" data-flag="🇰🇿" data-code="7" data-mask="(999)-999-99-99">🇰🇿 Казахстан +7</option>
+                      <option value="by" data-flag="🇧🇾" data-code="375" data-mask="(99)-999-99-99">🇧🇾 Беларусь +375</option>
+                      <option value="ua" data-flag="🇺🇦" data-code="380" data-mask="(99)-999-99-99">🇺🇦 Украина +380</option>
+                      <option value="uz" data-flag="🇺🇿" data-code="998" data-mask="(99)-999-99-99">🇺🇿 Узбекистан +998</option>
+                      <option value="kg" data-flag="🇰🇬" data-code="996" data-mask="(999)-99-99-99">🇰🇬 Кыргызстан +996</option>
+                      <option value="tj" data-flag="🇹🇯" data-code="992" data-mask="(99)-999-99-99">🇹🇯 Таджикистан +992</option>
+                      <option value="am" data-flag="🇦🇲" data-code="374" data-mask="(99)-99-99-99">🇦🇲 Армения +374</option>
+                      <option value="az" data-flag="🇦🇿" data-code="994" data-mask="(99)-999-99-99">🇦🇿 Азербайджан +994</option>
+                      <option value="ge" data-flag="🇬🇪" data-code="995" data-mask="(999)-99-99-99">🇬🇪 Грузия +995</option>
+                      <option value="md" data-flag="🇲🇩" data-code="373" data-mask="(99)-999-999">🇲🇩 Молдова +373</option>
+                      <option value="tm" data-flag="🇹🇲" data-code="993" data-mask="(99)-99-99-99">🇹🇲 Туркменистан +993</option>
+                      <option value="de" data-flag="🇩🇪" data-code="49" data-mask="(999)-9999-9999" data-min="10">🇩🇪 Германия +49</option>
+                      <option value="il" data-flag="🇮🇱" data-code="972" data-mask="(99)-999-9999">🇮🇱 Израиль +972</option>
+                      <option value="tr" data-flag="🇹🇷" data-code="90" data-mask="(999)-999-99-99">🇹🇷 Турция +90</option>
+                      <option value="pl" data-flag="🇵🇱" data-code="48" data-mask="999-999-999">🇵🇱 Польша +48</option>
+                      <option value="us" data-flag="🇺🇸" data-code="1" data-mask="(999)-999-9999">🇺🇸 США и Канада +1</option>
+                      <option value="ae" data-flag="🇦🇪" data-code="971" data-mask="(99)-999-9999">🇦🇪 ОАЭ +971</option>
+                      <option value="th" data-flag="🇹🇭" data-code="66" data-mask="(99)-999-9999">🇹🇭 Таиланд +66</option>
+                      <option value="vn" data-flag="🇻🇳" data-code="84" data-mask="(99)-999-99-99">🇻🇳 Вьетнам +84</option>
+                      <option value="rs" data-flag="🇷🇸" data-code="381" data-mask="(99)-999-9999" data-min="8">🇷🇸 Сербия +381</option>
+                      <option value="me" data-flag="🇲🇪" data-code="382" data-mask="(99)-999-999">🇲🇪 Черногория +382</option>
+                      <option value="cy" data-flag="🇨🇾" data-code="357" data-mask="99-999999">🇨🇾 Кипр +357</option>
+                      <option value="other" data-flag="🌐" data-code="" data-mask="999999999999999" data-min="7">Другая страна</option>
                     </select>
                   </label>
                   <span class="phone-field__divider" aria-hidden="true"></span>
@@ -453,7 +468,7 @@
   </div>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=12" defer></script>
+  <script src="js/main.js?v=13" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

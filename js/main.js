@@ -152,17 +152,17 @@
     var flagEl = phoneWrap.querySelector('[data-phone-flag]');
     var codeEl = phoneWrap.querySelector('[data-phone-code]');
     var full = phoneWrap.querySelector('[data-phone-full]');
-    var mask, code, maxDigits;
+    var mask, code, maxDigits, minDigits;
 
     var applyCountry = function () {
       var opt = country.options[country.selectedIndex];
       mask = opt.dataset.mask;
       code = opt.dataset.code;
       maxDigits = (mask.match(/9/g) || []).length;
+      minDigits = Number(opt.dataset.min) || maxDigits; // a few countries have numbers of different length
       flagEl.textContent = opt.dataset.flag;
-      codeEl.textContent = '+' + code;
-      // "(999)-999-99-99" → /^\(\d{3}\)-\d{3}-\d{2}-\d{2}$/
-      phone.pattern = mask.replace(/[()]/g, '\\$&').replace(/9+/g, function (m) { return '\\d{' + m.length + '}'; });
+      codeEl.textContent = '+' + code; // "Другая страна": just "+", the whole number is typed in the field
+      phone.placeholder = code ? 'номер телефона' : 'код страны и номер';
       phone.maxLength = mask.length;
     };
 
@@ -170,7 +170,7 @@
       var d = value.replace(/\D/g, '');
       if (pasted && d.length > maxDigits) {
         // pasted with the country code (+7…, 375…) or a Russian/Kazakh leading 8
-        if (d.indexOf(code) === 0 && d.length - code.length === maxDigits) d = d.slice(code.length);
+        if (code && d.indexOf(code) === 0 && d.length - code.length <= maxDigits) d = d.slice(code.length);
         else if (code === '7' && d.length === 11 && d[0] === '8') d = d.slice(1);
       }
       return d.slice(0, maxDigits);
@@ -187,7 +187,11 @@
     };
 
     var syncFull = function () {
-      full.value = phone.value ? '+' + code + '-' + phone.value : '';
+      if (!phone.value) full.value = '';
+      else full.value = code ? '+' + code + '-' + phone.value : '+' + phone.value;
+      // complete number? (checked here instead of a pattern: some countries allow a range of lengths)
+      var n = phone.value.replace(/\D/g, '').length;
+      phone.setCustomValidity(n && n < minDigits ? 'short' : '');
     };
 
     var lastDigits = '';
@@ -209,7 +213,6 @@
         if (/\d/.test(phone.value[pos])) seen++;
       }
       phone.setSelectionRange(pos, pos);
-      phone.setCustomValidity('');
       syncFull();
     });
 
@@ -233,9 +236,12 @@
     });
 
     phone.addEventListener('invalid', function () {
-      phone.setCustomValidity(phone.validity.valueMissing
-        ? 'Введите номер телефона'
-        : 'Введите номер полностью: +' + code + '-' + mask);
+      if (phone.validity.valueMissing) phone.setCustomValidity('Введите номер телефона');
+      else if (phone.validity.customError) {
+        phone.setCustomValidity(code
+          ? 'Введите номер полностью: +' + code + '-' + mask
+          : 'Введите номер полностью, вместе с кодом страны');
+      }
     });
 
     applyCountry();
