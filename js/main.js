@@ -143,49 +143,78 @@
 
   /* Motion from the Figma prototype (Smart Animate, cubic-bezier(0.7, 0, 0.42, 1)) */
 
-  // Phone mask: +7-(999)-999-99-99
-  var phone = document.querySelector('[data-phone-mask]');
-  if (phone) {
-    var PREFIX = '+7-(';
-    var digitsOf = function (value) {
-      var raw = value.replace(/^\+7/, '');
-      var d = raw.replace(/\D/g, '');
-      // pasted "8 999 ..." or "7 999 ..." without +7: drop the country digit
-      if (raw === value && d.length === 11 && /^[78]/.test(d)) d = d.slice(1);
-      return d.slice(0, 10);
+  // Phone: country picker + mask. Visible field holds only the local part, e.g. (999)-999-99-99;
+  // the hidden "phone" field gets the full number: +7-(999)-999-99-99
+  var phoneWrap = document.querySelector('[data-phone]');
+  if (phoneWrap) {
+    var phone = phoneWrap.querySelector('[data-phone-mask]');
+    var country = phoneWrap.querySelector('[data-phone-country]');
+    var flagEl = phoneWrap.querySelector('[data-phone-flag]');
+    var codeEl = phoneWrap.querySelector('[data-phone-code]');
+    var full = phoneWrap.querySelector('[data-phone-full]');
+    var mask, code, maxDigits;
+
+    var applyCountry = function () {
+      var opt = country.options[country.selectedIndex];
+      mask = opt.dataset.mask;
+      code = opt.dataset.code;
+      maxDigits = (mask.match(/9/g) || []).length;
+      flagEl.textContent = opt.dataset.flag;
+      codeEl.textContent = '+' + code;
+      // "(999)-999-99-99" → /^\(\d{3}\)-\d{3}-\d{2}-\d{2}$/
+      phone.pattern = mask.replace(/[()]/g, '\\$&').replace(/9+/g, function (m) { return '\\d{' + m.length + '}'; });
+      phone.maxLength = mask.length;
     };
+
+    var digitsOf = function (value, pasted) {
+      var d = value.replace(/\D/g, '');
+      if (pasted && d.length > maxDigits) {
+        // pasted with the country code (+7…, 375…) or a Russian/Kazakh leading 8
+        if (d.indexOf(code) === 0 && d.length - code.length === maxDigits) d = d.slice(code.length);
+        else if (code === '7' && d.length === 11 && d[0] === '8') d = d.slice(1);
+      }
+      return d.slice(0, maxDigits);
+    };
+
+    // fill the mask; a symbol is written only when a digit follows it, so Backspace always removes digits
     var formatPhone = function (d) {
-      var s = PREFIX + d.slice(0, 3);
-      if (d.length >= 3) s += ')';
-      if (d.length > 3) s += '-' + d.slice(3, 6);
-      if (d.length > 6) s += '-' + d.slice(6, 8);
-      if (d.length > 8) s += '-' + d.slice(8, 10);
-      return s;
+      var out = '';
+      var i = 0;
+      for (var k = 0; k < mask.length && i < d.length; k++) {
+        out += mask[k] === '9' ? d[i++] : mask[k];
+      }
+      return out;
     };
+
+    var syncFull = function () {
+      full.value = phone.value ? '+' + code + '-' + phone.value : '';
+    };
+
     var lastDigits = '';
     phone.addEventListener('input', function (e) {
       var caret = phone.selectionStart;
-      var before = phone.value.slice(0, caret);
-      var d = digitsOf(phone.value);
-      var digitsBeforeCaret = digitsOf(before).length;
-      // Backspace over ")" or "-" removes the digit before it, not just the symbol
+      var pasted = e.inputType === 'insertFromPaste' || e.inputType === 'insertReplacementText' || !e.inputType;
+      var d = digitsOf(phone.value, pasted);
+      var digitsBeforeCaret = Math.min(digitsOf(phone.value.slice(0, caret)).length, d.length);
+      // Backspace right after ")" or "-" removes the digit before it, not just the symbol
       if (e.inputType === 'deleteContentBackward' && d === lastDigits && digitsBeforeCaret > 0) {
         d = d.slice(0, digitsBeforeCaret - 1) + d.slice(digitsBeforeCaret);
         digitsBeforeCaret -= 1;
       }
+      if (pasted) digitsBeforeCaret = d.length;
       phone.value = formatPhone(d);
       lastDigits = d;
-      // put the caret back right after the same digit
-      var pos = PREFIX.length;
+      var pos = 0;
       for (var seen = 0; pos < phone.value.length && seen < digitsBeforeCaret; pos++) {
         if (/\d/.test(phone.value[pos])) seen++;
       }
       phone.setSelectionRange(pos, pos);
       phone.setCustomValidity('');
+      syncFull();
     });
-    // Letters and symbols are refused before they even reach the field (digits only)
+
+    // Letters and symbols are refused before they reach the field (digits only)
     phone.addEventListener('beforeinput', function (e) {
-      // a chunk with no digits at all is refused; a mixed one goes through and the mask keeps only its digits
       if ((e.inputType === 'insertText' || e.inputType === 'insertCompositionText') && e.data && !/\d/.test(e.data)) {
         e.preventDefault();
       }
@@ -193,16 +222,23 @@
     phone.addEventListener('keypress', function (e) {
       if (e.key.length === 1 && /\D/.test(e.key) && !e.ctrlKey && !e.metaKey) e.preventDefault();
     });
-    phone.addEventListener('focus', function () {
-      if (!phone.value) phone.value = PREFIX;
-      requestAnimationFrame(function () { phone.setSelectionRange(phone.value.length, phone.value.length); });
+
+    country.addEventListener('change', function () {
+      applyCountry();
+      var d = digitsOf(phone.value);
+      phone.value = formatPhone(d);
+      lastDigits = d;
+      syncFull();
+      phone.focus();
     });
-    phone.addEventListener('blur', function () {
-      if (!digitsOf(phone.value)) { phone.value = ''; lastDigits = ''; }
-    });
+
     phone.addEventListener('invalid', function () {
-      phone.setCustomValidity(phone.validity.valueMissing ? 'Введите номер телефона' : 'Введите номер полностью: +7-(999)-999-99-99');
+      phone.setCustomValidity(phone.validity.valueMissing
+        ? 'Введите номер телефона'
+        : 'Введите номер полностью: +' + code + '-' + mask);
     });
+
+    applyCountry();
   }
 
   // Consent checkbox: clear message, and highlight it once a send was attempted

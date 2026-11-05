@@ -1271,6 +1271,96 @@ textarea.field {
   height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 2px);
 }
 
+/* Phone: [flag +7 ⌄ | number]. The underline lives on the wrapper, like on the other fields */
+.phone-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--color-black);
+  font-weight: 500;
+  font-size: var(--fs-field);
+  line-height: var(--lh-base);
+  color: var(--color-black);
+  transition: border-color var(--dur-hover) var(--ease-soft);
+}
+
+.phone-field:focus-within {
+  border-bottom-color: var(--color-brown);
+}
+
+.phone-field__country {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-8);
+  flex-shrink: 0;
+  padding: var(--s-16) 0;
+  cursor: pointer;
+}
+
+.phone-field__flag {
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+/* thin chevron in the line weight of the site arrows */
+.phone-field__chevron {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 2px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  rotate: 45deg;
+  transition: rotate var(--dur-hover) var(--ease-soft);
+}
+
+/* the real <select> covers the visual part: native list on phones, keyboard works */
+.phone-field__select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  font-size: 16px; /* no zoom-in on iOS */
+  cursor: pointer;
+}
+
+.phone-field__country:focus-within .phone-field__code {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .phone-field__country:hover .phone-field__chevron {
+    rotate: 225deg;
+    margin-top: 4px;
+  }
+}
+
+.phone-field__divider {
+  flex-shrink: 0;
+  width: 1px;
+  height: 1.2em;
+  margin: 0 var(--s-16);
+  background: var(--color-black-20);
+}
+
+.phone-field__input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--s-16) 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+
+.phone-field__input::placeholder {
+  color: var(--color-black);
+  text-transform: uppercase;
+  opacity: 1;
+}
+
 /* Consent checkboxes under the form */
 .form__consents {
   display: flex;
@@ -2201,7 +2291,8 @@ textarea.field {
   }
 
   /* Figma has 2px everywhere; next to mobile-sized text it reads too heavy */
-  .field {
+  .field,
+  .phone-field {
     border-bottom-width: 1px;
   }
 

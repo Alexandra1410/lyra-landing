@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=37">
+  <link rel="stylesheet" href="css/style.css?v=38">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -353,8 +353,30 @@
               <div class="form__group">
                 <label class="visually-hidden" for="request-name">Ваше имя</label>
                 <input class="field" id="request-name" name="name" type="text" autocomplete="name" placeholder="ваше имя" required>
-                <label class="visually-hidden" for="request-phone">Номер телефона</label>
-                <input class="field" id="request-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="номер телефона" pattern="\+7-\(\d{3}\)-\d{3}-\d{2}-\d{2}" maxlength="18" required data-phone-mask>
+                <!-- Phone: country code picker (native select under the visual, so phones show their own list) + number with a mask.
+                     The full number in the +7-(999)-999-99-99 format goes to the hidden "phone" field -->
+                <div class="phone-field" data-phone>
+                  <label class="phone-field__country">
+                    <span class="phone-field__flag" aria-hidden="true" data-phone-flag>🇷🇺</span>
+                    <span class="phone-field__code" aria-hidden="true" data-phone-code>+7</span>
+                    <span class="phone-field__chevron" aria-hidden="true"></span>
+                    <select class="phone-field__select" name="phone_country" aria-label="Код страны" data-phone-country>
+                      <option value="ru" data-flag="🇷🇺" data-code="7" data-mask="(999)-999-99-99" selected>Россия +7</option>
+                      <option value="kz" data-flag="🇰🇿" data-code="7" data-mask="(999)-999-99-99">Казахстан +7</option>
+                      <option value="by" data-flag="🇧🇾" data-code="375" data-mask="(99)-999-99-99">Беларусь +375</option>
+                      <option value="uz" data-flag="🇺🇿" data-code="998" data-mask="(99)-999-99-99">Узбекистан +998</option>
+                      <option value="kg" data-flag="🇰🇬" data-code="996" data-mask="(999)-99-99-99">Кыргызстан +996</option>
+                      <option value="tj" data-flag="🇹🇯" data-code="992" data-mask="(99)-999-99-99">Таджикистан +992</option>
+                      <option value="am" data-flag="🇦🇲" data-code="374" data-mask="(99)-99-99-99">Армения +374</option>
+                      <option value="az" data-flag="🇦🇿" data-code="994" data-mask="(99)-999-99-99">Азербайджан +994</option>
+                      <option value="ge" data-flag="🇬🇪" data-code="995" data-mask="(999)-99-99-99">Грузия +995</option>
+                    </select>
+                  </label>
+                  <span class="phone-field__divider" aria-hidden="true"></span>
+                  <label class="visually-hidden" for="request-phone">Номер телефона</label>
+                  <input class="phone-field__input" id="request-phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="номер телефона" required data-phone-mask>
+                  <input type="hidden" name="phone" data-phone-full>
+                </div>
               </div>
               <label class="visually-hidden" for="request-comment">Комментарий</label>
               <textarea class="field field--muted" id="request-comment" name="comment" rows="1" placeholder="комментарий"></textarea>
@@ -431,7 +453,7 @@
   </div>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=11" defer></script>
+  <script src="js/main.js?v=12" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>
