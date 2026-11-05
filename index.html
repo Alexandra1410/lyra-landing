@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LYRA — Интерьеры, которые вдохновляют</title>
+  <meta name="description" content="Дизайн-студия LYRA: уникальные интерьеры, отражающие ваш характер и образ жизни. Более 10 лет опыта и десятки реализованных проектов.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <div class="page">
+    <main class="main">
+
+      <!-- Section 1: Hero -->
+      <section class="hero" aria-labelledby="hero-title">
+        <header class="header">
+          <a class="logo u-trim" href="#" aria-label="LYRA — на главную">LYRA</a>
+
+          <button class="header__burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню" data-menu-toggle>
+            <img src="icons/burger.svg" width="30" height="9" alt="">
+          </button>
+
+          <nav class="nav" id="site-nav" aria-label="Основная навигация">
+            <div class="nav__top">
+              <a class="logo logo--brown u-trim" href="#" aria-label="LYRA — на главную">LYRA</a>
+              <button class="nav__close" type="button" aria-label="Закрыть меню" data-menu-close>
+                <img src="icons/close.svg" width="18" height="17" alt="">
+              </button>
+            </div>
+            <div class="nav__body">
+              <ul class="nav__list">
+                <li><a class="nav__link u-trim" href="#cases">Кейсы</a></li>
+                <li><a class="nav__link u-trim" href="#reviews">Отзывы</a></li>
+                <li><a class="nav__link u-trim" href="#why">Гарантия</a></li>
+                <li><a class="nav__link u-trim" href="#contacts">Контакты</a></li>
+              </ul>
+              <a class="nav__cta link-arrow" href="#request">
+                <span class="u-trim">Оставить заявку</span>
+                <span class="link-arrow__icon" aria-hidden="true"></span>
+              </a>
+            </div>
+          </nav>
+        </header>
+
+        <div class="hero__photo">
+          <img class="hero__photo-img" src="images/hero.png" alt="Светлая кухня-гостиная с панорамным остеклением, деревянными табуретами и видом на сад">
+        </div>
+        <div class="hero__panel">
+          <img class="hero__arch" src="images/hero-arch.png" width="420" height="520" alt="Обеденная зона с деревянным столом, стульями и живыми растениями">
+        </div>
+
+        <h1 class="hero__title title-xl u-trim" id="hero-title">
+          Интерьеры,<br>
+          <span class="hero__title-indent">которые</span><br>
+          вдохновляют
+        </h1>
+
+        <p class="hero__text">
+          Мы создаем уникальные пространства, отражающие ваш характер и образ жизни.<br class="u-br-mobile"> Более 10 лет опыта<br class="u-br-desktop"> и десятки<br class="u-br-mobile"> реализованных проектов.
+        </p>
+
+        <a class="hero__button button button--light" href="#request">
+          <span class="u-trim">Получить консультацию</span>
+          <span class="button__icon" aria-hidden="true"></span>
+        </a>
+      </section>
+
+      <!-- Section 2: Why us -->
+      <section class="why" id="why" aria-labelledby="why-title">
+        <p class="why__label label label--muted u-trim">Преимущества</p>
+        <h2 class="why__title title-xl u-trim" id="why-title">Почему мы?</h2>
+
+        <ul class="why__grid">
+          <li class="why__image-item">
+            <img class="why__image" src="images/why.png" alt="Гостиная в тёплых тонах с диваном, стеллажами и мягким светом">
+          </li>
+          <li class="advantage advantage--1 advantage--first">
+            <div class="advantage__content">
+              <div class="advantage__head">
+                <h3 class="advantage__title u-trim">Индивидуальный<br>подход</h3>
+                <span class="advantage__num u-trim">01</span>
+              </div>
+              <p class="advantage__text">Каждый проект — отражение<br>вашей личности и стиля</p>
+            </div>
+          </li>
+          <li class="advantage advantage--2">
+            <div class="advantage__content">
+              <div class="advantage__head">
+                <h3 class="advantage__title u-trim">Современные<br>решения</h3>
+                <span class="advantage__num u-trim">02</span>
+              </div>
+              <p class="advantage__text">Используем актуальные тренды и проверенные технологии</p>
+            </div>
+          </li>
+          <li class="advantage advantage--3">
+            <div class="advantage__content">
+              <div class="advantage__head">
+                <h3 class="advantage__title u-trim">Полное<br>сопровождение</h3>
+                <span class="advantage__num u-trim">03</span>
+              </div>
+              <p class="advantage__text">От идеи до готового интерьера — мы рядом на каждом этапе</p>
+            </div>
+          </li>
+          <li class="advantage advantage--4">
+            <div class="advantage__content">
+              <div class="advantage__head">
+                <h3 class="advantage__title u-trim">Гарантия<br>прозрачности</h3>
+                <span class="advantage__num u-trim">04</span>
+              </div>
+              <p class="advantage__text">Четкие сметы и договор без скрытых расходов</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section 3: Benefits -->
+      <section class="benefits" aria-labelledby="benefits-title" data-benefits>
+        <img class="benefits__photo" src="images/benefits.png" alt="Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном">
+        <div class="benefits__panel">
+          <div class="benefits__inner">
+            <div class="benefits__thumbs">
+              <img class="benefits__thumb" src="images/thumb-1.png" alt="Лофт с высокими потолками и открытой кухней">
+              <img class="benefits__thumb" src="images/thumb-2.png" alt="Светлая спальня с текстильным изголовьем">
+              <img class="benefits__thumb" src="images/thumb-3.png" alt="Кухня с деревянными панелями и барной стойкой">
+              <img class="benefits__thumb" src="images/thumb-4.png" alt="Обеденная зона с подвесными светильниками">
+            </div>
+            <div class="benefits__text">
+              <p class="label label--sand u-trim">Что вы получите<br>с нами</p>
+              <div class="benefits__content">
+                <h2 class="benefits__title title-l u-trim" id="benefits-title">Не просто дизайн,<br>а атмосферу,<br>в которой хочется жить</h2>
+                <ol class="pager" aria-label="Слайды">
+                  <li><button class="pager__item pager__item--active" aria-current="true" type="button" aria-label="Слайд 1" data-slide="0"><span class="u-trim">01</span></button></li>
+                  <li><button class="pager__item" type="button" aria-label="Слайд 2" data-slide="1"><span class="u-trim">02</span></button></li>
+                  <li><button class="pager__item" type="button" aria-label="Слайд 3" data-slide="2"><span class="u-trim">03</span></button></li>
+                  <li><button class="pager__item" type="button" aria-label="Слайд 4" data-slide="3"><span class="u-trim">04</span></button></li>
+                  <li><button class="pager__item" type="button" aria-label="Слайд 5" data-slide="4"><span class="u-trim">05</span></button></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Cases -->
+      <section class="cases" id="cases" aria-labelledby="cases-title">
+        <div class="cases__head">
+          <h2 class="cases__title title-xl" id="cases-title">
+            <span class="u-trim">кейсы</span>
+            <span class="cases__count u-trim" aria-label="53 проекта">53</span>
+          </h2>
+          <a class="cases__all link-arrow" href="#cases">
+            <span class="u-trim">смотреть все</span>
+            <span class="link-arrow__icon" aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div class="cases__grid">
+          <article class="case case--1">
+            <p class="case__num">01</p>
+            <div class="case__media"><img class="case__img" src="images/thumb-1.png" alt="Минималистичный лофт с открытой кухней и высокими потолками"></div>
+            <h3 class="case__caption">Минималистичный лофт в центре москвы</h3>
+          </article>
+          <article class="case case--2">
+            <p class="case__num">02</p>
+            <div class="case__media"><img class="case__img" src="images/case-2.png" alt="Скандинавская квартира со светлой мебелью и деревянным полом"></div>
+            <h3 class="case__caption">Уютная скандинавская квартира<br>для молодой семьи</h3>
+          </article>
+          <article class="case case--3">
+            <p class="case__num">03</p>
+            <div class="case__media"><img class="case__img" src="images/case-3.png" alt="Малогабаритная студия с продуманной системой хранения"></div>
+            <h3 class="case__caption">Функциональная малогабаритная студия</h3>
+          </article>
+          <article class="case case--4">
+            <p class="case__num">04</p>
+            <div class="case__media"><img class="case__img" src="images/case-4.png" alt="Интерьер в стиле современной классики с лепниной"></div>
+            <h3 class="case__caption">Современная классика в сталинской высотке</h3>
+          </article>
+          <article class="case case--5">
+            <p class="case__num">05</p>
+            <div class="case__media"><img class="case__img" src="images/case-5.png" alt="Пентхаус в стиле арт-деко с панорамными окнами"></div>
+            <h3 class="case__caption">Арт-деко пентхаус<br class="u-br-mobile"> с панорамными видами</h3>
+          </article>
+          <article class="case case--6">
+            <p class="case__num">06</p>
+            <div class="case__media"><img class="case__img" src="images/case-6.png" alt="Эко-лофт с деревом, камнем и живыми растениями"></div>
+            <h3 class="case__caption">Эко-лофт<br class="u-br-mobile"> с натуральными материалами</h3>
+          </article>
+          <article class="case case--7">
+            <p class="case__num">07</p>
+            <div class="case__media"><img class="case__img" src="images/case-7.png" alt="Двухуровневый таунхаус с лестницей и светлой гостиной"></div>
+            <h3 class="case__caption">Семейное таунхаусное гнездо за городом</h3>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 5: Reviews -->
+      <section class="reviews" id="reviews" aria-labelledby="reviews-title">
+        <div class="reviews__head">
+          <h2 class="title-xl u-trim" id="reviews-title">отзывы</h2>
+          <div class="reviews__controls">
+            <button class="reviews__arrow reviews__arrow--prev" type="button" aria-label="Предыдущий отзыв" aria-controls="reviews-track" data-reviews-prev>
+              <span class="reviews__arrow-icon" aria-hidden="true"></span>
+            </button>
+            <button class="reviews__arrow" type="button" aria-label="Следующий отзыв" aria-controls="reviews-track" data-reviews-next>
+              <span class="reviews__arrow-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+        <ul class="reviews__track" id="reviews-track">
+          <li class="review review--1">
+            <img class="review__photo" src="images/review-1.png" alt="Екатерина Иванова, клиентка студии">
+            <!-- Карандашный портрет из Figma (вариант default); при наведении сменяется цветным фото -->
+            <img class="review__photo review__photo--sketch" src="images/review-1-sketch.png" alt="" aria-hidden="true" onerror="this.remove()">
+            <blockquote class="review__card">
+              <div class="review__body">
+                <div class="review__text">
+                  <footer class="review__author">
+                    <cite class="review__name">Екатерина Иванова</cite>
+                    <span class="review__city">г. Москва</span>
+                  </footer>
+                  <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
+                </div>
+                <a class="review__link link-arrow" href="#cases">
+                  <span class="u-trim">открыть проект</span>
+                  <span class="link-arrow__icon" aria-hidden="true"></span>
+                </a>
+              </div>
+            </blockquote>
+          </li>
+          <li class="review review--2">
+            <img class="review__photo" src="images/review-2.png" alt="Портрет клиентки студии, карандашный рисунок">
+            <!-- TODO: в Figma у всех трёх отзывов один и тот же текст (Екатерина) — заменить на реальный -->
+            <blockquote class="review__card">
+              <div class="review__body">
+                <div class="review__text">
+                  <footer class="review__author">
+                    <cite class="review__name">Екатерина Иванова</cite>
+                    <span class="review__city">г. Москва</span>
+                  </footer>
+                  <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
+                </div>
+                <a class="review__link link-arrow" href="#cases">
+                  <span class="u-trim">открыть проект</span>
+                  <span class="link-arrow__icon" aria-hidden="true"></span>
+                </a>
+              </div>
+            </blockquote>
+          </li>
+          <li class="review review--3">
+            <img class="review__photo" src="images/review-3.png" alt="Портрет клиента студии, карандашный рисунок">
+            <!-- TODO: в Figma у всех трёх отзывов один и тот же текст (Екатерина) — заменить на реальный -->
+            <blockquote class="review__card">
+              <div class="review__body">
+                <div class="review__text">
+                  <footer class="review__author">
+                    <cite class="review__name">Екатерина Иванова</cite>
+                    <span class="review__city">г. Москва</span>
+                  </footer>
+                  <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
+                </div>
+                <a class="review__link link-arrow" href="#cases">
+                  <span class="u-trim">открыть проект</span>
+                  <span class="link-arrow__icon" aria-hidden="true"></span>
+                </a>
+              </div>
+            </blockquote>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section 6: CTA -->
+      <section class="cta" aria-labelledby="cta-title">
+        <div class="cta__content">
+          <p class="cta__label label label--sand u-trim">первый шаг</p>
+          <h2 class="cta__heading" id="cta-title">
+            <span class="cta__word cta__word--1 title-xl u-trim">Готовы</span>
+            <span class="cta__word cta__word--2 title-xl u-trim">к изменениям?</span>
+            <span class="cta__word cta__word--3 title-xl u-trim">Сделайте первый</span>
+            <span class="cta__word cta__word--4 title-xl u-trim">шаг к дому<br class="u-br-mobile"> мечты</span>
+          </h2>
+          <span class="cta__line" aria-hidden="true"></span>
+        </div>
+        <img class="cta__ellipse cta__ellipse--left" src="icons/cta-ellipse.svg" alt="">
+        <img class="cta__ellipse cta__ellipse--right" src="icons/cta-ellipse.svg" alt="">
+        <a class="cta__link link-arrow" href="#request">
+          <span class="u-trim">начать проект</span>
+          <span class="link-arrow__icon" aria-hidden="true"></span>
+        </a>
+      </section>
+
+      <!-- Section 7: Request -->
+      <section class="request" id="request" aria-labelledby="request-title">
+        <div class="request__media">
+          <img class="request__img" src="images/request.png" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
+        </div>
+        <div class="request__panel">
+          <p class="label label--muted u-trim">заявка</p>
+          <div class="request__main">
+            <h2 class="title-l u-trim" id="request-title">оставьте заявку</h2>
+            <form class="form" id="request-form" action="#" method="post">
+              <div class="form__group">
+                <label class="visually-hidden" for="request-name">Ваше имя</label>
+                <input class="field" id="request-name" name="name" type="text" autocomplete="name" placeholder="ваше имя" required>
+                <label class="visually-hidden" for="request-phone">Номер телефона</label>
+                <input class="field" id="request-phone" name="phone" type="tel" autocomplete="tel" placeholder="номер телефона" required>
+              </div>
+              <label class="visually-hidden" for="request-comment">Комментарий</label>
+              <textarea class="field field--muted" id="request-comment" name="comment" rows="1" placeholder="комментарий"></textarea>
+            </form>
+          </div>
+          <button class="button button--dark" type="submit" form="request-form">
+            <span class="u-trim">отправить заявку</span>
+            <span class="button__icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Section 8: Footer -->
+    <footer class="footer" id="contacts">
+      <div class="footer__main">
+        <div class="footer__inner">
+          <div class="footer__contacts">
+            <address class="footer__contact-list">
+              <p class="u-trim">+7 (XXX) XXX-XX-XX</p>
+              <a class="u-trim" href="mailto:info@designstudio.ru">info@designstudio.ru</a>
+            </address>
+            <a class="footer__social" href="#" aria-label="Telegram">
+              <img src="icons/social-1.svg" alt="">
+            </a>
+            <a class="footer__social" href="#" aria-label="Instagram">
+              <img src="icons/social-2.svg" alt="">
+            </a>
+          </div>
+
+          <div class="footer__aside">
+            <form class="footer__subscribe" action="#" method="post">
+              <label class="footer__subscribe-text" for="subscribe-email">Подпишитесь на нашу рассылку и узнавайте первыми об акциях и скидках</label>
+              <input class="field" id="subscribe-email" name="email" type="email" autocomplete="email" placeholder="ваш email" required>
+            </form>
+            <p class="footer__tagline">LYRA |  Интерьеры, которые вдохновляют</p>
+          </div>
+        </div>
+
+        <picture>
+          <source media="(max-width: 768px)" srcset="icons/m-footer-lyra.svg">
+          <img class="footer__wordmark" src="icons/footer-lyra.svg" alt="">
+        </picture>
+      </div>
+
+      <div class="footer__picture">
+        <img class="footer__picture-img" src="images/picture.png" alt="Светлая гостиная с мягким диваном, деревянным столиком и торшером">
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
