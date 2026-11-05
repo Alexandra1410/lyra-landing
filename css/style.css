@@ -1423,13 +1423,14 @@ textarea.field {
 }
 
 .footer__wordmark {
-  /* Figma composition scaled with the screen: 1584×526 at 1440, starts 3px off the left edge,
-     runs past the right one, bottom 126px hidden under the photo (126/526 of its height) */
+  /* Scaled with the screen: 1584×526 at 1440, starts at the left edge, the A runs past the right one.
+     The photo covers only the bottom ~11% (58 of 526), so the foot of the L stays visible.
+     Gap above: 64px at 1440, scales with the screen */
   display: block;
   width: 110.02vw;
   max-width: none;
   height: auto;
-  margin: 125px 0 -8.75vw -0.208vw;
+  margin: max(4.44vw, 40px) 0 -4.03vw -0.208vw;
 }
 
 .footer__picture {
@@ -1668,9 +1669,6 @@ textarea.field {
     font-size: var(--fs-h2-m);
   }
 
-  .footer__wordmark {
-    margin-top: var(--s-64);
-  }
 
 }
 
@@ -2135,9 +2133,10 @@ textarea.field {
   }
 
   /* mobile file: 441×149 at 375, bottom 44px hidden under the photo */
+  /* mobile file 441×149: same idea, only the bottom ~11% (16 of 149) under the photo */
   .footer__wordmark {
     width: 117.68vw;
-    margin: var(--s-20) 0 -11.74vw -0.8vw;
+    margin: var(--s-36) 0 -4.37vw -0.8vw;
   }
 
   /* 197px at 375, scales with the screen within sane limits */
