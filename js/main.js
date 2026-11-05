@@ -2,7 +2,7 @@
   var burger = document.querySelector('[data-menu-toggle]');
   var nav = document.getElementById('site-nav');
   var closeBtn = document.querySelector('[data-menu-close]');
-  var mq = window.matchMedia('(max-width: 1024px)');
+  var mq = window.matchMedia('(max-width: 1279px)');
 
   function setMenu(open) {
     nav.classList.toggle('is-open', open);
@@ -92,7 +92,7 @@
     { src: 'images/thumb-4.png', alt: 'Обеденная зона с подвесными светильниками' }
   ];
   var titles = [
-    'Не просто дизайн,<br>а атмосферу,<br>в которой хочется жить',
+    'Не просто дизайн,<br>а атмосферу,<br>в которой хочется<br>жить',
     'Пространство,<br>отражающее<br>ваш стиль',
     'Рациональное<br>использование<br>каждого метра',
     'Долговечные<br>и экологичные<br>материалы',

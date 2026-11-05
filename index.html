@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=24">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -131,7 +131,7 @@
             <div class="benefits__text">
               <p class="label label--sand u-trim">Что вы получите<br>с нами</p>
               <div class="benefits__content">
-                <h2 class="benefits__title title-l u-trim" id="benefits-title">Не просто дизайн,<br>а атмосферу,<br>в которой хочется жить</h2>
+                <h2 class="benefits__title title-l u-trim" id="benefits-title">Не просто дизайн,<br>а атмосферу,<br>в которой хочется<br>жить</h2>
                 <ol class="pager" aria-label="Слайды">
                   <li><button class="pager__item pager__item--active" aria-current="true" type="button" aria-label="Слайд 1" data-slide="0"><span class="u-trim">01</span></button></li>
                   <li><button class="pager__item" type="button" aria-label="Слайд 2" data-slide="1"><span class="u-trim">02</span></button></li>
@@ -233,16 +233,17 @@
             </blockquote>
           </li>
           <li class="review review--2">
-            <img class="review__photo" src="images/review-2.png" alt="Портрет клиентки студии, карандашный рисунок">
-            <!-- TODO: в Figma у всех трёх отзывов один и тот же текст (Екатерина) — заменить на реальный -->
+            <img class="review__photo" src="images/review-2.png" alt="Анна Соколова, клиентка студии">
+            <!-- Карандашный портрет (default); при наведении сменяется цветным фото -->
+            <img class="review__photo review__photo--sketch" src="images/review-2-sketch.png" alt="" aria-hidden="true" onerror="this.remove()">
             <blockquote class="review__card">
               <div class="review__body">
                 <div class="review__text">
                   <footer class="review__author">
-                    <cite class="review__name">Екатерина Иванова</cite>
-                    <span class="review__city">г. Москва</span>
+                    <cite class="review__name">Анна Соколова</cite>
+                    <span class="review__city">г. Казань</span>
                   </footer>
-                  <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
+                  <p class="review__quote">В маленькой студии нашлось место и для работы, и для гостей. Каждый метр продуман!</p>
                 </div>
                 <a class="review__link link-arrow" href="#cases">
                   <span class="u-trim">открыть проект</span>
@@ -252,16 +253,17 @@
             </blockquote>
           </li>
           <li class="review review--3">
-            <img class="review__photo" src="images/review-3.png" alt="Портрет клиента студии, карандашный рисунок">
-            <!-- TODO: в Figma у всех трёх отзывов один и тот же текст (Екатерина) — заменить на реальный -->
+            <img class="review__photo" src="images/review-3.png" alt="Дмитрий Орлов, клиент студии">
+            <!-- Карандашный портрет (default); при наведении сменяется цветным фото -->
+            <img class="review__photo review__photo--sketch" src="images/review-3-sketch.png" alt="" aria-hidden="true" onerror="this.remove()">
             <blockquote class="review__card">
               <div class="review__body">
                 <div class="review__text">
                   <footer class="review__author">
-                    <cite class="review__name">Екатерина Иванова</cite>
-                    <span class="review__city">г. Москва</span>
+                    <cite class="review__name">Дмитрий Орлов</cite>
+                    <span class="review__city">г. Сочи</span>
                   </footer>
-                  <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
+                  <p class="review__quote">Смета не выросла ни на рубль, а ремонт закончили на неделю раньше. Рекомендую!</p>
                 </div>
                 <a class="review__link link-arrow" href="#cases">
                   <span class="u-trim">открыть проект</span>
@@ -348,7 +350,7 @@
         </div>
 
         <picture>
-          <source media="(max-width: 768px)" srcset="icons/m-footer-lyra.svg">
+          <source media="(max-width: 699px)" srcset="icons/m-footer-lyra.svg">
           <img class="footer__wordmark" src="icons/footer-lyra.svg" alt="">
         </picture>
       </div>
@@ -359,6 +361,6 @@
     </footer>
   </div>
 
-  <script src="js/main.js" defer></script>
+  <script src="js/main.js?v=3" defer></script>
 </body>
 </html>

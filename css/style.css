@@ -452,7 +452,9 @@ button {
 /* ---------- Section 2: Why us ---------- */
 .why {
   display: grid;
-  grid-template-columns: auto auto;
+  /* the list shrinks on narrow desktops instead of running past the screen */
+  grid-template-columns: max-content minmax(0, var(--content-wide));
+  column-gap: var(--s-36);
   grid-template-areas:
     "title title"
     "label list";
@@ -468,16 +470,17 @@ button {
 
 .why__title {
   grid-area: title;
-  padding-left: var(--indent-title);
+  contain: inline-size; /* spans both columns but must not widen the label column */
+  text-indent: var(--indent-title);
   color: var(--color-black);
 }
 
 .why__grid {
   grid-area: list;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--s-20);
-  width: var(--content-wide);
+  width: 100%;
 }
 
 .why__image-item {
@@ -574,6 +577,7 @@ button {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  gap: var(--s-36);
   width: 100%;
   max-width: 564px;
   height: 100%;
@@ -581,6 +585,7 @@ button {
 
 .benefits__thumbs {
   position: relative;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: var(--s-20);
@@ -597,7 +602,8 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 277px;
+  flex: 0 1 373px; /* widest title line at 40px; Figma's 277px let it run past the screen edge */
+  min-width: 0;
   height: 100%;
 }
 
@@ -610,6 +616,20 @@ button {
 .benefits__title {
   color: var(--color-sand);
   white-space: nowrap; /* line breaks come from <br>, like in Figma */
+}
+
+/* Narrow desktops: advantage titles shrink from 24px (≥1160px) so the 01–04 numbers keep their place */
+@media (min-width: 1280px) {
+  .advantage__head {
+    font-size: clamp(20px, 3.45vw - 16px, var(--fs-h3));
+  }
+}
+
+/* 40px from ~1250px up; on narrow desktops the title scales down so its longest line fits next to the thumbs */
+@media (min-width: 1280px) {
+  .benefits__title {
+    font-size: clamp(28px, 5.436vw - 27.8px, var(--fs-h2));
+  }
 }
 
 .pager {
@@ -730,17 +750,17 @@ button {
 
 /* ---------- Section 5: Reviews ---------- */
 .reviews {
+  --reviews-left: var(--indent-reviews);
   display: flex;
   flex-direction: column;
   gap: var(--s-64);
-  padding-left: var(--indent-reviews);
 }
 
 .reviews__head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-right: var(--s-20);
+  margin: 0 var(--s-20) 0 var(--reviews-left);
 }
 
 .reviews__controls {
@@ -784,7 +804,8 @@ button {
   display: flex;
   align-items: flex-start;
   gap: var(--s-20);
-  padding: 0 var(--s-20) var(--s-64) 0; /* bottom = how far the card sticks out */
+  /* full-bleed: at rest the first review lines up with the heading, scrolled ones slide to the screen edge */
+  padding: 0 var(--s-20) 56px var(--reviews-left); /* bottom = how far the card sticks out (200 + 280 - 424) */
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
@@ -802,8 +823,24 @@ button {
   flex-shrink: 0;
   width: 424px;
   height: 424px;
+  /* hover-out is quicker than hover-in, so leaving feels snappy */
+  --review-out: 0.2s;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   /* drop below neighbours only after the card has faded out */
-  transition: z-index 0s var(--dur-hover);
+  transition: z-index 0s var(--review-out);
+  /* the <li> is a square: ignore the pointer in its corners, so hover is
+     tracked only on the round photo and the round card (both have border-radius) */
+  pointer-events: none;
+}
+
+.review__photo,
+.review__card {
+  pointer-events: auto;
+}
+
+/* The last review sits at the right edge of the screen: open its card to the left (mirrored, 424 - 200 - 280) */
+.review:last-child {
+  --review-card-x: -56px;
 }
 
 /* Hover (Figma variant "pressed"): the card fades in, 300ms */
@@ -819,47 +856,62 @@ button {
   border-radius: var(--radius-round);
 }
 
-/* Default state is the pencil sketch; on hover it crossfades to the colour photo */
+/* Default state is the pencil sketch. Hover runs in two steps:
+   in  — the sketch crossfades to the colour photo, then the card fades in;
+   out — the card fades out quickly, the sketch comes back right behind it (they overlap). */
 .review__photo--sketch {
   position: absolute;
   inset: 0;
-  transition: opacity var(--dur-hover) var(--ease-figma);
+  transition: opacity 0.3s var(--ease-out) 0.08s;
 }
 
 .review:hover .review__photo--sketch,
 .review:focus-within .review__photo--sketch {
   opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease-figma) 0s;
 }
 
 .review__card {
   position: absolute;
   margin: 0;
-  top: 144px;
-  left: 144px;
+  /* smaller circle sitting below the face, so the face stays visible */
+  top: 200px;
+  left: var(--review-card-x, 200px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 344px;
-  height: 344px;
-  padding: var(--s-64) 53px;
+  justify-content: center;
+  width: 280px;
+  height: 280px;
+  padding: 32px 30px;
   border-radius: var(--radius-round);
   background: var(--color-brown);
   color: var(--color-white);
   text-align: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s var(--dur-hover);
+  transition: opacity var(--review-out) var(--ease-out), visibility 0s var(--review-out);
 }
 
 .review:hover .review__card,
 .review:focus-within .review__card {
   opacity: 1;
   visibility: visible;
-  transition-delay: 0s;
+  /* wait for the photo, then fade in */
+  transition: opacity var(--dur-hover) var(--ease-figma) var(--dur-hover), visibility 0s 0s;
 }
 
 /* Touch screens have no hover: keep the first card open until another review is tapped */
 @media (hover: none) {
+  /* the card shown by default must sit above the next circle, like a hovered one */
+  .review--1 {
+    z-index: 2;
+  }
+
+  .reviews__track:has(.review:hover) .review--1:not(:hover) {
+    z-index: 1;
+  }
+
   .review--1 .review__card {
     opacity: 1;
     visibility: visible;
@@ -883,16 +935,15 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 67px;
-  width: 238px;
+  gap: var(--s-28);
+  width: 100%;
 }
 
 .review__text {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 137px;
+  gap: var(--s-20);
   width: 100%;
 }
 
@@ -916,7 +967,7 @@ button {
 }
 
 .review__quote {
-  width: 274px;
+  width: 100%;
   font-weight: 600;
   font-size: var(--fs-body);
 }
@@ -963,13 +1014,16 @@ button {
 .cta__word--4 { grid-area: w4; text-align: right; }
 
 .cta__word {
+  /* 94/90px at 1440, scales down with the screen so every row stays inside it (1440 = 100vw) */
+  font-size: min(var(--fs-h1), 6.528vw);
+  line-height: min(var(--lh-h1), 6.25vw);
   white-space: nowrap;
 }
 
 .cta__line {
   grid-area: line;
   justify-self: center;
-  width: 268px;
+  width: min(268px, 18.6vw); /* 268 / 1440 */
   height: 2px;
   background: var(--color-sand);
 }
@@ -1100,7 +1154,6 @@ textarea.field {
 
 .footer__main {
   position: relative;
-  height: 863px;
   overflow: hidden;
   background: var(--color-sand);
 }
@@ -1110,7 +1163,7 @@ textarea.field {
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 284px;
+  gap: clamp(64px, 100vw - 1087px, 284px); /* 284px from ~1370px up; narrower screens give it to the form */
   padding: var(--s-64) var(--s-64) 0;
 }
 
@@ -1178,32 +1231,41 @@ textarea.field {
 }
 
 .footer__wordmark {
-  position: absolute;
-  top: 463px;
-  left: -3px;
-  width: max(1584.29px, 110.02vw); /* 1584.29 / 1440 */
+  /* Figma composition scaled with the screen: 1584×526 at 1440, starts 3px off the left edge,
+     runs past the right one, bottom 126px hidden under the photo (126/526 of its height) */
+  display: block;
+  width: 110.02vw;
+  max-width: none;
   height: auto;
+  margin: 125px 0 -8.75vw -0.208vw;
 }
 
 .footer__picture {
   position: relative;
-  height: 362px;
+  /* 362px at 1440, scales with the screen, capped on very wide monitors */
+  height: min(25.14vw, 480px);
+  margin-top: -1px; /* covers the sub-pixel seam where the LYRA letters would peek out at fractional heights */
   overflow: hidden;
   background: var(--color-white);
 }
 
+/* The photo keeps its own proportions at any width: it is sized by width only (height: auto)
+   and shifted up by a share of its own height, so the block just crops it like a frame.
+   Same crop as the Figma frame at 1440: top 72.78 / 187.72 = 38.77% of the photo hidden. */
 .footer__picture-img {
   position: absolute;
-  top: -72.78%;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 187.72%;
+  max-width: none;
+  height: auto;
+  transform: translateY(-38.77%);
 }
 
 /* =========================================================
-   Tablet (max-width: 1024px)
+   Tablet (max-width: 1279px)
    ========================================================= */
-@media (max-width: 1024px) {
+@media (max-width: 1279px) {
   :root {
     --fs-h1: 6.528vw;   /* 94 / 1440 */
     --lh-h1: 0.957em;   /* 90 / 94 */
@@ -1310,12 +1372,26 @@ textarea.field {
   }
 
   .why__title {
-    padding-left: 0;
+    text-indent: 0;
   }
 
   .why__grid {
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
+  }
+
+  /* two columns: the first row (01 and 02) closes with a divider under both cards */
+  .advantage--2 {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-20);
+  }
+
+  .advantage--2::after {
+    content: "";
+    display: block;
+    height: 1px;
+    background: var(--color-black-20);
   }
 
   .why__image {
@@ -1351,16 +1427,12 @@ textarea.field {
 
   /* Section 5 */
   .reviews {
-    padding-left: var(--s-16);
+    --reviews-left: var(--s-16);
   }
 
   /* Section 6 */
   .cta {
     height: 560px;
-  }
-
-  .cta__line {
-    width: 18.6vw; /* 268 / 1440 */
   }
 
   .cta__ellipse {
@@ -1389,10 +1461,6 @@ textarea.field {
   }
 
   /* Footer */
-  .footer__main {
-    height: 760px;
-  }
-
   .footer__inner {
     justify-content: space-between;
     gap: var(--s-36);
@@ -1409,20 +1477,45 @@ textarea.field {
   }
 
   .footer__wordmark {
-    top: 400px;
-    width: 110vw;
+    margin-top: var(--s-64);
+  }
+
+}
+
+/* Tablet hero: the description stays in the photo half so it never runs under the button */
+@media (max-width: 1279px) {
+  .hero__text {
+    width: min(396px, calc(var(--split-left) - 40px));
+  }
+}
+
+/* Small tablets: contacts and the subscribe form no longer fit side by side */
+@media (min-width: 700px) and (max-width: 799px) {
+  .footer__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .footer__contacts,
+  .footer__aside {
+    flex: none;
+    width: 100%;
     height: auto;
   }
 
-  .footer__picture {
-    height: 25.14vw; /* 362 / 1440 */
+  .footer__contacts {
+    gap: var(--s-36) var(--s-12);
+  }
+
+  .footer__aside {
+    gap: var(--s-36);
   }
 }
 
 /* =========================================================
-   Mobile (max-width: 768px)
+   Mobile (max-width: 699px)
    ========================================================= */
-@media (max-width: 768px) {
+@media (max-width: 699px) {
   :root {
     --fs-h1: var(--fs-h1-m);
     --lh-h1: var(--lh-h1-m);
@@ -1475,6 +1568,8 @@ textarea.field {
   .hero__title {
     top: 72px;
     left: var(--s-16);
+    /* 48px from ~377px up; narrower phones scale it so «вдохновляют» fits (345px wide at 48px) */
+    font-size: min(var(--fs-h1-m), calc((100vw - 32px) * 0.139));
   }
 
   .hero__text {
@@ -1521,7 +1616,8 @@ textarea.field {
     border-bottom: 1px solid var(--color-black-20);
   }
 
-  .advantage--first::after {
+  .advantage--first::after,
+  .advantage--2::after {
     display: none;
   }
 
@@ -1592,6 +1688,11 @@ textarea.field {
     gap: 0;
   }
 
+  .cases__head {
+    flex-wrap: wrap;
+    row-gap: var(--s-16); /* on 320px screens «смотреть все» drops under the title */
+  }
+
   .cases__grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--s-20);
@@ -1628,11 +1729,11 @@ textarea.field {
   /* Section 5 */
   .reviews {
     gap: 26px;
-    padding: var(--s-64) var(--s-16);
+    padding: var(--s-64) 0;
   }
 
   .reviews__head {
-    margin-right: 0;
+    margin-right: var(--s-16);
   }
 
   .reviews__arrow {
@@ -1647,8 +1748,7 @@ textarea.field {
 
   .reviews__track {
     gap: var(--s-8);
-    padding: 0 var(--s-16) 73px 0;
-    margin-right: calc(var(--s-16) * -1);
+    padding: 0 var(--s-16) 150px var(--reviews-left); /* bottom = how far the card sticks out */
   }
 
   .review {
@@ -1656,13 +1756,10 @@ textarea.field {
     height: 270px;
   }
 
-  .review--2 {
-    display: none;
-  }
-
   .review__card {
-    top: 73px;
-    left: 73px;
+    /* straight below the face: covers only the shoulders and never sticks out sideways */
+    top: 150px;
+    left: 0;
     width: 270px;
     height: 270px;
     padding: 45px 32px;
@@ -1714,7 +1811,7 @@ textarea.field {
   }
 
   .cta__word {
-    font-size: var(--fs-cta-m);
+    font-size: min(var(--fs-cta-m), calc((100vw - 28px) * 0.1326)); /* «к изменениям?» stays on one line down to 320px */
     line-height: var(--lh-h1-m);
     white-space: normal;
     text-box: none;
@@ -1793,9 +1890,6 @@ textarea.field {
   }
 
   /* Footer */
-  .footer__main {
-    height: 524px;
-  }
 
   .footer__inner {
     flex-direction: column;
@@ -1814,6 +1908,7 @@ textarea.field {
 
   .footer__contact-list {
     gap: var(--s-24);
+    font-size: min(var(--fs-h2-m), calc((100vw - 32px) * 0.094)); /* the email (340px at 32px) fits narrow phones */
     white-space: nowrap;
   }
 
@@ -1835,21 +1930,30 @@ textarea.field {
     font-weight: 400;
   }
 
+  /* Figma has 2px everywhere; next to mobile-sized text it reads too heavy */
+  .field {
+    border-bottom-width: 1px;
+  }
+
+  textarea.field {
+    height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 1px);
+  }
+
+  /* mobile file: 441×149 at 375, bottom 44px hidden under the photo */
   .footer__wordmark {
-    top: 419px;
-    width: 441.296px;
-    height: 149px;
+    width: 117.68vw;
+    margin: var(--s-20) 0 -11.74vw -0.8vw;
   }
 
+  /* 197px at 375, scales with the screen within sane limits */
   .footer__picture {
-    height: 197px;
+    height: clamp(168px, 52.53vw, 260px);
   }
 
+  /* mobile Figma crop: zoomed in, 16.8% of the frame to the left, 73.52 / 189.62 = 38.77% of the photo above */
   .footer__picture-img {
-    top: -73.52%;
     left: -16.8%;
     width: 210.93%;
-    height: 189.62%;
   }
 }
 
