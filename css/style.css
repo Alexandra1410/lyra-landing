@@ -298,14 +298,36 @@ button {
 
 /* ---------- Header / Nav ---------- */
 .header {
-  position: absolute;
-  top: var(--s-20);
-  left: var(--s-20);
-  right: var(--s-20);
-  z-index: 20;
+  /* Stays on screen while scrolling: transparent over the first screen,
+     a brown bar once the page moves (.is-scrolled, set in main.js).
+     No transform / backdrop-filter here — the mobile menu inside is position: fixed */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: var(--s-20);
+  background-color: rgb(56 37 32 / 0);
+  transition:
+    background-color 0.4s var(--ease-soft),
+    padding 0.4s var(--ease-soft),
+    box-shadow 0.4s var(--ease-soft);
+}
+
+.header.is-scrolled {
+  padding-top: var(--s-12);
+  padding-bottom: var(--s-12);
+  background-color: var(--color-brown);
+  box-shadow: 0 8px 24px rgb(17 17 17 / 0.12);
+}
+
+/* jumps from the menu stop below the fixed header */
+section[id],
+footer[id] {
+  scroll-margin-top: 72px;
 }
 
 .logo {
@@ -1703,9 +1725,12 @@ textarea.field {
 
   /* Header */
   .header {
-    top: var(--s-16);
-    left: var(--s-16);
-    right: 13px;
+    padding: var(--s-16) 13px var(--s-16) var(--s-16);
+  }
+
+  .header.is-scrolled {
+    padding-top: var(--s-12);
+    padding-bottom: var(--s-12);
   }
 
   .logo {
@@ -2136,7 +2161,6 @@ textarea.field {
   background: var(--color-brown);
 }
 
-.js .header,
 .js .hero__photo,
 .js .hero__arch,
 .js .hero__title,
@@ -2154,6 +2178,14 @@ textarea.field {
     scale var(--dur-intro) var(--ease-figma),
     opacity var(--dur-intro) var(--ease-figma),
     background-color var(--dur-button) var(--ease-soft);
+}
+
+.js .header {
+  transition:
+    translate var(--dur-intro) var(--ease-figma),
+    background-color 0.4s var(--ease-soft),
+    padding 0.4s var(--ease-soft),
+    box-shadow 0.4s var(--ease-soft);
 }
 
 .js .hero:not(.is-in) .header { translate: 0 -470px; }
@@ -2387,6 +2419,9 @@ html.lenis body {
 
 /* ---------- Document pages (privacy, consent, offer) ---------- */
 .legal-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2431,7 +2466,7 @@ html.lenis body {
 
 .legal__aside {
   position: sticky;
-  top: var(--s-28);
+  top: 124px; /* below the sticky header (96px) + 28px */
   align-self: start;
   display: flex;
   flex-direction: column;

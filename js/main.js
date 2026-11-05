@@ -7,11 +7,17 @@
       autoRaf: true,
       lerp: 0.09,       // lower = softer, longer glide
       wheelMultiplier: 0.9,
-      anchors: { duration: 1.2 }
+      anchors: { duration: 1.2 } // stops below the fixed header via scroll-margin-top in CSS
     });
     window.lyraLenis = lenis;
     if (document.documentElement.classList.contains('is-loading')) lenis.stop(); // no scrolling under the preloader
   }
+  // Header stays on screen; turns into a brown bar as soon as the page is scrolled
+  var header = document.querySelector('.header');
+  function updateHeader() { header.classList.toggle('is-scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
+
   var burger = document.querySelector('[data-menu-toggle]');
   var nav = document.getElementById('site-nav');
   var closeBtn = document.querySelector('[data-menu-close]');
