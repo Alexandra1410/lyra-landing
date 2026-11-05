@@ -840,6 +840,42 @@ footer[id] {
   outline-offset: -2px;
 }
 
+/* Narrow window with a mouse: the label may wrap instead of being cut */
+@media (max-width: 699px) and (hover: hover) {
+  .case__more-label {
+    padding: 0 var(--s-12);
+    font-size: var(--fs-body-m);
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* Phones: the text pill doesn't fit two-column cards — a round brown ↗ button in the corner,
+   the words stay for screen readers */
+@media (max-width: 699px) and (hover: none) {
+  .case .case__more {
+    justify-content: flex-end;
+    padding: var(--s-8);
+  }
+
+  .case__more .case__more-label {
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .case__more-label .u-trim {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
 /* Touch screens have no hover: keep a small "смотреть проект ↗" label in the corner */
 @media (hover: none) {
   .case__more {
@@ -1838,6 +1874,9 @@ textarea.field {
 @media (max-width: 1279px) {
   .hero__text {
     width: min(396px, calc(var(--split-left) - 40px));
+    /* pinned to the bottom: on narrow tablets it wraps to 4 lines and used to touch the edge */
+    top: auto;
+    bottom: var(--s-20);
   }
 }
 
@@ -1929,6 +1968,7 @@ textarea.field {
 
   .hero__text {
     top: 438px;
+    bottom: auto;
     left: var(--s-16);
     width: 338px;
     max-width: calc(100% - 32px);
@@ -1940,6 +1980,8 @@ textarea.field {
     left: var(--s-16);
     right: var(--s-16);
     transform: none;
+    /* 28px from ~400px up; on 320px phones the text + arrow need a bit more room */
+    padding-inline: clamp(16px, 5vw, 28px);
   }
 
   /* Section 2 */
