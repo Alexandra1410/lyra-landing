@@ -39,10 +39,40 @@
   var track = document.getElementById('reviews-track');
   var prevBtn = document.querySelector('[data-reviews-prev]');
   var nextBtn = document.querySelector('[data-reviews-next]');
+  // Smooth scroll by one review: eased animation instead of a jump
+  var scrollAnim = null;
+  var scrollTarget = null;
+  function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
   function scrollReviews(dir) {
     var item = track.querySelector('.review');
     var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    track.scrollBy({ left: dir * (item.offsetWidth + gap) });
+    var max = track.scrollWidth - track.clientWidth;
+    var from = track.scrollLeft;
+    var base = scrollAnim ? scrollTarget : from; // a quick second click continues from where the first one goes
+    var to = Math.max(0, Math.min(max, base + dir * (item.offsetWidth + gap)));
+    if (to === from) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      track.scrollLeft = to;
+      return;
+    }
+    if (scrollAnim) cancelAnimationFrame(scrollAnim);
+    scrollTarget = to;
+    track.style.scrollBehavior = 'auto'; // frames are set by hand
+    var start = null;
+    var duration = 650;
+    function step(now) {
+      if (start === null) start = now;
+      var k = Math.min(1, (now - start) / duration);
+      track.scrollLeft = from + (to - from) * easeInOut(k);
+      if (k < 1) {
+        scrollAnim = requestAnimationFrame(step);
+      } else {
+        scrollAnim = null;
+        track.style.scrollBehavior = '';
+        updateArrows();
+      }
+    }
+    scrollAnim = requestAnimationFrame(step);
   }
   function updateArrows() {
     var max = track.scrollWidth - track.clientWidth - 1;
@@ -57,13 +87,44 @@
 
   /* Motion from the Figma prototype (Smart Animate, cubic-bezier(0.7, 0, 0.42, 1)) */
 
-  // Hero intro: "After delay 10ms" → 2000ms
+  // Hero intro: "After delay 10ms" → 2000ms. Starts when the preloader goes away
   var hero = document.querySelector('.hero');
-  requestAnimationFrame(function () {
+  function playHero() {
     requestAnimationFrame(function () {
-      setTimeout(function () { hero.classList.add('is-in'); }, 10);
+      requestAnimationFrame(function () {
+        setTimeout(function () { hero.classList.add('is-in'); }, 10);
+      });
     });
-  });
+  }
+
+  // Preloader: covers the page until the first screen (fonts + hero photos) has loaded,
+  // so the visitor sees "loading" instead of a page that renders with freezes.
+  // Images further down are lazy-loaded and don't hold it up.
+  var preloader = document.querySelector('[data-preloader]');
+  var preloaderShownAt = Date.now();
+  var preloaderDone = false;
+  // show LYRA only in the brand font, never in a fallback one
+  if (preloader && document.fonts && document.fonts.load) {
+    document.fonts.load('700 40px "Non Bureau"').then(function () { preloader.classList.add('is-font-ready'); });
+  } else if (preloader) {
+    preloader.classList.add('is-font-ready');
+  }
+  function hidePreloader() {
+    if (preloaderDone) return;
+    preloaderDone = true;
+    // keep it on screen at least a moment, so it doesn't just flash
+    var wait = Math.max(0, 600 - (Date.now() - preloaderShownAt));
+    setTimeout(function () {
+      document.documentElement.classList.remove('is-loading');
+      if (!preloader) { playHero(); return; }
+      preloader.classList.add('is-hidden');
+      playHero();
+      setTimeout(function () { preloader.remove(); }, 700);
+    }, wait);
+  }
+  if (document.readyState === 'complete') hidePreloader();
+  else window.addEventListener('load', hidePreloader);
+  setTimeout(hidePreloader, 8000); // slow network: never keep the visitor waiting forever
 
   // CTA: Figma triggers it on hover and then locks the final state,
   // so it plays once — on cursor enter or when half of the section is visible
@@ -85,11 +146,11 @@
   // Benefits slider: click on a dot → variant 1–5, 300ms
   var benefits = document.querySelector('[data-benefits]');
   var photos = [
-    { src: 'images/benefits.png', alt: 'Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном' },
-    { src: 'images/thumb-1.png', alt: 'Лофт с высокими потолками и открытой кухней' },
-    { src: 'images/thumb-2.png', alt: 'Светлая спальня с текстильным изголовьем' },
-    { src: 'images/thumb-3.png', alt: 'Кухня с деревянными панелями и барной стойкой' },
-    { src: 'images/thumb-4.png', alt: 'Обеденная зона с подвесными светильниками' }
+    { src: 'images/benefits.webp', alt: 'Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном' },
+    { src: 'images/thumb-1.webp', alt: 'Лофт с высокими потолками и открытой кухней' },
+    { src: 'images/thumb-2.webp', alt: 'Светлая спальня с текстильным изголовьем' },
+    { src: 'images/thumb-3.webp', alt: 'Кухня с деревянными панелями и барной стойкой' },
+    { src: 'images/thumb-4.webp', alt: 'Обеденная зона с подвесными светильниками' }
   ];
   var titles = [
     'Не просто дизайн,<br>а атмосферу,<br>в которой хочется<br>жить',
@@ -162,6 +223,32 @@
     dot.addEventListener('click', function () { goToSlide(Number(dot.dataset.slide)); });
   });
 
-  // Preload slide photos so the first switch doesn't flash
-  photos.forEach(function (photo) { new Image().src = photo.src; });
+  // A click on a small photo opens that photo as the slide.
+  // Thumbs show the other four slides in order, so thumb i = i-th slide that isn't current
+  function slideForThumb(i) {
+    return photos.map(function (_, k) { return k; }).filter(function (k) { return k !== current; })[i];
+  }
+  thumbs.forEach(function (thumb, i) {
+    thumb.setAttribute('role', 'button');
+    thumb.setAttribute('tabindex', '0');
+    thumb.addEventListener('click', function () { goToSlide(slideForThumb(i)); });
+    thumb.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        goToSlide(slideForThumb(i));
+      }
+    });
+  });
+
+  // Preload slide photos so the first switch doesn't flash —
+  // only when the block gets close, so they don't slow down the first screen
+  function preloadSlides() { photos.forEach(function (photo) { new Image().src = photo.src; }); }
+  if ('IntersectionObserver' in window) {
+    var slidesObserver = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { preloadSlides(); slidesObserver.disconnect(); }
+    }, { rootMargin: '600px 0px' });
+    slidesObserver.observe(benefits);
+  } else {
+    preloadSlides();
+  }
 })();

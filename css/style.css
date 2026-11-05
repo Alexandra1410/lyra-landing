@@ -88,6 +88,8 @@
   --ease-figma: cubic-bezier(0.7, 0, 0.42, 1);
   --dur-hover: 0.3s;
   --dur-intro: 2s;
+  --dur-button: 0.45s; /* button hover: calm, not abrupt */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 *,
@@ -223,7 +225,7 @@ button {
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
-  transition: background-color var(--dur-hover) var(--ease-figma);
+  transition: background-color var(--dur-button) var(--ease-soft);
 }
 
 .button--light {
@@ -596,6 +598,17 @@ button {
   width: 100%;
   height: 100px;
   object-fit: cover;
+  cursor: pointer;
+  transition: opacity var(--dur-hover) var(--ease-soft);
+}
+
+.benefits__thumb:hover {
+  opacity: 0.8;
+}
+
+.benefits__thumb:focus-visible {
+  outline: 2px solid var(--color-sand);
+  outline-offset: 2px;
 }
 
 .benefits__text {
@@ -732,6 +745,72 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: scale 0.6s var(--ease-soft);
+}
+
+/* Hover: the photo dims and zooms a little, "смотреть проект ↗" fades in over it.
+   The link covers the whole photo, so the entire picture is clickable */
+.case__more {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+  background: rgb(56 37 32 / 0);
+  transition: background-color var(--dur-button) var(--ease-soft);
+}
+
+.case__more-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-8);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  line-height: var(--lh-base);
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  translate: 0 12px;
+  transition: opacity var(--dur-button) var(--ease-soft), translate var(--dur-button) var(--ease-soft);
+}
+
+.case:hover .case__img {
+  scale: 1.04;
+}
+
+.case:hover .case__more,
+.case__more:focus-visible {
+  background: rgb(56 37 32 / 0.35);
+}
+
+.case:hover .case__more-label,
+.case__more:focus-visible .case__more-label {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.case__more:focus-visible {
+  outline: 2px solid var(--color-sand);
+  outline-offset: -2px;
+}
+
+/* Touch screens have no hover: keep a small "смотреть проект ↗" label in the corner */
+@media (hover: none) {
+  .case__more {
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: var(--s-12);
+  }
+
+  .case__more-label {
+    padding: 10px 14px;
+    border-radius: var(--radius-pill);
+    background: rgb(56 37 32 / 0.85);
+    font-size: var(--fs-small);
+    opacity: 1;
+    translate: 0 0;
+  }
 }
 
 .case__caption {
@@ -856,8 +935,8 @@ button {
   border-radius: var(--radius-round);
 }
 
-/* Default state is the pencil sketch. Hover runs in two steps:
-   in  — the sketch crossfades to the colour photo, then the card fades in;
+/* Default state is the pencil sketch.
+   in  — the sketch crossfades to the colour photo and the card fades in at the same time;
    out — the card fades out quickly, the sketch comes back right behind it (they overlap). */
 .review__photo--sketch {
   position: absolute;
@@ -897,8 +976,8 @@ button {
 .review:focus-within .review__card {
   opacity: 1;
   visibility: visible;
-  /* wait for the photo, then fade in */
-  transition: opacity var(--dur-hover) var(--ease-figma) var(--dur-hover), visibility 0s 0s;
+  /* appears together with the colour photo, no delay */
+  transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
 }
 
 /* Touch screens have no hover: keep the first card open until another review is tapped */
@@ -1978,6 +2057,14 @@ textarea.field {
     opacity var(--dur-intro) var(--ease-figma);
 }
 
+.js .hero__button {
+  transition:
+    translate var(--dur-intro) var(--ease-figma),
+    scale var(--dur-intro) var(--ease-figma),
+    opacity var(--dur-intro) var(--ease-figma),
+    background-color var(--dur-button) var(--ease-soft);
+}
+
 .js .hero:not(.is-in) .header { translate: 0 -470px; }
 .js .hero:not(.is-in) .hero__photo { opacity: 0; }
 .js .hero:not(.is-in) .hero__arch { scale: 0; opacity: 0; }
@@ -2008,5 +2095,86 @@ textarea.field {
   .js .hero *,
   .js .cta * {
     transition: none !important;
+  }
+}
+
+/* ---------- Preloader ---------- */
+.preloader {
+  display: none;
+}
+
+.js .preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-20);
+  background: var(--color-brown);
+  color: var(--color-sand);
+  transition: opacity 0.6s var(--ease-soft), visibility 0s 0.6s;
+}
+
+.preloader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.preloader__logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-soft);
+}
+
+.preloader.is-font-ready .preloader__logo {
+  opacity: 1;
+  animation: preloader-pulse 1.6s var(--ease-soft) 0.4s infinite;
+}
+
+/* thin line that keeps running while the page loads */
+.preloader__bar {
+  position: relative;
+  width: 120px;
+  height: 1px;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.2);
+}
+
+.preloader__bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  transform: translateX(-100%);
+  animation: preloader-bar 1.2s var(--ease-soft) infinite;
+}
+
+@keyframes preloader-pulse {
+  50% { opacity: 0.5; }
+}
+
+@keyframes preloader-bar {
+  to { transform: translateX(100%); }
+}
+
+/* no scrolling under the preloader */
+.is-loading body {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader__logo,
+  .preloader__bar::after {
+    animation: none;
+  }
+
+  .preloader__bar::after {
+    transform: none;
   }
 }

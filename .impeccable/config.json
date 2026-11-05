@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-05T16:07:11.203Z",
+        "reason": "Client-requested preloader: the running line is a loading indicator shown only until the first screen loads, then removed; not a content marquee"
+      }
+    ]
+  }
+}

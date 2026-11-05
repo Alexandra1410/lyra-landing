@@ -5,13 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LYRA — Интерьеры, которые вдохновляют</title>
   <meta name="description" content="Дизайн-студия LYRA: уникальные интерьеры, отражающие ваш характер и образ жизни. Более 10 лет опыта и десятки реализованных проектов.">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=24">
-  <script>document.documentElement.classList.add('js');</script>
+  <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
+  <link rel="preload" href="fonts/NonBureau-Bold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="css/style.css?v=27">
+  <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
+  <!-- Preloader: shown only with JS, removed once the first screen has loaded -->
+  <div class="preloader" data-preloader aria-hidden="true">
+    <span class="preloader__logo">LYRA</span>
+    <span class="preloader__bar"></span>
+  </div>
   <div class="page">
     <main class="main">
 
@@ -47,10 +55,10 @@
         </header>
 
         <div class="hero__photo">
-          <img class="hero__photo-img" src="images/hero.png" alt="Светлая кухня-гостиная с панорамным остеклением, деревянными табуретами и видом на сад">
+          <img class="hero__photo-img" fetchpriority="high" src="images/hero.webp" alt="Светлая кухня-гостиная с панорамным остеклением, деревянными табуретами и видом на сад">
         </div>
         <div class="hero__panel">
-          <img class="hero__arch" src="images/hero-arch.png" width="420" height="520" alt="Обеденная зона с деревянным столом, стульями и живыми растениями">
+          <img class="hero__arch" src="images/hero-arch.webp" width="420" height="520" alt="Обеденная зона с деревянным столом, стульями и живыми растениями">
         </div>
 
         <h1 class="hero__title title-xl u-trim" id="hero-title">
@@ -76,7 +84,7 @@
 
         <ul class="why__grid">
           <li class="why__image-item">
-            <img class="why__image" src="images/why.png" alt="Гостиная в тёплых тонах с диваном, стеллажами и мягким светом">
+            <img loading="lazy" decoding="async" class="why__image" src="images/why.webp" alt="Гостиная в тёплых тонах с диваном, стеллажами и мягким светом">
           </li>
           <li class="advantage advantage--1 advantage--first">
             <div class="advantage__content">
@@ -119,14 +127,14 @@
 
       <!-- Section 3: Benefits -->
       <section class="benefits" aria-labelledby="benefits-title" data-benefits>
-        <img class="benefits__photo" src="images/benefits.png" alt="Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном">
+        <img loading="lazy" decoding="async" class="benefits__photo" src="images/benefits.webp" alt="Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном">
         <div class="benefits__panel">
           <div class="benefits__inner">
             <div class="benefits__thumbs">
-              <img class="benefits__thumb" src="images/thumb-1.png" alt="Лофт с высокими потолками и открытой кухней">
-              <img class="benefits__thumb" src="images/thumb-2.png" alt="Светлая спальня с текстильным изголовьем">
-              <img class="benefits__thumb" src="images/thumb-3.png" alt="Кухня с деревянными панелями и барной стойкой">
-              <img class="benefits__thumb" src="images/thumb-4.png" alt="Обеденная зона с подвесными светильниками">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-1.webp" alt="Лофт с высокими потолками и открытой кухней">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-2.webp" alt="Светлая спальня с текстильным изголовьем">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-3.webp" alt="Кухня с деревянными панелями и барной стойкой">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-4.webp" alt="Обеденная зона с подвесными светильниками">
             </div>
             <div class="benefits__text">
               <p class="label label--sand u-trim">Что вы получите<br>с нами</p>
@@ -161,37 +169,37 @@
         <div class="cases__grid">
           <article class="case case--1">
             <p class="case__num">01</p>
-            <div class="case__media"><img class="case__img" src="images/thumb-1.png" alt="Минималистичный лофт с открытой кухней и высокими потолками"></div>
+            <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/thumb-1.webp" alt="Минималистичный лофт с открытой кухней и высокими потолками"><a class="case__more" href="#cases"><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Минималистичный лофт в центре москвы</h3>
           </article>
           <article class="case case--2">
             <p class="case__num">02</p>
-            <div class="case__media"><img class="case__img" src="images/case-2.png" alt="Скандинавская квартира со светлой мебелью и деревянным полом"></div>
+            <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-2.webp" alt="Скандинавская квартира со светлой мебелью и деревянным полом"><a class="case__more" href="#cases"><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Уютная скандинавская квартира<br>для молодой семьи</h3>
           </article>
           <article class="case case--3">
             <p class="case__num">03</p>
-            <div class="case__media"><img class="case__img" src="images/case-3.png" alt="Малогабаритная студия с продуманной системой хранения"></div>
+            <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-3.webp" alt="Малогабаритная студия с продуманной системой хранения"><a class="case__more" href="#cases"><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Функциональная малогабаритная студия</h3>
           </article>
           <article class="case case--4">
             <p class="case__num">04</p>
-            <div class="case__media"><img class="case__img" src="images/case-4.png" alt="Интерьер в стиле современной классики с лепниной"></div>
+            <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-4.webp" alt="Интерьер в стиле современной классики с лепниной"><a class="case__more" href="#cases"><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Современная классика в сталинской высотке</h3>
           </article>
           <article class="case case--5">
             <p class="case__num">05</p>
-            <div class="case__media"><img class="case__img" src="images/case-5.png" alt="Пентхаус в стиле арт-деко с панорамными окнами"></div>
+            <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-5.webp" alt="Пентхаус в стиле арт-деко с панорамными окнами"><a class="case__more" href="#cases"><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Арт-деко пентхаус<br class="u-br-mobile"> с панорамными видами</h3>
           </article>
           <article class="case case--6">
             <p class="case__num">06</p>
-            <div class="case__media"><img class="case__img" src="images/case-6.png" alt="Эко-лофт с деревом, камнем и живыми растениями"></div>
+            <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-6.webp" alt="Эко-лофт с деревом, камнем и живыми растениями"><a class="case__more" href="#cases"><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Эко-лофт<br class="u-br-mobile"> с натуральными материалами</h3>
           </article>
           <article class="case case--7">
             <p class="case__num">07</p>
-            <div class="case__media"><img class="case__img" src="images/case-7.png" alt="Двухуровневый таунхаус с лестницей и светлой гостиной"></div>
+            <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-7.webp" alt="Двухуровневый таунхаус с лестницей и светлой гостиной"><a class="case__more" href="#cases"><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Семейное таунхаусное гнездо за городом</h3>
           </article>
         </div>
@@ -213,9 +221,9 @@
 
         <ul class="reviews__track" id="reviews-track">
           <li class="review review--1">
-            <img class="review__photo" src="images/review-1.png" alt="Екатерина Иванова, клиентка студии">
+            <img loading="lazy" decoding="async" class="review__photo" src="images/review-1.webp" alt="Екатерина Иванова, клиентка студии">
             <!-- Карандашный портрет из Figma (вариант default); при наведении сменяется цветным фото -->
-            <img class="review__photo review__photo--sketch" src="images/review-1-sketch.png" alt="" aria-hidden="true" onerror="this.remove()">
+            <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-1-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
             <blockquote class="review__card">
               <div class="review__body">
                 <div class="review__text">
@@ -233,9 +241,9 @@
             </blockquote>
           </li>
           <li class="review review--2">
-            <img class="review__photo" src="images/review-2.png" alt="Анна Соколова, клиентка студии">
+            <img loading="lazy" decoding="async" class="review__photo" src="images/review-2.webp" alt="Анна Соколова, клиентка студии">
             <!-- Карандашный портрет (default); при наведении сменяется цветным фото -->
-            <img class="review__photo review__photo--sketch" src="images/review-2-sketch.png" alt="" aria-hidden="true" onerror="this.remove()">
+            <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-2-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
             <blockquote class="review__card">
               <div class="review__body">
                 <div class="review__text">
@@ -253,9 +261,9 @@
             </blockquote>
           </li>
           <li class="review review--3">
-            <img class="review__photo" src="images/review-3.png" alt="Дмитрий Орлов, клиент студии">
+            <img loading="lazy" decoding="async" class="review__photo" src="images/review-3.webp" alt="Дмитрий Орлов, клиент студии">
             <!-- Карандашный портрет (default); при наведении сменяется цветным фото -->
-            <img class="review__photo review__photo--sketch" src="images/review-3-sketch.png" alt="" aria-hidden="true" onerror="this.remove()">
+            <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-3-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
             <blockquote class="review__card">
               <div class="review__body">
                 <div class="review__text">
@@ -264,6 +272,45 @@
                     <span class="review__city">г. Сочи</span>
                   </footer>
                   <p class="review__quote">Смета не выросла ни на рубль, а ремонт закончили на неделю раньше. Рекомендую!</p>
+                </div>
+                <a class="review__link link-arrow" href="#cases">
+                  <span class="u-trim">открыть проект</span>
+                  <span class="link-arrow__icon" aria-hidden="true"></span>
+                </a>
+              </div>
+            </blockquote>
+          </li>
+          <!-- TODO: отзывы 4–5 — копии 1–2, чтобы слайдер прокручивался; заменить на новые отзывы -->
+          <li class="review review--4">
+            <img loading="lazy" decoding="async" class="review__photo" src="images/review-1.webp" alt="Екатерина Иванова, клиентка студии">
+            <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-1-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
+            <blockquote class="review__card">
+              <div class="review__body">
+                <div class="review__text">
+                  <footer class="review__author">
+                    <cite class="review__name">Екатерина Иванова</cite>
+                    <span class="review__city">г. Москва</span>
+                  </footer>
+                  <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
+                </div>
+                <a class="review__link link-arrow" href="#cases">
+                  <span class="u-trim">открыть проект</span>
+                  <span class="link-arrow__icon" aria-hidden="true"></span>
+                </a>
+              </div>
+            </blockquote>
+          </li>
+          <li class="review review--5">
+            <img loading="lazy" decoding="async" class="review__photo" src="images/review-2.webp" alt="Анна Соколова, клиентка студии">
+            <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-2-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
+            <blockquote class="review__card">
+              <div class="review__body">
+                <div class="review__text">
+                  <footer class="review__author">
+                    <cite class="review__name">Анна Соколова</cite>
+                    <span class="review__city">г. Казань</span>
+                  </footer>
+                  <p class="review__quote">В маленькой студии нашлось место и для работы, и для гостей. Каждый метр продуман!</p>
                 </div>
                 <a class="review__link link-arrow" href="#cases">
                   <span class="u-trim">открыть проект</span>
@@ -298,7 +345,7 @@
       <!-- Section 7: Request -->
       <section class="request" id="request" aria-labelledby="request-title">
         <div class="request__media">
-          <img class="request__img" src="images/request.png" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
+          <img loading="lazy" decoding="async" class="request__img" src="images/request.webp" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
         </div>
         <div class="request__panel">
           <p class="label label--muted u-trim">заявка</p>
@@ -356,11 +403,11 @@
       </div>
 
       <div class="footer__picture">
-        <img class="footer__picture-img" src="images/picture.png" alt="Светлая гостиная с мягким диваном, деревянным столиком и торшером">
+        <img loading="lazy" decoding="async" class="footer__picture-img" src="images/picture.webp" alt="Светлая гостиная с мягким диваном, деревянным столиком и торшером">
       </div>
     </footer>
   </div>
 
-  <script src="js/main.js?v=3" defer></script>
+  <script src="js/main.js?v=6" defer></script>
 </body>
 </html>
