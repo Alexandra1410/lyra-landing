@@ -1829,6 +1829,7 @@ textarea.field {
     flex: none;
     width: 100%;
     height: 480px;
+    object-position: 50% 80%; /* wide frame: the sofa stays whole, the blossom branches still show */
   }
 
   .benefits__panel {
@@ -1968,7 +1969,9 @@ textarea.field {
 
   /* Hero */
   .hero {
-    height: 910px; /* 818 + 92: the brown block is taller so the dining table shows in the arch */
+    /* photo 422 + text area 108 + the whole arch (420×520, narrower on small phones) */
+    --arch-w: min(420px, 100vw);
+    height: calc(422px + 108px + var(--arch-w) * 520 / 420);
   }
 
   .hero__photo {
@@ -1980,13 +1983,13 @@ textarea.field {
     top: 422px;
     left: 0;
     width: 100%;
-    height: 488px;
+    height: calc(108px + var(--arch-w) * 520 / 420);
   }
 
   /* full-size arch, centred: it bleeds past both screen edges equally on any phone */
   .hero__arch {
     top: 108px;
-    width: 420px;
+    width: var(--arch-w); /* the whole arch fits: dome on top, table and chairs at the bottom */
   }
 
   .hero__title {
