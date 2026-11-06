@@ -51,6 +51,7 @@
   --color-brown: #382520;
   --color-sand: #e9e0d7;
   --color-sand-40: rgba(233, 224, 215, 0.4);
+  --color-error: #b3261e; /* 6.5:1 on white */
   --color-sand-60: rgba(233, 224, 215, 0.6); /* muted small text on brown that still passes contrast (AA) */
   --color-sand-20: rgba(233, 224, 215, 0.2);
 
@@ -1326,7 +1327,7 @@ footer[id] {
   justify-content: space-between;
   align-items: flex-start;
   width: var(--split-right);
-  height: 800px;
+  min-height: 800px; /* grows if errors or a long comment need more room, instead of eating the padding */
   padding: var(--s-64);
   background: var(--color-white);
 }
@@ -1352,6 +1353,83 @@ footer[id] {
   gap: var(--s-28);
 }
 
+/* Field + its label + its error. At rest the placeholder is the label (as in the layout);
+   once something is typed, a small label appears above the line so the field keeps its name */
+.form__field {
+  position: relative;
+}
+
+.form__label {
+  position: absolute;
+  top: -6px;
+  left: 0;
+  font-size: var(--fs-small);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--color-black-65);
+  opacity: 0;
+  translate: 0 4px;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-soft), translate 0.2s var(--ease-soft);
+}
+
+.form__field:has(.field:not(:placeholder-shown)) > .form__label,
+.phone-field:has(.phone-field__input:not(:placeholder-shown)) > .form__label {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* error under the field: says what's wrong and how to fix it */
+.form__error {
+  margin-top: var(--s-8);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--color-error);
+}
+
+.form__error:empty {
+  display: none;
+}
+
+.form__error--check {
+  margin-top: calc(var(--s-8) * -1);
+  padding-left: 32px; /* under the text, not the box */
+}
+
+.field[aria-invalid="true"],
+.phone-field:has([aria-invalid="true"]) {
+  border-bottom-color: var(--color-error);
+}
+
+/* "Thank you" state that replaces the form once sending is wired up */
+.request__success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+  outline: none;
+}
+
+.request__success[hidden] {
+  display: none;
+}
+
+.request__success-text {
+  max-width: 32ch;
+  font-size: var(--fs-body);
+  line-height: 1.4;
+  color: var(--color-black-65);
+}
+
+/* after sending: the title + form and the button give way to the thank-you, centred in the panel */
+.request__panel.is-sent .request__main,
+.request__panel.is-sent > .button {
+  display: none;
+}
+
+.request__panel.is-sent .request__success {
+  margin-block: auto;
+}
+
 .field {
   display: block;
   width: 100%;
@@ -1369,7 +1447,7 @@ footer[id] {
 }
 
 .field::placeholder {
-  color: var(--color-black);
+  color: var(--color-black-65); /* lighter than what the visitor types, so empty and filled fields differ */
   text-transform: uppercase;
   opacity: 1;
 }
@@ -1386,8 +1464,13 @@ footer[id] {
   color: var(--color-black-65); /* was black-40 (2.6:1) */
 }
 
+/* comment: one line at rest, grows with the text (JS sets the height; field-sizing where supported),
+   scrolls after ~6 lines */
 textarea.field {
-  height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 2px);
+  min-height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 2px);
+  max-height: calc(var(--fs-field) * 1.2 * 6 + var(--s-16) * 2 + 2px);
+  field-sizing: content;
+  overflow-y: auto;
 }
 
 /* Phone: [flag +7 ⌄ | number]. The underline lives on the wrapper, like on the other fields */
@@ -1475,7 +1558,7 @@ textarea.field {
 }
 
 .phone-field__input::placeholder {
-  color: var(--color-black);
+  color: var(--color-black-65);
   text-transform: uppercase;
   opacity: 1;
 }
@@ -1549,8 +1632,9 @@ textarea.field {
 }
 
 /* the required box turns red if someone tries to send without it */
-.form.is-submitted .check__input:invalid + .check__box {
-  border-color: #b3261e;
+.form.is-submitted .check__input:invalid + .check__box,
+.check__input[aria-invalid="true"] + .check__box {
+  border-color: var(--color-error);
 }
 
 .check__text {
@@ -2446,7 +2530,7 @@ textarea.field {
   }
 
   textarea.field {
-    height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 1px);
+    min-height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 1px);
   }
 
   /* mobile file 441×149: the same crop — visible from x≈4.9 (L) to x≈406.9 (A cut by ~21%),

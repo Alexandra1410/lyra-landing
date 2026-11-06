@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=65">
+  <link rel="stylesheet" href="css/style.css?v=69">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -351,10 +351,14 @@
             <h2 class="title-l u-trim" id="request-title">оставьте заявку</h2>
             <form class="form" id="request-form" action="#" method="post">
               <div class="form__group">
-                <label class="visually-hidden" for="request-name">Ваше имя</label>
-                <input class="field" id="request-name" name="name" type="text" autocomplete="name" placeholder="ваше имя" required>
+                <div class="form__field">
+                  <label class="form__label" for="request-name">Ваше имя</label>
+                  <input class="field" id="request-name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="ваше имя" required aria-describedby="request-name-error">
+                  <p class="form__error" id="request-name-error" data-error-for="request-name"></p>
+                </div>
                 <!-- Phone: country code picker (native select under the visual, so phones show their own list) + number with a mask.
                      The full number in the +7-(999)-999-99-99 format goes to the hidden "phone" field -->
+                <div class="form__field">
                 <div class="phone-field" data-phone>
                   <label class="phone-field__country">
                     <span class="phone-field__flag" aria-hidden="true" data-phone-flag>🇷🇺</span>
@@ -388,19 +392,24 @@
                     </select>
                   </label>
                   <span class="phone-field__divider" aria-hidden="true"></span>
-                  <label class="visually-hidden" for="request-phone">Номер телефона</label>
-                  <input class="phone-field__input" id="request-phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="номер телефона" required data-phone-mask>
+                  <label class="form__label form__label--phone" for="request-phone">Номер телефона</label>
+                  <input class="phone-field__input" id="request-phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="номер телефона" required aria-describedby="request-phone-error" data-phone-mask>
                   <input type="hidden" name="phone" data-phone-full>
                 </div>
+                <p class="form__error" id="request-phone-error" data-error-for="request-phone"></p>
+                </div>
               </div>
-              <label class="visually-hidden" for="request-comment">Комментарий</label>
-              <textarea class="field field--muted" id="request-comment" name="comment" rows="1" placeholder="комментарий"></textarea>
+              <div class="form__field">
+                <label class="form__label" for="request-comment">Комментарий</label>
+                <textarea class="field field--muted" id="request-comment" name="comment" rows="1" maxlength="1000" placeholder="комментарий" data-autogrow></textarea>
+              </div>
               <div class="form__consents">
                 <label class="check">
-                  <input class="check__input" type="checkbox" name="consent_personal_data" value="yes" required>
+                  <input class="check__input" id="request-consent" type="checkbox" name="consent_personal_data" value="yes" required aria-describedby="request-consent-error">
                   <span class="check__box" aria-hidden="true"></span>
                   <span class="check__text">Принимаю <a href="oferta.html" target="_blank" rel="noopener">условия оферты</a> и даю <a href="personal-data.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a> по <a href="privacy.html" target="_blank" rel="noopener">политике конфиденциальности</a></span>
                 </label>
+                <p class="form__error form__error--check" id="request-consent-error" data-error-for="request-consent"></p>
                 <label class="check">
                   <input class="check__input" type="checkbox" name="consent_marketing" value="yes">
                   <span class="check__box" aria-hidden="true"></span>
@@ -413,6 +422,11 @@
             <span class="u-trim">отправить заявку</span>
             <span class="button__icon" aria-hidden="true"></span>
           </button>
+          <!-- Shown instead of the form once sending is wired up (window.lyraRequestSent()); text is a draft for the client -->
+          <div class="request__success" role="status" tabindex="-1" hidden data-request-success>
+            <p class="request__success-title title-l">Спасибо, заявка отправлена</p>
+            <p class="request__success-text">Мы свяжемся с вами по указанному номеру.</p>
+          </div>
         </div>
       </section>
     </main>
@@ -438,11 +452,12 @@
             <form class="footer__subscribe" action="#" method="post">
               <label class="footer__subscribe-text" for="subscribe-email">Подпишитесь на нашу рассылку и узнавайте первыми об акциях и скидках</label>
               <div class="footer__subscribe-field">
-                <input class="field" id="subscribe-email" name="email" type="email" autocomplete="email" placeholder="ваш email" required>
+                <input class="field" id="subscribe-email" name="email" type="email" autocomplete="email" maxlength="120" placeholder="ваш email" required aria-describedby="subscribe-email-error">
                 <button class="footer__subscribe-submit" type="submit" aria-label="Подписаться">
                   <span class="footer__subscribe-arrow" aria-hidden="true"></span>
                 </button>
               </div>
+              <p class="form__error" id="subscribe-email-error" data-error-for="subscribe-email"></p>
             </form>
             <div class="footer__bottom">
               <p class="footer__tagline">LYRA |  Интерьеры, которые вдохновляют</p>
@@ -468,7 +483,7 @@
   </div>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=19" defer></script>
+  <script src="js/main.js?v=20" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

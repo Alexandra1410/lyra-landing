@@ -203,6 +203,10 @@
       codeEl.textContent = '+' + code; // "Другая страна": just "+", the whole number is typed in the field
       phone.placeholder = code ? 'номер телефона' : 'код страны и номер';
       phone.maxLength = mask.length;
+      // message for an incomplete number, used by the form check below
+      phone.dataset.incomplete = code
+        ? 'Введите номер полностью: +' + code + '-' + mask.replace(/9/g, '_')
+        : 'Введите номер полностью, вместе с кодом страны';
     };
 
     var digitsOf = function (value, pasted) {
@@ -274,28 +278,110 @@
       phone.focus();
     });
 
-    phone.addEventListener('invalid', function () {
-      if (phone.validity.valueMissing) phone.setCustomValidity('Введите номер телефона');
-      else if (phone.validity.customError) {
-        phone.setCustomValidity(code
-          ? 'Введите номер полностью: +' + code + '-' + mask
-          : 'Введите номер полностью, вместе с кодом страны');
-      }
-    });
-
     applyCountry();
   }
 
-  // Consent checkbox: clear message, and highlight it once a send was attempted
+  // Form checks: our own messages in Russian under each field instead of the browser's bubbles.
+  // Without JS the native `required` checks still work (noValidate is set only here).
+  function showError(input, message) {
+    var box = document.getElementById(input.id + '-error');
+    if (box) box.textContent = message || '';
+    if (message) input.setAttribute('aria-invalid', 'true');
+    else input.removeAttribute('aria-invalid');
+  }
+
+  // rules: [{ input, check: function () { return '' or an error message } }]
+  function guardForm(form, rules, onValid) {
+    if (!form) return;
+    form.noValidate = true;
+    var tried = false;
+    function run(rule) {
+      var message = rule.check();
+      showError(rule.input, message);
+      return !message;
+    }
+    form.addEventListener('submit', function (e) {
+      tried = true;
+      form.classList.add('is-submitted');
+      var firstBad = null;
+      rules.forEach(function (rule) { if (!run(rule) && !firstBad) firstBad = rule.input; });
+      if (firstBad) {
+        e.preventDefault();
+        firstBad.focus();
+        return;
+      }
+      if (onValid) onValid(e);
+    });
+    // after a failed try, each field re-checks itself as the visitor fixes it
+    rules.forEach(function (rule) {
+      ['input', 'change'].forEach(function (type) {
+        rule.input.addEventListener(type, function () {
+          if (tried || rule.input.hasAttribute('aria-invalid')) run(rule);
+        });
+      });
+    });
+  }
+
   var requestForm = document.getElementById('request-form');
   if (requestForm) {
-    var consent = requestForm.querySelector('[name="consent_personal_data"]');
-    consent.addEventListener('invalid', function () {
-      consent.setCustomValidity('Чтобы отправить заявку, нужно согласие на обработку персональных данных');
-      requestForm.classList.add('is-submitted');
+    var nameInput = requestForm.querySelector('#request-name');
+    var phoneInput = requestForm.querySelector('#request-phone');
+    var consentInput = requestForm.querySelector('#request-consent');
+    var submitButton = document.querySelector('[form="request-form"][type="submit"]');
+    guardForm(requestForm, [
+      { input: nameInput, check: function () {
+        var v = nameInput.value.trim();
+        if (!v) return 'Введите имя';
+        if (v.length < 2) return 'Имя слишком короткое: нужно хотя бы 2 буквы';
+        return '';
+      } },
+      { input: phoneInput, check: function () {
+        var n = phoneInput.value.replace(/\D/g, '').length;
+        if (!n) return 'Введите номер телефона';
+        if (phoneInput.validity.customError) return phoneInput.dataset.incomplete || 'Введите номер полностью';
+        return '';
+      } },
+      { input: consentInput, check: function () {
+        return consentInput.checked ? '' : 'Чтобы отправить заявку, нужно согласие на обработку персональных данных';
+      } }
+    ], function () {
+      // one send per click: the button waits until the page answers
+      if (submitButton) { submitButton.disabled = true; submitButton.setAttribute('aria-busy', 'true'); }
     });
-    consent.addEventListener('change', function () { consent.setCustomValidity(''); });
+
+    // "Thank you" state, for when sending is wired up: call window.lyraRequestSent() after a successful send
+    var requestPanel = requestForm.closest('.request__panel');
+    var success = document.querySelector('[data-request-success]');
+    window.lyraRequestSent = function () {
+      if (!requestPanel || !success) return;
+      requestPanel.classList.add('is-sent');
+      success.hidden = false;
+      success.focus();
+    };
   }
+
+  var subscribeForm = document.querySelector('.footer__subscribe');
+  if (subscribeForm) {
+    var emailInput = subscribeForm.querySelector('#subscribe-email');
+    guardForm(subscribeForm, [
+      { input: emailInput, check: function () {
+        emailInput.value = emailInput.value.trim();
+        if (!emailInput.value) return 'Введите email';
+        if (emailInput.validity.typeMismatch) return 'Проверьте адрес: например, name@mail.ru';
+        return '';
+      } }
+    ]);
+  }
+
+  // Comment grows with the text (browsers without CSS field-sizing)
+  document.querySelectorAll('[data-autogrow]').forEach(function (area) {
+    if (window.CSS && CSS.supports('field-sizing', 'content')) return;
+    var grow = function () {
+      area.style.height = 'auto';
+      area.style.height = (area.scrollHeight + area.offsetHeight - area.clientHeight) + 'px';
+    };
+    area.addEventListener('input', grow);
+  });
 
   // Hero intro: "After delay 10ms" → 2000ms. Starts when the preloader goes away
   var hero = document.querySelector('.hero');
