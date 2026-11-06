@@ -595,6 +595,37 @@
   if (ctaObserver) ctaObserver.observe(cta);
   else playCta();
 
+  // Section entrances (CSS: [data-from]): each element plays once, when its parent reaches
+  // the lower 15% of the screen. The parent is watched, not the element itself: the element
+  // waits off-screen (translated), so it would never "intersect" on its own.
+  var revealItems = document.querySelectorAll('[data-from]');
+  // the nearest parent that has its own box (display: contents has none and never intersects)
+  function revealRoot(el) {
+    var parent = el.parentElement;
+    while (parent.parentElement && getComputedStyle(parent).display === 'contents') parent = parent.parentElement;
+    return parent;
+  }
+  function revealIn(root) {
+    revealItems.forEach(function (el) { if (revealRoot(el) === root) el.classList.add('is-in'); });
+  }
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        revealIn(entry.target);
+        revealObserver.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -15% 0px' });
+    revealItems.forEach(function (el) { revealObserver.observe(revealRoot(el)); });
+  } else {
+    revealItems.forEach(function (el) { el.classList.add('is-in'); });
+  }
+  // keyboard: Tab onto something still waiting off-screen shows it at once
+  document.addEventListener('focusin', function (e) {
+    var el = e.target.closest('[data-from]:not(.is-in)');
+    if (el) el.classList.add('is-in');
+  });
+
   // Benefits slider: click on a dot → variant 1–5, 300ms
   var benefits = document.querySelector('[data-benefits]');
   // Each photo: srcset for the big slide (phones get the 640/800px copy), a small copy for the thumbs

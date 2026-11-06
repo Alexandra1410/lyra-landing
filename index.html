@@ -48,7 +48,7 @@
       setTimeout(reveal, 3000);
     })(document);
   </script>
-  <link rel="stylesheet" href="css/style.css?v=89">
+  <link rel="stylesheet" href="css/style.css?v=91">
 </head>
 <body>
   <!-- Preloader: shown only with JS, removed once the first screen has loaded -->
@@ -306,8 +306,8 @@
       <!-- Section 5: Reviews -->
       <section class="reviews" id="reviews" aria-labelledby="reviews-title">
         <div class="reviews__head">
-          <h2 class="title-xl u-trim" id="reviews-title">отзывы</h2>
-          <div class="reviews__controls">
+          <h2 data-from="left" class="title-xl u-trim" id="reviews-title">отзывы</h2>
+          <div data-from="right" class="reviews__controls">
             <button class="reviews__arrow reviews__arrow--prev" type="button" aria-label="Предыдущий отзыв" aria-controls="reviews-track" data-reviews-prev>
               <span class="reviews__arrow-icon" aria-hidden="true"></span>
             </button>
@@ -317,7 +317,7 @@
           </div>
         </div>
 
-        <ul class="reviews__track" id="reviews-track">
+        <ul data-from="right" class="reviews__track" id="reviews-track">
           <li class="review review--1" tabindex="0">
             <img loading="lazy" decoding="async" class="review__photo" src="images/review-1.webp" alt="Екатерина Иванова, клиентка студии">
             <!-- Карандашный портрет из Figma (вариант default); при наведении сменяется цветным фото -->
@@ -444,11 +444,11 @@
       <!-- Section 7: Request -->
       <section class="request" id="request" aria-labelledby="request-title">
         <div class="request__media">
-          <img loading="lazy" decoding="async" class="request__img" src="images/request.webp" srcset="images/request-800.webp 800w, images/request.webp 1163w" sizes="(max-width: 1279px) 100vw, 50vw" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
+          <img loading="lazy" decoding="async" data-from="fade" class="request__img" src="images/request.webp" srcset="images/request-800.webp 800w, images/request.webp 1163w" sizes="(max-width: 1279px) 100vw, 50vw" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
         </div>
         <div class="request__panel">
-          <p class="label label--muted u-trim">заявка</p>
-          <div class="request__main">
+          <p data-from="right" class="label label--muted u-trim">заявка</p>
+          <div data-from="right" class="request__main">
             <h2 class="title-l u-trim" id="request-title">оставьте заявку</h2>
             <form class="form" id="request-form" action="#" method="post">
               <div class="form__group">
@@ -615,7 +615,7 @@
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=30" defer></script>
+  <script src="js/main.js?v=31" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

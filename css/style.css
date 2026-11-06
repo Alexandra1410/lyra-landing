@@ -113,6 +113,7 @@
   --ease-figma: cubic-bezier(0.7, 0, 0.42, 1);
   --dur-hover: 0.3s;
   --dur-intro: 2s;
+  --dur-reveal: 1.4s; /* section entrances below the first screen */
   --dur-button: 0.45s; /* button hover: calm, not abrupt */
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -2673,6 +2674,27 @@ textarea.field {
   .js .cta * {
     transition: none !important;
   }
+}
+
+/* Section entrances (reviews, request): the same language as the hero and CTA — Figma easing,
+   titles and text arrive from beyond the screen edge (data-from="left|right"), photos fade in —
+   but quicker than the 2000ms intro (client: smooth, a bit faster). main.js adds .is-in once
+   the element's parent comes into view; plays once. Reduced motion: everything is simply there. */
+.js .reviews,
+.js .request {
+  overflow-x: clip; /* elements waiting off-screen must not widen the page */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-from] {
+    transition:
+      translate var(--dur-reveal) var(--ease-figma),
+      opacity var(--dur-reveal) var(--ease-figma);
+  }
+
+  .js [data-from="left"]:not(.is-in) { translate: -100vw 0; }
+  .js [data-from="right"]:not(.is-in) { translate: 100vw 0; }
+  .js [data-from="fade"]:not(.is-in) { opacity: 0; }
 }
 
 /* ---------- Preloader ---------- */
