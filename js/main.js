@@ -107,7 +107,9 @@
   }
   // Two modes, chosen by what the visitor actually uses, not by what the browser claims
   // ((hover: none) is wrong on some laptops with touchpads/touchscreens and in DevTools device mode):
-  // — mouse: a review opens while the cursor is over it (.is-hover), closes when it leaves;
+  // — mouse: the review at the start of the strip is open by default (.is-default) so its words
+  //   are readable without hovering; hovering another one opens it instead (.is-hover) and the
+  //   default closes; when the cursor leaves, the default opens again;
   // — touch (a phone has no cursor): one review is always open (.is-active) — the first on load,
   //   then the one an arrow or a swipe brings into view, or the one tapped. Opening/closing uses
   //   the same CSS transitions as the mouse hover, so the animation is identical.
@@ -129,24 +131,50 @@
     });
     return best;
   }
+  var defaultReview = reviewItems[0];
+  var defaultTimer = null;
+  // delay: when the cursor leaves, wait a moment — if it lands on the next review straight away,
+  // the default doesn't blink open and shut in between
+  function syncDefault(delay) {
+    clearTimeout(defaultTimer);
+    var apply = function () {
+      var hovered = track.querySelector('.review.is-hover');
+      reviewItems.forEach(function (r) {
+        r.classList.toggle('is-default', !touchMode && !hovered && r === defaultReview);
+      });
+    };
+    if (delay) defaultTimer = setTimeout(apply, delay);
+    else apply();
+  }
   function activateVisibleReview() {
     if (touchMode) setActiveReview(visibleReview());
+    else { defaultReview = visibleReview(); syncDefault(0); }
   }
   function setTouchMode(on) {
     if (touchMode === on) return;
     touchMode = on;
     setActiveReview(on ? visibleReview() : null);
+    if (!on) defaultReview = visibleReview();
+    syncDefault(0);
   }
   // any real mouse movement switches to mouse mode; a finger switches back
   document.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') setTouchMode(false); }, { passive: true });
   document.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') setTouchMode(true); }, { passive: true });
   reviewItems.forEach(function (r) {
-    r.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') r.classList.add('is-hover'); });
-    r.addEventListener('pointerleave', function () { r.classList.remove('is-hover'); });
+    r.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      r.classList.add('is-hover');
+      syncDefault(0);
+    });
+    r.addEventListener('pointerleave', function () {
+      r.classList.remove('is-hover');
+      syncDefault(150);
+    });
   });
-  // safety net: the cursor left the browser window — close everything
+  // safety net: the cursor left the browser window — close hovered ones, the default stays
   document.documentElement.addEventListener('pointerleave', function () {
     reviewItems.forEach(function (r) { r.classList.remove('is-hover'); });
+    syncDefault(150);
   });
   // touch: tapping a review opens it (the previous one closes).
   // Pointer events, not click: iPhone sends no click for a tap on a plain photo.
@@ -173,6 +201,7 @@
   }, { passive: true });
   touchMq.addEventListener('change', function () { setTouchMode(touchMq.matches); });
   setActiveReview(reviewItems[0]); // phone: the first review is open from the start
+  syncDefault(0);                   // mouse: the same one is open by default
 
   prevBtn.addEventListener('click', function () { scrollReviews(-1); });
   nextBtn.addEventListener('click', function () { scrollReviews(1); });

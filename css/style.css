@@ -43,7 +43,8 @@
   --color-white: #ffffff;
   --color-white-80: rgba(255, 255, 255, 0.8);
   --color-white-40: rgba(255, 255, 255, 0.4);
-  --color-white-55: rgba(255, 255, 255, 0.55); /* muted small text on brown that still passes contrast (AA) */
+  --color-white-55: rgba(255, 255, 255, 0.55);
+  --color-white-65: rgba(255, 255, 255, 0.65); /* muted small text on brown that still passes contrast (AA) */
   --color-black: #111111;
   --color-black-40: rgba(17, 17, 17, 0.4);
   --color-black-65: rgba(17, 17, 17, 0.65); /* muted small text that still passes contrast (AA) */
@@ -1136,18 +1137,23 @@ footer[id],
 }
 
 /* Mouse: JS adds .is-hover on pointerenter and removes it on pointerleave (main.js).
+   .is-default: with a mouse, the review at the start of the strip stays open so its words are
+   readable without hovering; it closes while another review is hovered (JS swaps the class).
    Plain :hover is only a fallback for when JS hasn't loaded. */
-.review.is-hover {
+.review.is-hover,
+.review.is-default {
   z-index: 2;
   transition-delay: 0s;
 }
 
-.review.is-hover .review__photo--sketch {
+.review.is-hover .review__photo--sketch,
+.review.is-default .review__photo--sketch {
   opacity: 0;
   transition: opacity var(--dur-hover) var(--ease-figma) 0s;
 }
 
-.review.is-hover .review__card {
+.review.is-hover .review__card,
+.review.is-default .review__card {
   opacity: 1;
   visibility: visible;
   transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
@@ -1185,7 +1191,7 @@ footer[id],
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 22px;
   width: 100%;
 }
 
@@ -1199,20 +1205,22 @@ footer[id],
 
 .review__name {
   font-style: normal;
-  font-size: 0.8125rem;          /* 16 × 0.814 */
+  font-size: 0.9375rem;     /* 15px: readable; the hidden project link freed room in the circle */
   color: var(--color-white-80);
 }
 
 .review__city {
-  font-size: 0.625rem;          /* 12 × 0.814 */
-  color: var(--color-white-55); /* was white-40 (3:1) */
+  font-size: 0.75rem;       /* 12px */
+  color: var(--color-white-65);
 }
 
 .review__quote {
   width: 100%;
-  max-width: 223px;         /* 274 × 0.814 */
+  max-width: 224px;
   font-weight: 600;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;     /* 15px */
+  line-height: 1.3;
+  text-wrap: balance;
 }
 
 .review__link {
@@ -2356,7 +2364,7 @@ textarea.field {
 
   /* same idea on the phone: the mobile layout's 270px card scaled to our 240px (× 0.889) */
   .review__body {
-    gap: 28px;
+    gap: 20px;
     width: 100%;
   }
 
@@ -2365,18 +2373,18 @@ textarea.field {
   }
 
   .review__name {
-    font-size: 0.7812rem;        /* 14 × 0.889 */
+    font-size: 0.875rem;      /* 14px */
   }
 
   .review__city {
-    font-size: 0.6562rem;        /* 12 × 0.889 */
+    font-size: 0.75rem;       /* 12px */
   }
 
   .review__quote {
-    max-width: 180px;
+    max-width: 196px;
     font-weight: 400;
-    font-size: 0.7812rem;
-    line-height: 1.2;
+    font-size: 0.875rem;      /* 14px */
+    line-height: 1.25;
     text-wrap: balance;       /* even lines instead of one long + one short */
   }
 
