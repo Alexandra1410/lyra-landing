@@ -21,19 +21,19 @@
 /* Non Bureau — font files live in ../fonts/ */
 @font-face {
   font-family: "Non Bureau";
-  src: local("Non Bureau Regular"), local("NonBureau-Regular"), url("../fonts/NonBureau-Regular.otf") format("opentype");
+  src: local("Non Bureau Regular"), local("NonBureau-Regular"), url("../fonts/NonBureau-Regular.woff2") format("woff2"), url("../fonts/NonBureau-Regular.otf") format("opentype");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Non Bureau";
-  src: local("Non Bureau Medium"), local("NonBureau-Medium"), url("../fonts/NonBureau-Medium.otf") format("opentype");
+  src: local("Non Bureau Medium"), local("NonBureau-Medium"), url("../fonts/NonBureau-Medium.woff2") format("woff2"), url("../fonts/NonBureau-Medium.otf") format("opentype");
   font-weight: 500;
   font-display: swap;
 }
 @font-face {
   font-family: "Non Bureau";
-  src: local("Non Bureau Bold"), local("NonBureau-Bold"), url("../fonts/NonBureau-Bold.otf") format("opentype");
+  src: local("Non Bureau Bold"), local("NonBureau-Bold"), url("../fonts/NonBureau-Bold.woff2") format("woff2"), url("../fonts/NonBureau-Bold.otf") format("opentype");
   font-weight: 700;
   font-display: swap;
 }
@@ -43,6 +43,7 @@
   --color-white: #ffffff;
   --color-white-80: rgba(255, 255, 255, 0.8);
   --color-white-40: rgba(255, 255, 255, 0.4);
+  --color-white-55: rgba(255, 255, 255, 0.55); /* muted small text on brown that still passes contrast (AA) */
   --color-black: #111111;
   --color-black-40: rgba(17, 17, 17, 0.4);
   --color-black-65: rgba(17, 17, 17, 0.65); /* muted small text that still passes contrast (AA) */
@@ -50,6 +51,7 @@
   --color-brown: #382520;
   --color-sand: #e9e0d7;
   --color-sand-40: rgba(233, 224, 215, 0.4);
+  --color-sand-60: rgba(233, 224, 215, 0.6); /* muted small text on brown that still passes contrast (AA) */
   --color-sand-20: rgba(233, 224, 215, 0.2);
 
   /* Font families */
@@ -57,22 +59,22 @@
   --font-body: "Manrope", Arial, sans-serif;
 
   /* Font sizes */
-  --fs-h1: 94px;
-  --fs-h1-m: 48px;
-  --fs-cta-m: 46px;
-  --fs-logo: 40px;
-  --fs-h2: 40px;
-  --fs-h2-m: 32px;
-  --fs-h3: 24px;
-  --fs-h3-m: 22px;
-  --fs-field: 20px;
-  --fs-logo-m: 20px;
-  --fs-body: 16px;
-  --fs-body-m: 14px;
-  --fs-small: 12px;
+  --fs-h1: 5.875rem;
+  --fs-h1-m: 3rem;
+  --fs-cta-m: 2.875rem;
+  --fs-logo: 2.5rem;
+  --fs-h2: 2.5rem;
+  --fs-h2-m: 2rem;
+  --fs-h3: 1.5rem;
+  --fs-h3-m: 1.375rem;
+  --fs-field: 1.25rem;
+  --fs-logo-m: 1.25rem;
+  --fs-body: 1rem;
+  --fs-body-m: 0.875rem;
+  --fs-small: 0.75rem;
 
   /* Line heights */
-  --lh-h1: 90px;
+  --lh-h1: 5.625rem;
   --lh-h1-m: 0.9;
   --lh-base: 1.2;
   --lh-h3: 1;
@@ -207,11 +209,11 @@ button {
 }
 
 .label--muted {
-  color: var(--color-black-20);
+  color: var(--color-black-65); /* was black-20 (1.6:1); 65% is the lightest grey that reads (5.9:1) */
 }
 
 .label--sand {
-  color: var(--color-sand-40);
+  color: var(--color-sand-60); /* was sand-40 (3:1) */
 }
 
 .title-xl {
@@ -442,7 +444,13 @@ footer[id] {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--color-black-40);
+  /* the even 40% shade + soft extra shades only where text sits: a light band behind the big title
+     (bright windows) and a stronger one at the bottom under the description (light floor),
+     so the title reaches 3:1 and the small text 4.5:1 without darkening the whole photo */
+  background:
+    linear-gradient(to top, rgba(17, 17, 17, 0.5) 0%, rgba(17, 17, 17, 0.3) 14%, rgba(17, 17, 17, 0) 30%),
+    linear-gradient(to bottom, rgba(17, 17, 17, 0) 28%, rgba(17, 17, 17, 0.14) 36%, rgba(17, 17, 17, 0.14) 66%, rgba(17, 17, 17, 0) 74%),
+    var(--color-black-40);
 }
 
 .hero__panel {
@@ -582,7 +590,7 @@ footer[id] {
 
 .advantage__num {
   width: 37px;
-  color: var(--color-black-20);
+  color: var(--color-black-65); /* was black-20 (1.6:1) */
   text-align: right;
 }
 
@@ -749,7 +757,7 @@ footer[id] {
   font-weight: 600;
   font-size: var(--fs-body);
   line-height: var(--lh-base);
-  color: var(--color-black-20);
+  color: var(--color-black-65);
 }
 
 .cases__all {
@@ -1016,6 +1024,22 @@ footer[id] {
   inset: max(-7px, calc((44px - 100%) / -2));
 }
 
+/* the same finger-sized (44px) tap area for small controls whose look must stay as in the layout:
+   the menu button (36×16) and the standalone «смотреть все» / «начать проект» links (12px tall) */
+.header__burger,
+.cases__all,
+.cta__link {
+  position: relative;
+}
+
+.header__burger::before,
+.cases__all::before,
+.cta__link::before {
+  content: "";
+  position: absolute;
+  inset: calc((44px - 100%) / -2) -6px;
+}
+
 .review {
   position: relative;
   z-index: 1;
@@ -1168,25 +1192,25 @@ footer[id] {
 
 .review__name {
   font-style: normal;
-  font-size: 13px;          /* 16 × 0.814 */
+  font-size: 0.8125rem;          /* 16 × 0.814 */
   color: var(--color-white-80);
 }
 
 .review__city {
-  font-size: 10px;          /* 12 × 0.814 */
-  color: var(--color-white-40);
+  font-size: 0.625rem;          /* 12 × 0.814 */
+  color: var(--color-white-55); /* was white-40 (3:1) */
 }
 
 .review__quote {
   width: 100%;
   max-width: 223px;         /* 274 × 0.814 */
   font-weight: 600;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .review__link {
   gap: 6px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--color-white);
 }
 
@@ -1359,7 +1383,7 @@ footer[id] {
 }
 
 .field--muted::placeholder {
-  color: var(--color-black-40);
+  color: var(--color-black-65); /* was black-40 (2.6:1) */
 }
 
 textarea.field {
@@ -1415,7 +1439,7 @@ textarea.field {
   inset: 0;
   width: 100%;
   opacity: 0;
-  font-size: 16px; /* no zoom-in on iOS */
+  font-size: 1rem; /* no zoom-in on iOS */
   cursor: pointer;
 }
 
@@ -2009,6 +2033,13 @@ textarea.field {
     height: 422px;
   }
 
+  /* phone: the title sits at the top, over the bright window — the extra shade moves up there */
+  .hero__photo::after {
+    background:
+      linear-gradient(to bottom, rgba(17, 17, 17, 0.35) 10%, rgba(17, 17, 17, 0.2) 35%, rgba(17, 17, 17, 0) 55%),
+      var(--color-black-40);
+  }
+
   .hero__panel {
     top: 422px;
     left: 0;
@@ -2244,23 +2275,23 @@ textarea.field {
   }
 
   .review__name {
-    font-size: 12.5px;        /* 14 × 0.889 */
+    font-size: 0.7812rem;        /* 14 × 0.889 */
   }
 
   .review__city {
-    font-size: 10.5px;        /* 12 × 0.889 */
+    font-size: 0.6562rem;        /* 12 × 0.889 */
   }
 
   .review__quote {
     max-width: 180px;
     font-weight: 400;
-    font-size: 12.5px;
+    font-size: 0.7812rem;
     line-height: 1.2;
     text-wrap: balance;       /* even lines instead of one long + one short */
   }
 
   .review__link {
-    font-size: 14px;          /* 16 × 0.889 */
+    font-size: 0.875rem;          /* 16 × 0.889 */
   }
 
   /* Section 6 */
@@ -2533,7 +2564,7 @@ textarea.field {
 .preloader__logo {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 40px;
+  font-size: 2.5rem;
   line-height: 1;
   letter-spacing: 0.02em;
   opacity: 0;
@@ -2622,12 +2653,16 @@ html.lenis body {
 .footer__legal {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-8) var(--s-16);
+  gap: 12px var(--s-16);     /* rows of 24px tap areas don't overlap */
   font-size: var(--fs-small);
   color: var(--color-black-65);
 }
 
 .footer__legal a {
+  /* 12px links: 6px of invisible padding makes each tap area 24px+ tall (WCAG 2.5.8) without moving the text */
+  display: inline-block;
+  padding-block: 6px;
+  margin-block: -6px;
   transition: color var(--dur-hover) var(--ease-soft);
 }
 
@@ -2924,7 +2959,7 @@ html.lenis body {
 
   .legal__body h2 {
     margin-top: var(--s-36);
-    font-size: 18px;
+    font-size: 1.125rem;
   }
 
   .legal-footer {
