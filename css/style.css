@@ -1421,35 +1421,6 @@ footer[id],
   border-bottom-color: var(--color-error);
 }
 
-/* "Thank you" state that replaces the form once sending is wired up */
-.request__success {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-16);
-  outline: none;
-}
-
-.request__success[hidden] {
-  display: none;
-}
-
-.request__success-text {
-  max-width: 32ch;
-  font-size: var(--fs-body);
-  line-height: 1.4;
-  color: var(--color-black-65);
-}
-
-/* after sending: the title + form and the button give way to the thank-you, centred in the panel */
-.request__panel.is-sent .request__main,
-.request__panel.is-sent > .button {
-  display: none;
-}
-
-.request__panel.is-sent .request__success {
-  margin-block: auto;
-}
-
 .field {
   display: block;
   width: 100%;
@@ -3377,5 +3348,153 @@ html.has-lightbox {
   .lightbox__close {
     top: var(--s-4, 4px);
     right: var(--s-4, 4px);
+  }
+}
+
+/* ---------- Thank-you page (after the request is sent) ----------
+   Same split as the request section: the pencil-sketch house on the left,
+   a white panel with «Спасибо!», what happens next and the way back */
+.thanks {
+  display: grid;
+  grid-template-columns: var(--split-left) var(--split-right);
+  min-height: calc(100dvh - 96px); /* the screen under the sticky header */
+}
+
+.thanks__media {
+  position: relative;
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.thanks__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thanks__panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--s-64);
+  background: var(--color-white);
+}
+
+.thanks__title {
+  margin-top: var(--s-28);
+}
+
+.thanks__text {
+  max-width: 34ch;
+  margin-top: var(--s-28);
+  font-size: var(--fs-field);
+  line-height: 1.4;
+}
+
+.thanks__steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--s-28);
+  width: 100%;
+  max-width: 640px;
+  margin: var(--s-64) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.thanks__step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-12);
+  padding-top: var(--s-20);
+  border-top: 1px solid var(--color-black-20);
+}
+
+.thanks__num {
+  font-weight: 600;
+  font-size: var(--fs-small);
+  color: var(--color-black-65);
+  font-variant-numeric: tabular-nums;
+}
+
+.thanks__step-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-h3);
+  line-height: 1;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+.thanks__step-text {
+  max-width: 24ch;
+  font-size: var(--fs-body-m);
+  line-height: 1.4;
+  color: var(--color-black-65);
+}
+
+.thanks__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-20) var(--s-36);
+  margin-top: var(--s-64);
+}
+
+@media (max-width: 999px) {
+  .thanks {
+    grid-template-columns: 1fr;
+  }
+
+  .thanks__panel {
+    order: -1; /* the words first, the picture under them */
+  }
+
+  .thanks__media {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 699px) {
+  .thanks {
+    min-height: 0;
+  }
+
+  .thanks__panel {
+    padding: var(--s-36) var(--s-16) var(--s-64);
+  }
+
+  .thanks__title {
+    margin-top: var(--s-20);
+    font-size: var(--fs-h1-m);
+    line-height: var(--lh-h1-m);
+  }
+
+  .thanks__text {
+    margin-top: var(--s-20);
+    font-size: var(--fs-body);
+  }
+
+  .thanks__steps {
+    grid-template-columns: 1fr;
+    gap: var(--s-20);
+    margin-top: var(--s-36);
+  }
+
+  .thanks__step-title {
+    font-size: var(--fs-h3-m);
+  }
+
+  .thanks__actions {
+    width: 100%;
+    margin-top: var(--s-36);
+  }
+
+  .thanks__actions .button {
+    width: 100%;
   }
 }

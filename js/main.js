@@ -378,14 +378,10 @@
       if (submitButton) { submitButton.disabled = true; submitButton.setAttribute('aria-busy', 'true'); }
     });
 
-    // "Thank you" state, for when sending is wired up: call window.lyraRequestSent() after a successful send
-    var requestPanel = requestForm.closest('.request__panel');
-    var success = document.querySelector('[data-request-success]');
+    // After a successful send, go to the thank-you page (thanks.html).
+    // Call window.lyraRequestSent() once sending is wired up (Telegram / e-mail / CRM).
     window.lyraRequestSent = function () {
-      if (!requestPanel || !success) return;
-      requestPanel.classList.add('is-sent');
-      success.hidden = false;
-      success.focus();
+      window.location.href = 'thanks.html';
     };
   }
 

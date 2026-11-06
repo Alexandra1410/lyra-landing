@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=80">
+  <link rel="stylesheet" href="css/style.css?v=81">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -53,10 +53,10 @@
         </header>
 
         <div class="hero__photo">
-          <img class="hero__photo-img" fetchpriority="high" src="images/hero.webp" alt="Светлая кухня-гостиная с панорамным остеклением, деревянными табуретами и видом на сад">
+          <img class="hero__photo-img" fetchpriority="high" src="images/hero.webp" srcset="images/hero-640.webp 640w, images/hero-900.webp 900w, images/hero.webp 1246w" sizes="(max-width: 699px) 422px, max(50vw, 800px)" alt="Светлая кухня-гостиная с панорамным остеклением, деревянными табуретами и видом на сад">
         </div>
         <div class="hero__panel">
-          <img class="hero__arch" src="images/hero-arch.webp?v=2" width="1246" height="1246" alt="Обеденная зона с деревянным столом, стульями и живыми растениями">
+          <img class="hero__arch" src="images/hero-arch.webp?v=2" srcset="images/hero-arch-640.webp 640w, images/hero-arch-900.webp 900w, images/hero-arch.webp?v=2 1246w" sizes="520px" width="1246" height="1246" alt="Обеденная зона с деревянным столом, стульями и живыми растениями">
         </div>
 
         <h1 class="hero__title title-xl u-trim" id="hero-title">
@@ -480,11 +480,6 @@
             <span class="u-trim">отправить заявку</span>
             <span class="button__icon" aria-hidden="true"></span>
           </button>
-          <!-- Shown instead of the form once sending is wired up (window.lyraRequestSent()); text is a draft for the client -->
-          <div class="request__success" role="status" tabindex="-1" hidden data-request-success>
-            <p class="request__success-title title-l">Спасибо, заявка отправлена</p>
-            <p class="request__success-text">Мы свяжемся с вами по указанному номеру.</p>
-          </div>
         </div>
       </section>
     </main>
@@ -576,7 +571,7 @@
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=24" defer></script>
+  <script src="js/main.js?v=25" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Заявка отправлена — LYRA</title>
+  <!-- a service page: shown after the request form is sent, not for search engines -->
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/NonBureau-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css?v=81">
+</head>
+<body class="legal-page thanks-page">
+  <header class="legal-header">
+    <a class="legal-header__logo" href="index.html" aria-label="LYRA — на главную">LYRA</a>
+    <a class="legal-header__back link-arrow" href="index.html">
+      <span class="link-arrow__icon" aria-hidden="true"></span>
+      <span>на главную</span>
+    </a>
+  </header>
+
+  <main class="thanks">
+    <div class="thanks__media">
+      <img class="thanks__img" src="images/request.webp" fetchpriority="high" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
+    </div>
+
+    <section class="thanks__panel" aria-labelledby="thanks-title">
+      <p class="label label--muted u-trim">заявка отправлена</p>
+      <h1 class="thanks__title title-xl u-trim" id="thanks-title">Спасибо!</h1>
+      <p class="thanks__text">Мы получили вашу заявку и свяжемся с вами по указанному номеру.</p>
+
+      <!-- TODO: steps are a draft for the client to confirm (what really happens after a request) -->
+      <ol class="thanks__steps" aria-label="Что будет дальше">
+        <li class="thanks__step">
+          <span class="thanks__num u-trim">01</span>
+          <p class="thanks__step-title u-trim">Звонок</p>
+          <p class="thanks__step-text">Уточним задачу, площадь, сроки и бюджет</p>
+        </li>
+        <li class="thanks__step">
+          <span class="thanks__num u-trim">02</span>
+          <p class="thanks__step-title u-trim">Встреча</p>
+          <p class="thanks__step-text">Обсудим идеи в студии или на объекте, сделаем замеры</p>
+        </li>
+        <li class="thanks__step">
+          <span class="thanks__num u-trim">03</span>
+          <p class="thanks__step-title u-trim">Концепция</p>
+          <p class="thanks__step-text">Предложим планировку, стиль и смету проекта</p>
+        </li>
+      </ol>
+
+      <div class="thanks__actions">
+        <a class="button button--dark" href="index.html#cases">
+          <span class="u-trim">смотреть кейсы</span>
+          <span class="button__icon" aria-hidden="true"></span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="legal-footer">
+    <p>LYRA |  Интерьеры, которые вдохновляют</p>
+    <nav class="legal-footer__links" aria-label="Документы">
+        <a href="privacy.html">Политика конфиденциальности</a>
+        <a href="personal-data.html">Согласие на обработку данных</a>
+        <a href="oferta.html">Публичная оферта</a>
+    </nav>
+  </footer>
+
+  <script src="js/vendor/lenis.min.js" defer></script>
+  <script src="js/site.js?v=1" defer></script>
+</body>
+</html>
