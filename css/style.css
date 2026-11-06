@@ -1033,16 +1033,14 @@ footer[id],
 }
 
 /* the same finger-sized (44px) tap area for small controls whose look must stay as in the layout:
-   the menu button (36×16) and the standalone «смотреть все» / «начать проект» links (12px tall) */
+   the menu button (36×16) and the standalone «смотреть все» link (12px tall) */
 .header__burger,
-.cases__all,
-.cta__link {
+.cases__all {
   position: relative;
 }
 
 .header__burger::before,
-.cases__all::before,
-.cta__link::before {
+.cases__all::before {
   content: "";
   position: absolute;
   inset: calc((44px - 100%) / -2) -6px;
@@ -1234,8 +1232,7 @@ footer[id],
   height: 9.8px;
 }
 
-.review__link:hover,
-.cta__link:hover {
+.review__link:hover {
   color: var(--color-sand);
 }
 
@@ -1306,12 +1303,12 @@ footer[id],
   left: calc(50% - 265px);
 }
 
+/* the section's action is a real button, the same light pill as «Получить консультацию» in the hero */
 .cta__link {
   position: absolute;
   top: 556px;
   left: 50%;
   z-index: 1;
-  color: var(--color-white);
   transform: translateX(-50%);
 }
 
@@ -2033,6 +2030,7 @@ textarea.field {
   .request__panel {
     width: 100%;
     height: auto;
+    min-height: 0;            /* the desktop 800px floor doesn't apply when the panel stacks */
     gap: var(--s-64);
   }
 
@@ -2447,8 +2445,13 @@ textarea.field {
     left: calc(50% - 267.5px);
   }
 
+  /* full width on the phone, like the hero button */
   .cta__link {
     top: 498px;
+    left: var(--s-16);
+    right: var(--s-16);
+    transform: none;
+    padding-inline: clamp(16px, 5vw, 28px);
   }
 
   /* Section 7 */
@@ -2616,6 +2619,13 @@ textarea.field {
 .js .cta__ellipse,
 .js .cta__link {
   transition: translate var(--dur-intro) var(--ease-figma);
+}
+
+/* the button also keeps its hover colour change */
+.js .cta__link {
+  transition:
+    translate var(--dur-intro) var(--ease-figma),
+    background-color var(--dur-button) var(--ease-soft);
 }
 
 .js .cta:not(.is-in) .cta__word--1 { translate: -461px 0; }
