@@ -1680,16 +1680,16 @@ textarea.field {
 }
 
 .footer__wordmark {
-  /* Symmetric crop: the L runs past the left edge and the A past the right one by the same
-     ~2% of their own width, so the A's inner triangle is fully visible.
-     File 1584×526, letters span x 3…1580: L is 349 units wide, A 516.5 →
-     scale = 100vw / (1577 − 0.02 × 865.5) → width 101.58vw, shifted left by (3 + 0.02 × 349) units.
-     The photo covers the bottom ~11.5% of the letters. Gap above: 64px at 1440, scales with the screen */
+  /* Crop as drawn by the client: the L's left edge just past the screen edge (~2% of the L),
+     the A cut by ~21% of its width, the inner triangle fully visible.
+     File 1584×526: visible letters from x≈10 (L) to x≈1470.6 (through the A) → 1460.6 units = 100vw,
+     so width = 1584.29 / 1460.6 = 108.47vw, shifted left by 10 units. Photo covers the bottom ~11.5%.
+     Gap above: 64px at 1440, scales with the screen */
   display: block;
-  width: 101.58vw;
+  width: 108.47vw;
   max-width: none;
   height: auto;
-  margin: max(4.44vw, 40px) 0 -3.88vw -0.64vw;
+  margin: max(4.44vw, 40px) 0 -4.14vw -0.68vw;
 }
 
 .footer__picture {
@@ -2418,11 +2418,11 @@ textarea.field {
     height: calc(var(--fs-field) * 1.2 + var(--s-16) * 2 + 1px);
   }
 
-  /* mobile file 441×149, letters x 3…437 (L 96 units, A 142): the same symmetric ~2% crop,
-     bottom ~11% under the photo */
+  /* mobile file 441×149: the same crop — visible from x≈4.9 (L) to x≈406.9 (A cut by ~21%),
+     402 units = 100vw → width 109.78vw; bottom ~11.5% under the photo */
   .footer__wordmark {
-    width: 102.81vw;
-    margin: var(--s-36) 0 -3.82vw -1.15vw;
+    width: 109.78vw;
+    margin: var(--s-36) 0 -4.26vw -1.22vw;
   }
 
   /* 197px at 375, scales with the screen within sane limits */
