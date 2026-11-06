@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=87">
+  <link rel="stylesheet" href="css/style.css?v=88">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -481,6 +481,7 @@
             <span class="u-trim">отправить заявку</span>
             <span class="button__icon" aria-hidden="true"></span>
           </button>
+          <p class="form__error form__error--send" id="request-send-error" role="alert"></p>
         </div>
       </section>
     </main>
@@ -513,7 +514,7 @@
                   <span class="footer__subscribe-arrow" aria-hidden="true"></span>
                 </button>
               </div>
-              <p class="form__error" id="subscribe-email-error" data-error-for="subscribe-email"></p>
+              <p class="form__error" id="subscribe-email-error" data-error-for="subscribe-email" aria-live="polite"></p>
             </form>
             <div class="footer__bottom">
               <p class="footer__tagline">LYRA |  Интерьеры, которые вдохновляют</p>
@@ -572,7 +573,7 @@
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=27" defer></script>
+  <script src="js/main.js?v=28" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

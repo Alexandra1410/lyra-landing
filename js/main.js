@@ -324,6 +324,18 @@
   }
 
   // rules: [{ input, check: function () { return '' or an error message } }]
+  // Where the forms send their data. EMPTY = DEMO MODE: nothing is sent anywhere —
+  // the request form just goes to the thank-you page, the subscribe form just says «подписаны».
+  // TODO before launch: put the real address here (e.g. a Formspree / Telegram-bot / CRM endpoint).
+  var REQUEST_ENDPOINT = '';
+  var SUBSCRIBE_ENDPOINT = '';
+
+  // POST the form as FormData; resolves on 2xx, rejects otherwise (or when offline)
+  function sendForm(form, endpoint) {
+    return fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); });
+  }
+
   function guardForm(form, rules, onValid) {
     if (!form) return;
     form.noValidate = true;
@@ -377,9 +389,24 @@
       { input: consentInput, check: function () {
         return consentInput.checked ? '' : 'Чтобы отправить заявку, нужно согласие на обработку персональных данных';
       } }
-    ], function () {
-      // one send per click: the button waits until the page answers
-      if (submitButton) { submitButton.disabled = true; submitButton.setAttribute('aria-busy', 'true'); }
+    ], function (e) {
+      e.preventDefault(); // sent by script, never by the browser's own POST (static hosting answers it with an error)
+      var sendError = document.getElementById('request-send-error');
+      sendError.textContent = '';
+      if (!REQUEST_ENDPOINT) {
+        console.warn('[LYRA] Demo mode: the request was NOT sent anywhere — set REQUEST_ENDPOINT in js/main.js before launch.');
+        window.lyraRequestSent();
+        return;
+      }
+      // one send per click: the button waits for the answer
+      submitButton.disabled = true;
+      submitButton.setAttribute('aria-busy', 'true');
+      sendForm(requestForm, REQUEST_ENDPOINT).then(window.lyraRequestSent, function () {
+        submitButton.disabled = false;
+        submitButton.removeAttribute('aria-busy');
+        // nothing typed is lost: the form stays as it was
+        sendError.textContent = 'Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз — или позвоните нам.';
+      });
     });
 
     // After a successful send, go to the thank-you page (thanks.html).
@@ -399,7 +426,29 @@
         if (emailInput.validity.typeMismatch) return 'Проверьте адрес: например, name@mail.ru';
         return '';
       } }
-    ]);
+    ], function (e) {
+      e.preventDefault();
+      var note = document.getElementById('subscribe-email-error');
+      var done = function () {
+        subscribeForm.reset();
+        note.classList.add('form__error--ok');
+        note.textContent = 'Готово, вы подписаны';
+      };
+      if (!SUBSCRIBE_ENDPOINT) {
+        console.warn('[LYRA] Demo mode: the subscription was NOT sent anywhere — set SUBSCRIBE_ENDPOINT in js/main.js before launch.');
+        done();
+        return;
+      }
+      sendForm(subscribeForm, SUBSCRIBE_ENDPOINT).then(done, function () {
+        note.classList.remove('form__error--ok');
+        note.textContent = 'Не удалось подписаться. Попробуйте ещё раз чуть позже';
+      });
+    });
+    // the «подписаны» note goes away as soon as the visitor types again
+    emailInput.addEventListener('input', function () {
+      var note = document.getElementById('subscribe-email-error');
+      if (note.classList.contains('form__error--ok')) { note.classList.remove('form__error--ok'); note.textContent = ''; }
+    });
   }
 
   // «смотреть проект»: a project card over the page — photo, title, facts, a few words,

@@ -1428,6 +1428,17 @@ footer[id],
   display: none;
 }
 
+/* success note under the subscribe field (same place as its error) */
+.form__error--ok {
+  color: var(--color-brown);
+}
+
+/* "couldn't send" under the request button */
+.form__error--send {
+  max-width: 36ch;
+  margin-top: var(--s-12);
+}
+
 .form__error--check {
   margin-top: calc(var(--s-8) * -1);
   padding-left: 32px; /* under the text, not the box */
