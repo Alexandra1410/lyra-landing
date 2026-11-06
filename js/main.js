@@ -402,38 +402,82 @@
     ]);
   }
 
-  // «смотреть проект»: the case photo full screen with its caption.
+  // «смотреть проект»: a project card over the page — photo, title, facts, a few words,
+  // «обсудить похожий проект» and arrows to the neighbours (also ← → keys).
   // Without JS (or without <dialog>) the link simply opens the photo file.
   var lightbox = document.querySelector('[data-lightbox]');
   if (lightbox && typeof lightbox.showModal === 'function') {
-    var lbImg = lightbox.querySelector('[data-lightbox-img]');
-    var lbCaption = lightbox.querySelector('[data-lightbox-caption]');
+    var cases = Array.prototype.slice.call(document.querySelectorAll('.case'));
+    var lb = {
+      img: lightbox.querySelector('[data-lightbox-img]'),
+      title: lightbox.querySelector('[data-lightbox-caption]'),
+      index: lightbox.querySelector('[data-lightbox-index]'),
+      total: lightbox.querySelector('[data-lightbox-total]'),
+      facts: lightbox.querySelector('[data-lightbox-facts]'),
+      about: lightbox.querySelector('[data-lightbox-about]')
+    };
+    var current = 0;
+    var lbReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    lb.total.textContent = pad(cases.length);
+
+    var fillCase = function (i) {
+      current = (i + cases.length) % cases.length;
+      var card = cases[current];
+      var img = card.querySelector('.case__img');
+      var info = card.querySelector('[data-case-info]');
+      lb.img.srcset = img.srcset;
+      lb.img.sizes = '(max-width: 899px) 100vw, 60vw';
+      lb.img.src = img.src;
+      lb.img.alt = img.alt;
+      // line breaks in the caption (<br>) become spaces, so words don't stick together
+      var cap = card.querySelector('.case__caption').cloneNode(true);
+      cap.querySelectorAll('br').forEach(function (br) { br.replaceWith(' '); });
+      lb.title.textContent = cap.textContent.replace(/\s+/g, ' ').trim();
+      lb.index.textContent = pad(current + 1);
+      lb.facts.innerHTML = info ? info.querySelector('.case__facts').innerHTML : '';
+      lb.about.textContent = info ? info.querySelector('.case__about').textContent : '';
+      lb.about.hidden = !info;
+    };
+
+    var showCase = function (i) {
+      if (lbReduce.matches || !lightbox.open) { fillCase(i); return; }
+      // a quick cross-fade between projects
+      var layout = lightbox.querySelector('.lightbox__layout');
+      layout.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: 'ease-out' }).finished.then(function () {
+        fillCase(i);
+        lightbox.scrollTop = 0;
+        layout.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 250, easing: 'ease-out' });
+      });
+    };
+
     var closeLightbox = function () { lightbox.close(); };
 
     document.querySelectorAll('[data-lightbox-open]').forEach(function (link) {
       link.addEventListener('click', function (e) {
         var card = link.closest('.case');
-        var img = card && card.querySelector('.case__img');
-        if (!img) return;
+        if (!card) return;
         e.preventDefault();
-        lbImg.srcset = img.srcset;
-        lbImg.sizes = 'min(1200px, 100vw)';
-        lbImg.src = img.src;
-        lbImg.alt = img.alt;
-        // line breaks in the caption (<br>) become spaces, so words don't stick together
-        var cap = card.querySelector('.case__caption').cloneNode(true);
-        cap.querySelectorAll('br').forEach(function (br) { br.replaceWith(' '); });
-        lbCaption.textContent = cap.textContent.replace(/\s+/g, ' ').trim();
+        fillCase(cases.indexOf(card));
         lightbox.showModal();
+        lightbox.scrollTop = 0;
         document.documentElement.classList.add('has-lightbox');
         if (window.lyraLenis) window.lyraLenis.stop();
       });
     });
 
+    lightbox.querySelector('[data-lightbox-prev]').addEventListener('click', function () { showCase(current - 1); });
+    lightbox.querySelector('[data-lightbox-next]').addEventListener('click', function () { showCase(current + 1); });
+    lightbox.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); showCase(current - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); showCase(current + 1); }
+    });
     lightbox.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
-    // a click on the dark area around the photo closes it (the photo and caption don't)
+    // «обсудить похожий проект»: close the card, then the link scrolls to the request form
+    lightbox.querySelector('[data-lightbox-cta]').addEventListener('click', closeLightbox);
+    // a click on the empty brown area closes it (the photo and the text don't)
     lightbox.addEventListener('click', function (e) {
-      if (!e.target.closest('.lightbox__figure') && !e.target.closest('[data-lightbox-close]')) closeLightbox();
+      if (e.target === lightbox) closeLightbox();
     });
     // Esc, the close button or a click outside: unlock the page; focus returns to the photo link by itself
     lightbox.addEventListener('close', function () {

@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=77">
+  <link rel="stylesheet" href="css/style.css?v=80">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -165,41 +165,98 @@
           </a>
         </div>
 
+        <!-- Project details (.case__info) are a DRAFT written for the layout: replace with the client's real area, timing, city and description -->
         <div class="cases__grid">
           <article class="case case--1">
             <p class="case__num">01</p>
             <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/thumb-1.webp" srcset="images/thumb-1-640.webp 640w, images/thumb-1-1200.webp 1200w, images/thumb-1.webp 1936w" sizes="(max-width: 699px) 91.5vw, (max-width: 1279px) 22.8vw, 27.3vw" alt="Минималистичный лофт с открытой кухней и высокими потолками"><a class="case__more" href="images/thumb-1.webp" aria-label="Смотреть проект: Минималистичный лофт в центре Москвы" data-lightbox-open><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Минималистичный лофт в центре Москвы</h3>
+            <div class="case__info" hidden data-case-info>
+              <dl class="case__facts">
+                <div><dt>Площадь</dt><dd>92 м²</dd></div>
+                <div><dt>Срок</dt><dd>5 месяцев</dd></div>
+                <div><dt>Город</dt><dd>Москва</dd></div>
+              </dl>
+              <p class="case__about">Открыли пространство под высоким потолком: кухня, гостиная и кабинет живут в одном объёме, а зоны держатся на свете и материалах — дубовом полу, тёплом бетоне и льне.</p>
+            </div>
           </article>
           <article class="case case--2">
             <p class="case__num">02</p>
             <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-2.webp" srcset="images/case-2-640.webp 640w, images/case-2-1200.webp 1200w, images/case-2.webp 2000w" sizes="(max-width: 699px) 65.5vw, (max-width: 1279px) 72.2vw, 73.5vw" alt="Скандинавская квартира со светлой мебелью и деревянным полом"><a class="case__more" href="images/case-2.webp" aria-label="Смотреть проект: Уютная скандинавская квартира для молодой семьи" data-lightbox-open><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Уютная скандинавская квартира<br>для молодой семьи</h3>
+            <div class="case__info" hidden data-case-info>
+              <dl class="case__facts">
+                <div><dt>Площадь</dt><dd>74 м²</dd></div>
+                <div><dt>Срок</dt><dd>4 месяца</dd></div>
+                <div><dt>Город</dt><dd>Санкт-Петербург</dd></div>
+              </dl>
+              <p class="case__about">Светлая база, много дерева и продуманное хранение. Квартира рассчитана на то, что семья будет расти: детская легко меняется вместе с ребёнком.</p>
+            </div>
           </article>
           <article class="case case--3">
             <p class="case__num">03</p>
             <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-3.webp" srcset="images/case-3-640.webp 640w, images/case-3-1200.webp 1200w, images/case-3.webp 2000w" sizes="(max-width: 699px) 49.9vw, (max-width: 1279px) 29.9vw, 44.0vw" alt="Малогабаритная студия с продуманной системой хранения"><a class="case__more" href="images/case-3.webp" aria-label="Смотреть проект: Функциональная малогабаритная студия" data-lightbox-open><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Функциональная малогабаритная студия</h3>
+            <div class="case__info" hidden data-case-info>
+              <dl class="case__facts">
+                <div><dt>Площадь</dt><dd>32 м²</dd></div>
+                <div><dt>Срок</dt><dd>3 месяца</dd></div>
+                <div><dt>Город</dt><dd>Москва</dd></div>
+              </dl>
+              <p class="case__about">На 32 метрах поместились спальное место, рабочий стол и гардероб. Мебель сделана на заказ под каждую нишу — ни одного пустого угла.</p>
+            </div>
           </article>
           <article class="case case--4">
             <p class="case__num">04</p>
             <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-4.webp" srcset="images/case-4-640.webp 640w, images/case-4-1200.webp 1200w, images/case-4.webp 1738w" sizes="(max-width: 699px) 91.5vw, (max-width: 1279px) 22.8vw, 23.8vw" alt="Интерьер в стиле современной классики с лепниной"><a class="case__more" href="images/case-4.webp" aria-label="Смотреть проект: Современная классика в сталинской высотке" data-lightbox-open><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Современная классика в сталинской высотке</h3>
+            <div class="case__info" hidden data-case-info>
+              <dl class="case__facts">
+                <div><dt>Площадь</dt><dd>118 м²</dd></div>
+                <div><dt>Срок</dt><dd>8 месяцев</dd></div>
+                <div><dt>Город</dt><dd>Москва</dd></div>
+              </dl>
+              <p class="case__about">Сохранили лепнину и высоту потолков, добавили спокойную палитру и современный свет. История дома осталась, музейная тяжесть ушла.</p>
+            </div>
           </article>
           <article class="case case--5">
             <p class="case__num">05</p>
             <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-5.webp" srcset="images/case-5-640.webp 640w, images/case-5-1200.webp 1200w, images/case-5.webp 2000w" sizes="(max-width: 699px) 62.4vw, (max-width: 1279px) 47.5vw, 55.0vw" alt="Пентхаус в стиле арт-деко с панорамными окнами"><a class="case__more" href="images/case-5.webp" aria-label="Смотреть проект: Арт-деко пентхаус  с панорамными видами" data-lightbox-open><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Арт-деко пентхаус<br class="u-br-mobile"> с панорамными видами</h3>
+            <div class="case__info" hidden data-case-info>
+              <dl class="case__facts">
+                <div><dt>Площадь</dt><dd>210 м²</dd></div>
+                <div><dt>Срок</dt><dd>11 месяцев</dd></div>
+                <div><dt>Город</dt><dd>Москва</dd></div>
+              </dl>
+              <p class="case__about">Латунь, мрамор и бархат в сдержанной гамме: роскошь, которая не спорит с видом из панорамных окон.</p>
+            </div>
           </article>
           <article class="case case--6">
             <p class="case__num">06</p>
             <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-6.webp" srcset="images/case-6-640.webp 640w, images/case-6-1200.webp 1200w, images/case-6.webp 2000w" sizes="(max-width: 699px) 67.6vw, (max-width: 1279px) 72.2vw, 73.5vw" alt="Эко-лофт с деревом, камнем и живыми растениями"><a class="case__more" href="images/case-6.webp" aria-label="Смотреть проект: Эко-лофт  с натуральными материалами" data-lightbox-open><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Эко-лофт<br class="u-br-mobile"> с натуральными материалами</h3>
+            <div class="case__info" hidden data-case-info>
+              <dl class="case__facts">
+                <div><dt>Площадь</dt><dd>136 м²</dd></div>
+                <div><dt>Срок</dt><dd>7 месяцев</dd></div>
+                <div><dt>Город</dt><dd>Казань</dd></div>
+              </dl>
+              <p class="case__about">Дерево, камень, известковая штукатурка и живые растения. Материалы, которые приятно трогать и которые красиво стареют.</p>
+            </div>
           </article>
           <article class="case case--7">
             <p class="case__num">07</p>
             <div class="case__media"><img loading="lazy" decoding="async" class="case__img" src="images/case-7.webp" srcset="images/case-7-640.webp 640w, images/case-7-1200.webp 1200w, images/case-7.webp 1458w" sizes="(max-width: 699px) 91.5vw, (max-width: 1279px) 22.8vw, 23.8vw" alt="Двухуровневый таунхаус с лестницей и светлой гостиной"><a class="case__more" href="images/case-7.webp" aria-label="Смотреть проект: Семейное таунхаусное гнездо за городом" data-lightbox-open><span class="case__more-label"><span class="u-trim">смотреть проект</span><span class="link-arrow__icon" aria-hidden="true"></span></span></a></div>
             <h3 class="case__caption">Семейное таунхаусное гнездо за городом</h3>
+            <div class="case__info" hidden data-case-info>
+              <dl class="case__facts">
+                <div><dt>Площадь</dt><dd>180 м²</dd></div>
+                <div><dt>Срок</dt><dd>9 месяцев</dd></div>
+                <div><dt>Город</dt><dd>Подмосковье</dd></div>
+              </dl>
+              <p class="case__about">Два уровня для большой семьи: общая гостиная с камином внизу, тихие спальни наверху и прямой выход в сад.</p>
+            </div>
           </article>
         </div>
       </section>
@@ -485,19 +542,41 @@
     </footer>
   </div>
 
-  <!-- Project photo, full screen ("смотреть проект"). Native <dialog>: Esc closes it, focus stays inside and returns to the photo -->
-  <dialog class="lightbox" aria-labelledby="lightbox-caption" data-lightbox>
-    <figure class="lightbox__figure">
-      <img class="lightbox__img" src="" alt="" data-lightbox-img>
-      <figcaption class="lightbox__caption" id="lightbox-caption" data-lightbox-caption></figcaption>
-    </figure>
-    <button class="lightbox__close" type="button" aria-label="Закрыть фото" data-lightbox-close>
+  <!-- Project card ("смотреть проект"): photo + details. Native <dialog>: Esc closes it, focus stays inside and returns to the photo -->
+  <dialog class="lightbox" aria-labelledby="lightbox-title" data-lightbox>
+    <div class="lightbox__layout">
+      <div class="lightbox__media">
+        <img class="lightbox__img" src="" alt="" data-lightbox-img>
+      </div>
+      <div class="lightbox__info">
+        <p class="lightbox__count label label--sand"><span data-lightbox-index>01</span> / <span data-lightbox-total>07</span></p>
+        <h2 class="lightbox__title title-l" id="lightbox-title" data-lightbox-caption></h2>
+        <span class="lightbox__line" aria-hidden="true"></span>
+        <dl class="lightbox__facts" data-lightbox-facts></dl>
+        <p class="lightbox__about" data-lightbox-about></p>
+        <div class="lightbox__actions">
+          <a class="lightbox__cta button button--light" href="#request" data-lightbox-cta>
+            <span class="u-trim">обсудить похожий проект</span>
+            <span class="button__icon" aria-hidden="true"></span>
+          </a>
+          <div class="lightbox__nav">
+            <button class="lightbox__arrow lightbox__arrow--prev" type="button" aria-label="Предыдущий проект" data-lightbox-prev>
+              <span class="lightbox__arrow-icon" aria-hidden="true"></span>
+            </button>
+            <button class="lightbox__arrow" type="button" aria-label="Следующий проект" data-lightbox-next>
+              <span class="lightbox__arrow-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="lightbox__close" type="button" aria-label="Закрыть проект" data-lightbox-close>
       <span class="lightbox__close-icon" aria-hidden="true"></span>
     </button>
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=23" defer></script>
+  <script src="js/main.js?v=24" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>
