@@ -1968,7 +1968,7 @@ textarea.field {
 
   /* Hero */
   .hero {
-    height: 818px;
+    height: 910px; /* 818 + 92: the brown block is taller so the dining table shows in the arch */
   }
 
   .hero__photo {
@@ -1980,7 +1980,7 @@ textarea.field {
     top: 422px;
     left: 0;
     width: 100%;
-    height: 396px;
+    height: 488px;
   }
 
   /* full-size arch, centred: it bleeds past both screen edges equally on any phone */
