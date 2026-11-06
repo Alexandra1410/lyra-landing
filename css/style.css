@@ -1969,9 +1969,7 @@ textarea.field {
 
   /* Hero */
   .hero {
-    /* photo 422 + text area 108 + the whole arch (420×520, narrower on small phones) */
-    --arch-w: min(420px, 100vw);
-    height: calc(422px + 108px + var(--arch-w) * 520 / 420);
+    height: 818px;
   }
 
   .hero__photo {
@@ -1983,13 +1981,18 @@ textarea.field {
     top: 422px;
     left: 0;
     width: 100%;
-    height: calc(108px + var(--arch-w) * 520 / 420);
+    height: 396px;
   }
 
   /* full-size arch, centred: it bleeds past both screen edges equally on any phone */
+  /* Arch as in the mobile layout: the oval frame stays where it was (420×520, 108px below the panel top,
+     bleeding past the screen edges), but the photo inside is raised and slightly enlarged (×1.25, 230px up),
+     so the table and chairs fill the visible top of the arch. The frame is cut with clip-path
+     in the enlarged image's coordinates; these numbers stay hole-free on every phone width */
   .hero__arch {
-    top: 108px;
-    width: var(--arch-w); /* the whole arch fits: dome on top, table and chairs at the bottom */
+    top: -122px;              /* 108 − 230 */
+    width: 525px;             /* 420 × 1.25 */
+    clip-path: ellipse(210px 260px at 262.5px 490px); /* the 420×520 frame: centre 108+260 below the panel top */
   }
 
   .hero__title {
