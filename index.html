@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=82">
+  <link rel="stylesheet" href="css/style.css?v=84">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -276,7 +276,7 @@
         </div>
 
         <ul class="reviews__track" id="reviews-track">
-          <li class="review review--1">
+          <li class="review review--1" tabindex="0">
             <img loading="lazy" decoding="async" class="review__photo" src="images/review-1.webp" alt="Екатерина Иванова, клиентка студии">
             <!-- Карандашный портрет из Figma (вариант default); при наведении сменяется цветным фото -->
             <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-1-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
@@ -296,7 +296,7 @@
               </div>
             </blockquote>
           </li>
-          <li class="review review--2">
+          <li class="review review--2" tabindex="0">
             <img loading="lazy" decoding="async" class="review__photo" src="images/review-2.webp" alt="Анна Соколова, клиентка студии">
             <!-- Карандашный портрет (default); при наведении сменяется цветным фото -->
             <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-2-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
@@ -316,7 +316,7 @@
               </div>
             </blockquote>
           </li>
-          <li class="review review--3">
+          <li class="review review--3" tabindex="0">
             <img loading="lazy" decoding="async" class="review__photo" src="images/review-3.webp" alt="Дмитрий Орлов, клиент студии">
             <!-- Карандашный портрет (default); при наведении сменяется цветным фото -->
             <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-3-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
@@ -337,7 +337,7 @@
             </blockquote>
           </li>
           <!-- TODO: отзывы 4–5 — копии 1–2, чтобы слайдер прокручивался; заменить на новые отзывы -->
-          <li class="review review--4">
+          <li class="review review--4" tabindex="0">
             <img loading="lazy" decoding="async" class="review__photo" src="images/review-1.webp" alt="Екатерина Иванова, клиентка студии">
             <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-1-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
             <blockquote class="review__card">
@@ -356,7 +356,7 @@
               </div>
             </blockquote>
           </li>
-          <li class="review review--5">
+          <li class="review review--5" tabindex="0">
             <img loading="lazy" decoding="async" class="review__photo" src="images/review-2.webp" alt="Анна Соколова, клиентка студии">
             <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-2-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
             <blockquote class="review__card">
@@ -571,7 +571,7 @@
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=25" defer></script>
+  <script src="js/main.js?v=26" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

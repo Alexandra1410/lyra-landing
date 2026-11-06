@@ -271,15 +271,6 @@ button {
   background: var(--color-brown);
 }
 
-.button--brown {
-  background: var(--color-brown);
-  color: var(--color-white);
-}
-
-.button--brown:hover {
-  background: var(--color-black);
-}
-
 /* Arrow drawn as a mask so it follows the text color on hover */
 .button__icon,
 .link-arrow__icon {
@@ -1072,9 +1063,18 @@ footer[id],
   -webkit-tap-highlight-color: transparent; /* no grey flash on tap: the open animation is the feedback */
 }
 
-.review__photo,
-.review__card {
+.review__photo {
   pointer-events: auto;
+}
+
+/* keyboard: Tab lands on a review, it opens like on hover; the ring follows the round photo */
+.review:focus-visible {
+  outline: none;
+}
+
+.review:focus-visible .review__photo:not(.review__photo--sketch) {
+  outline: 2px solid var(--color-brown);
+  outline-offset: 4px;
 }
 
 /* The last review sits at the right edge of the screen: open its card to the left (mirrored, 424 - 200 - 280) */
@@ -1087,6 +1087,7 @@ footer[id],
    the first one on load, the one that slides into view after an arrow/swipe, or the one tapped.
    :hover is limited to real mouse devices, otherwise a tap would leave a second card "stuck" open. */
 .review.is-active,
+.review:focus-visible,
 .review:has(:focus-visible) {
   z-index: 2;
   transition-delay: 0s;
@@ -1108,6 +1109,7 @@ footer[id],
 }
 
 .review.is-active .review__photo--sketch,
+.review:focus-visible .review__photo--sketch,
 .review:has(:focus-visible) .review__photo--sketch {
   opacity: 0;
   transition: opacity var(--dur-hover) var(--ease-figma) 0s;
@@ -1130,17 +1132,20 @@ footer[id],
   background: var(--color-brown);
   color: var(--color-white);
   text-align: center;
+  /* closed: invisible and not clickable, but its words stay in the page for screen readers
+     (visibility: hidden used to hide 4 of 5 reviews from them) */
   opacity: 0;
-  visibility: hidden;
-  transition: opacity var(--review-out) var(--ease-out), visibility 0s var(--review-out);
+  pointer-events: none;
+  transition: opacity var(--review-out) var(--ease-out);
 }
 
 .review.is-active .review__card,
+.review:focus-visible .review__card,
 .review:has(:focus-visible) .review__card {
   opacity: 1;
-  visibility: visible;
+  pointer-events: auto;
   /* appears together with the colour photo, no delay */
-  transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
+  transition: opacity var(--dur-hover) var(--ease-figma);
 }
 
 /* Mouse: JS adds .is-hover on pointerenter and removes it on pointerleave (main.js).
@@ -1162,8 +1167,8 @@ footer[id],
 .review.is-hover .review__card,
 .review.is-default .review__card {
   opacity: 1;
-  visibility: visible;
-  transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
+  pointer-events: auto;
+  transition: opacity var(--dur-hover) var(--ease-figma);
 }
 
 @media (hover: hover) {
@@ -1179,8 +1184,8 @@ footer[id],
 
   html:not(.js) .review:hover .review__card {
     opacity: 1;
-    visibility: visible;
-    transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
+    pointer-events: auto;
+    transition: opacity var(--dur-hover) var(--ease-figma);
   }
 }
 
@@ -1443,8 +1448,10 @@ footer[id],
   opacity: 1;
 }
 
-.field:focus-visible {
+.field:focus-visible,
+.field:focus {
   border-bottom-color: var(--color-brown);
+  box-shadow: 0 1px 0 var(--color-brown); /* the line also gets 1px thicker: a colour change alone was invisible */
 }
 
 .field--muted {
@@ -1479,6 +1486,14 @@ textarea.field {
 
 .phone-field:focus-within {
   border-bottom-color: var(--color-brown);
+  box-shadow: 0 1px 0 var(--color-brown);
+}
+
+/* a field with an error stays red while it's being fixed */
+.field[aria-invalid="true"]:focus,
+.phone-field:has([aria-invalid="true"]):focus-within {
+  border-bottom-color: var(--color-error);
+  box-shadow: 0 1px 0 var(--color-error);
 }
 
 .phone-field__country {

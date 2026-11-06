@@ -138,7 +138,8 @@
   function syncDefault(delay) {
     clearTimeout(defaultTimer);
     var apply = function () {
-      var hovered = track.querySelector('.review.is-hover');
+      // a review chosen with the mouse or the keyboard takes the default's place
+      var hovered = track.querySelector('.review.is-hover, .review:focus-visible');
       reviewItems.forEach(function (r) {
         r.classList.toggle('is-default', !touchMode && !hovered && r === defaultReview);
       });
@@ -171,6 +172,9 @@
       syncDefault(150);
     });
   });
+  // keyboard: Tab onto a review opens it (CSS :focus-visible), the default steps aside meanwhile
+  track.addEventListener('focusin', function () { syncDefault(0); });
+  track.addEventListener('focusout', function () { syncDefault(150); });
   // safety net: the cursor left the browser window — close hovered ones, the default stays
   document.documentElement.addEventListener('pointerleave', function () {
     reviewItems.forEach(function (r) { r.classList.remove('is-hover'); });
