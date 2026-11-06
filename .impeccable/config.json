@@ -20,6 +20,15 @@
         ],
         "createdAt": "2026-11-06T11:11:50.152Z",
         "reason": "Claude: false positive — the only infinite animation is the shared .preloader__bar::after loading bar in css/style.css (a progress indicator with prefers-reduced-motion override, not a marquee); thanks.html has no preloader markup"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-06T11:52:28.295Z",
+        "reason": "Claude verified: the only empty src is the lightbox <img>, filled by main.js when a case opens"
       }
     ]
   }

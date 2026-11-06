@@ -9,8 +9,46 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Preloader + hero intro live here, not in main.js (and above the stylesheet, so the CSS
+    // download does not delay this script): on a slow phone network main.js
+    // arrives late, and the page must not stay hidden while it downloads.
+    // The page opens once both hero photos (onload/onerror on the <img>) and the brand font
+    // are in, or after 3 s, whichever comes first. Everything else keeps loading behind it.
+    (function (d) {
+      var html = d.documentElement, startedAt = Date.now(), done = false, heroImgs = 0;
+      html.classList.add('js', 'is-loading');
+      function playHero() {
+        var hero = d.querySelector('.hero');
+        if (!hero) { d.addEventListener('DOMContentLoaded', playHero); return; }
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { setTimeout(function () { hero.classList.add('is-in'); }, 10); });
+        });
+      }
+      function reveal() {
+        if (done) return;
+        done = true;
+        // keep the preloader up at least a moment, so it doesn't just flash
+        setTimeout(function () {
+          html.classList.remove('is-loading');
+          var preloader = d.querySelector('[data-preloader]');
+          if (preloader) {
+            preloader.classList.add('is-hidden');
+            setTimeout(function () { preloader.remove(); }, 700);
+          }
+          playHero();
+          d.dispatchEvent(new Event('lyra:reveal'));
+        }, Math.max(0, 600 - (Date.now() - startedAt)));
+      }
+      window.lyraHeroImg = function () {
+        if (++heroImgs < 2) return;
+        if (d.fonts && d.fonts.load) d.fonts.load('700 40px "Non Bureau"').then(reveal, reveal);
+        else reveal();
+      };
+      setTimeout(reveal, 3000);
+    })(document);
+  </script>
   <link rel="stylesheet" href="css/style.css?v=88">
-  <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
   <!-- Preloader: shown only with JS, removed once the first screen has loaded -->
@@ -53,10 +91,14 @@
         </header>
 
         <div class="hero__photo">
-          <img class="hero__photo-img" fetchpriority="high" src="images/hero.webp" srcset="images/hero-640.webp 640w, images/hero-900.webp 900w, images/hero.webp 1246w" sizes="(max-width: 699px) 422px, max(50vw, 800px)" alt="Светлая кухня-гостиная с панорамным остеклением, деревянными табуретами и видом на сад">
+          <!-- phones: the 900px copy is plenty under the dark overlay and saves ~75 KB on the first screen -->
+          <picture>
+            <source media="(max-width: 699px)" srcset="images/hero-900.webp">
+            <img class="hero__photo-img" fetchpriority="high" src="images/hero.webp" srcset="images/hero-640.webp 640w, images/hero-900.webp 900w, images/hero.webp 1246w" sizes="(max-width: 699px) 422px, max(50vw, 800px)" alt="Светлая кухня-гостиная с панорамным остеклением, деревянными табуретами и видом на сад" onload="lyraHeroImg()" onerror="lyraHeroImg()">
+          </picture>
         </div>
         <div class="hero__panel">
-          <img class="hero__arch" src="images/hero-arch.webp?v=2" srcset="images/hero-arch-640.webp 640w, images/hero-arch-900.webp 900w, images/hero-arch.webp?v=2 1246w" sizes="(max-width: 699px) min(500px, 133.33vw), 520px" width="1246" height="1246" alt="Обеденная зона с деревянным столом, стульями и живыми растениями">
+          <img class="hero__arch" fetchpriority="high" src="images/hero-arch.webp?v=2" srcset="images/hero-arch-640.webp 640w, images/hero-arch-900.webp 900w, images/hero-arch.webp?v=2 1246w" sizes="(max-width: 699px) min(500px, 133.33vw), 520px" width="1246" height="1246" alt="Обеденная зона с деревянным столом, стульями и живыми растениями" onload="lyraHeroImg()" onerror="lyraHeroImg()">
         </div>
 
         <h1 class="hero__title title-xl u-trim" id="hero-title">
@@ -82,7 +124,7 @@
 
         <ul class="why__grid">
           <li class="why__image-item">
-            <img loading="lazy" decoding="async" class="why__image" src="images/why.webp" alt="Гостиная в тёплых тонах с диваном, стеллажами и мягким светом">
+            <img loading="lazy" decoding="async" class="why__image" src="images/why.webp" srcset="images/why-800.webp 800w, images/why.webp 1431w" sizes="(max-width: 1279px) 100vw, max(690px, 48vw)" alt="Гостиная в тёплых тонах с диваном, стеллажами и мягким светом">
           </li>
           <li class="advantage advantage--1 advantage--first">
             <div class="advantage__content">
@@ -125,14 +167,14 @@
 
       <!-- Section 3: Benefits -->
       <section class="benefits" aria-labelledby="benefits-title" data-benefits>
-        <img loading="lazy" decoding="async" class="benefits__photo" src="images/benefits.webp" alt="Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном">
+        <img loading="lazy" decoding="async" class="benefits__photo" src="images/benefits.webp" srcset="images/benefits-800.webp 800w, images/benefits.webp 1440w" sizes="(max-width: 1279px) 100vw, 50vw" alt="Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном">
         <div class="benefits__panel">
           <div class="benefits__inner">
             <div class="benefits__thumbs">
-              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-1.webp" alt="Лофт с высокими потолками и открытой кухней">
-              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-2.webp" alt="Светлая спальня с текстильным изголовьем">
-              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-3.webp" alt="Кухня с деревянными панелями и барной стойкой">
-              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-4.webp" alt="Обеденная зона с подвесными светильниками">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-1-280.webp" alt="Лофт с высокими потолками и открытой кухней">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-2-280.webp" alt="Светлая спальня с текстильным изголовьем">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-3-280.webp" alt="Кухня с деревянными панелями и барной стойкой">
+              <img loading="lazy" decoding="async" class="benefits__thumb" src="images/thumb-4-280.webp" alt="Обеденная зона с подвесными светильниками">
             </div>
             <div class="benefits__text">
               <p class="label label--sand u-trim">Что вы получите<br>с нами</p>
@@ -402,7 +444,7 @@
       <!-- Section 7: Request -->
       <section class="request" id="request" aria-labelledby="request-title">
         <div class="request__media">
-          <img loading="lazy" decoding="async" class="request__img" src="images/request.webp" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
+          <img loading="lazy" decoding="async" class="request__img" src="images/request.webp" srcset="images/request-800.webp 800w, images/request.webp 1163w" sizes="(max-width: 1279px) 100vw, 50vw" alt="Эскиз загородного дома: карандашный рисунок, переходящий в фотографию">
         </div>
         <div class="request__panel">
           <p class="label label--muted u-trim">заявка</p>
@@ -534,7 +576,7 @@
       </div>
 
       <div class="footer__picture">
-        <img loading="lazy" decoding="async" class="footer__picture-img" src="images/picture.webp" alt="Светлая гостиная с мягким диваном, деревянным столиком и торшером">
+        <img loading="lazy" decoding="async" class="footer__picture-img" src="images/picture.webp" srcset="images/picture-1000.webp 1000w, images/picture-1600.webp 1600w, images/picture.webp 2560w" sizes="(max-width: 699px) 211vw, 100vw" alt="Светлая гостиная с мягким диваном, деревянным столиком и торшером">
       </div>
     </footer>
   </div>
@@ -573,7 +615,7 @@
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=28" defer></script>
+  <script src="js/main.js?v=29" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

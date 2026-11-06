@@ -560,45 +560,18 @@
     area.addEventListener('input', grow);
   });
 
-  // Hero intro: "After delay 10ms" → 2000ms. Starts when the preloader goes away
-  var hero = document.querySelector('.hero');
-  function playHero() {
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        setTimeout(function () { hero.classList.add('is-in'); }, 10);
-      });
-    });
-  }
-
-  // Preloader: covers the page until the first screen (fonts + hero photos) has loaded,
-  // so the visitor sees "loading" instead of a page that renders with freezes.
-  // Images further down are lazy-loaded and don't hold it up.
+  // Preloader and hero intro are run by the inline script in <head> (it opens the page once
+  // the hero photos and brand font are in, or after 3 s). Here: show LYRA in the preloader
+  // only in the brand font, never a fallback one, and let scrolling start when the page opens.
   var preloader = document.querySelector('[data-preloader]');
-  var preloaderShownAt = Date.now();
-  var preloaderDone = false;
-  // show LYRA only in the brand font, never in a fallback one
   if (preloader && document.fonts && document.fonts.load) {
     document.fonts.load('700 40px "Non Bureau"').then(function () { preloader.classList.add('is-font-ready'); });
   } else if (preloader) {
     preloader.classList.add('is-font-ready');
   }
-  function hidePreloader() {
-    if (preloaderDone) return;
-    preloaderDone = true;
-    // keep it on screen at least a moment, so it doesn't just flash
-    var wait = Math.max(0, 600 - (Date.now() - preloaderShownAt));
-    setTimeout(function () {
-      document.documentElement.classList.remove('is-loading');
-      if (lenis) lenis.start();
-      if (!preloader) { playHero(); return; }
-      preloader.classList.add('is-hidden');
-      playHero();
-      setTimeout(function () { preloader.remove(); }, 700);
-    }, wait);
+  if (lenis && document.documentElement.classList.contains('is-loading')) {
+    document.addEventListener('lyra:reveal', function () { lenis.start(); }, { once: true });
   }
-  if (document.readyState === 'complete') hidePreloader();
-  else window.addEventListener('load', hidePreloader);
-  setTimeout(hidePreloader, 8000); // slow network: never keep the visitor waiting forever
 
   // CTA: Figma triggers it on hover and then locks the final state,
   // so it plays once — on cursor enter or when half of the section is visible
@@ -619,12 +592,13 @@
 
   // Benefits slider: click on a dot → variant 1–5, 300ms
   var benefits = document.querySelector('[data-benefits]');
+  // Each photo: srcset for the big slide (phones get the 640/800px copy), a small copy for the thumbs
   var photos = [
-    { src: 'images/benefits.webp', alt: 'Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном' },
-    { src: 'images/thumb-1.webp', alt: 'Лофт с высокими потолками и открытой кухней' },
-    { src: 'images/thumb-2.webp', alt: 'Светлая спальня с текстильным изголовьем' },
-    { src: 'images/thumb-3.webp', alt: 'Кухня с деревянными панелями и барной стойкой' },
-    { src: 'images/thumb-4.webp', alt: 'Обеденная зона с подвесными светильниками' }
+    { src: 'images/benefits.webp', srcset: 'images/benefits-800.webp 800w, images/benefits.webp 1440w', thumb: 'images/benefits-280.webp', alt: 'Минималистичная гостиная с белым диваном, книжным стеллажом и панорамным окном' },
+    { src: 'images/thumb-1.webp', srcset: 'images/thumb-1-640.webp 640w, images/thumb-1-1200.webp 1200w, images/thumb-1.webp 1936w', thumb: 'images/thumb-1-280.webp', alt: 'Лофт с высокими потолками и открытой кухней' },
+    { src: 'images/thumb-2.webp', srcset: 'images/thumb-2-800.webp 800w, images/thumb-2.webp 1213w', thumb: 'images/thumb-2-280.webp', alt: 'Светлая спальня с текстильным изголовьем' },
+    { src: 'images/thumb-3.webp', srcset: 'images/thumb-3-800.webp 800w, images/thumb-3.webp 1213w', thumb: 'images/thumb-3-280.webp', alt: 'Кухня с деревянными панелями и барной стойкой' },
+    { src: 'images/thumb-4.webp', srcset: 'images/thumb-4-800.webp 800w, images/thumb-4.webp 1213w', thumb: 'images/thumb-4-280.webp', alt: 'Обеденная зона с подвесными светильниками' }
   ];
   var titles = [
     'Не просто дизайн,<br>а атмосферу,<br>в которой хочется<br>жить',
@@ -643,15 +617,19 @@
   var current = 0;
 
   // Crossfade an image to a new photo: a copy fades in on top, then replaces it
-  function swapImage(img, photo) {
-    if (img.getAttribute('src') === photo.src) return;
+  // big = true → the slide (srcset picks the size), false → a thumb (small copy)
+  function swapImage(img, photo, big) {
+    var src = big ? photo.src : photo.thumb;
+    var srcset = big ? photo.srcset : '';
+    function apply(el) { el.srcset = srcset; el.src = src; }
+    if (img.getAttribute('src') === src) return;
     if (reduceMotion.matches) {
-      img.src = photo.src;
+      apply(img);
       img.alt = photo.alt;
       return;
     }
     var copy = img.cloneNode();
-    copy.src = photo.src;
+    apply(copy);
     copy.alt = '';
     copy.style.cssText = 'position:absolute;margin:0;pointer-events:none;' +
       'left:' + img.offsetLeft + 'px;top:' + img.offsetTop + 'px;' +
@@ -659,7 +637,7 @@
     img.after(copy);
     copy.animate([{ opacity: 0 }, { opacity: 1 }], { duration: slideMs, easing: slideEasing })
       .finished.then(function () {
-        img.src = photo.src;
+        apply(img);
         img.alt = photo.alt;
         copy.remove();
       });
@@ -680,10 +658,10 @@
   function goToSlide(index) {
     if (index === current) return;
     current = index;
-    swapImage(bigPhoto, photos[index]);
+    swapImage(bigPhoto, photos[index], true);
     // Thumbs show the other four photos in their original order
     var rest = photos.filter(function (_, i) { return i !== index; });
-    thumbs.forEach(function (thumb, i) { swapImage(thumb, rest[i]); });
+    thumbs.forEach(function (thumb, i) { swapImage(thumb, rest[i], false); });
     swapTitle(titles[index]);
     dots.forEach(function (dot, i) {
       var active = i === index;
@@ -716,7 +694,16 @@
 
   // Preload slide photos so the first switch doesn't flash —
   // only when the block gets close, so they don't slow down the first screen
-  function preloadSlides() { photos.forEach(function (photo) { new Image().src = photo.src; }); }
+  // (same srcset + sizes as the big photo, so the browser fetches exactly the size it will show)
+  function preloadSlides() {
+    photos.forEach(function (photo) {
+      var big = new Image();
+      big.sizes = bigPhoto.sizes;
+      big.srcset = photo.srcset;
+      big.src = photo.src;
+      new Image().src = photo.thumb;
+    });
+  }
   if ('IntersectionObserver' in window) {
     var slidesObserver = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) { preloadSlides(); slidesObserver.disconnect(); }
