@@ -105,12 +105,17 @@
     prevBtn.disabled = track.scrollLeft <= 0;
     nextBtn.disabled = track.scrollLeft >= max;
   }
-  // Touch screens have no hover: one review at a time is "open" (.is-active) —
-  // the first on load, then the one an arrow or a swipe brings into view, or the one tapped
+  // Two modes, chosen by what the visitor actually uses, not by what the browser claims
+  // ((hover: none) is wrong on some laptops with touchpads/touchscreens and in DevTools device mode):
+  // — mouse: a review opens while the cursor is over it (.is-hover), closes when it leaves;
+  // — touch (a phone has no cursor): one review is always open (.is-active) — the first on load,
+  //   then the one an arrow or a swipe brings into view, or the one tapped. Opening/closing uses
+  //   the same CSS transitions as the mouse hover, so the animation is identical.
   var reviewItems = track.querySelectorAll('.review');
   var touchMq = window.matchMedia('(hover: none)');
+  var touchMode = touchMq.matches;
   function setActiveReview(item) {
-    reviewItems.forEach(function (r) { r.classList.toggle('is-active', touchMq.matches && r === item); });
+    reviewItems.forEach(function (r) { r.classList.toggle('is-active', touchMode && r === item); });
   }
   function visibleReview() {
     var max = track.scrollWidth - track.clientWidth;
@@ -125,20 +130,49 @@
     return best;
   }
   function activateVisibleReview() {
-    if (touchMq.matches) setActiveReview(visibleReview());
+    if (touchMode) setActiveReview(visibleReview());
   }
+  function setTouchMode(on) {
+    if (touchMode === on) return;
+    touchMode = on;
+    setActiveReview(on ? visibleReview() : null);
+  }
+  // any real mouse movement switches to mouse mode; a finger switches back
+  document.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') setTouchMode(false); }, { passive: true });
+  document.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') setTouchMode(true); }, { passive: true });
   reviewItems.forEach(function (r) {
-    r.addEventListener('click', function () { if (touchMq.matches) setActiveReview(r); });
+    r.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') r.classList.add('is-hover'); });
+    r.addEventListener('pointerleave', function () { r.classList.remove('is-hover'); });
   });
-  // after a finger swipe settles
+  // safety net: the cursor left the browser window — close everything
+  document.documentElement.addEventListener('pointerleave', function () {
+    reviewItems.forEach(function (r) { r.classList.remove('is-hover'); });
+  });
+  // touch: tapping a review opens it (the previous one closes).
+  // Pointer events, not click: iPhone sends no click for a tap on a plain photo.
+  var tapStart = null;
+  document.addEventListener('pointerdown', function (e) {
+    tapStart = e.pointerType === 'touch' ? { x: e.clientX, y: e.clientY, scroll: track.scrollLeft } : null;
+  }, { passive: true });
+  document.addEventListener('pointerup', function (e) {
+    if (!tapStart || e.pointerType !== 'touch' || !touchMode) return;
+    var moved = Math.abs(e.clientX - tapStart.x) > 10 || Math.abs(e.clientY - tapStart.y) > 10 ||
+      Math.abs(track.scrollLeft - tapStart.scroll) > 10;
+    tapStart = null;
+    if (moved) return; // it was a swipe or a scroll, not a tap
+    var r = e.target.closest('.review');
+    if (r && !e.target.closest('a')) setActiveReview(r); // «Открыть проект» just follows the link
+  }, { passive: true });
+  document.addEventListener('pointercancel', function () { tapStart = null; }, { passive: true });
+  // after a finger swipe settles, open the review that came into view
   var swipeTimer = null;
   track.addEventListener('scroll', function () {
-    if (scrollAnim) return; // arrow animation handles it itself
+    if (scrollAnim) return; // the arrow animation opens it itself when it ends
     clearTimeout(swipeTimer);
     swipeTimer = setTimeout(activateVisibleReview, 150);
   }, { passive: true });
-  touchMq.addEventListener('change', function () { setActiveReview(touchMq.matches ? visibleReview() : null); });
-  setActiveReview(reviewItems[0]);
+  touchMq.addEventListener('change', function () { setTouchMode(touchMq.matches); });
+  setActiveReview(reviewItems[0]); // phone: the first review is open from the start
 
   prevBtn.addEventListener('click', function () { scrollReviews(-1); });
   nextBtn.addEventListener('click', function () { scrollReviews(1); });

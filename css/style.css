@@ -1030,6 +1030,7 @@ footer[id] {
   /* the <li> is a square: ignore the pointer in its corners, so hover is
      tracked only on the round photo and the round card (both have border-radius) */
   pointer-events: none;
+  -webkit-tap-highlight-color: transparent; /* no grey flash on tap: the open animation is the feedback */
 }
 
 .review__photo,
@@ -1047,7 +1048,7 @@ footer[id] {
    the first one on load, the one that slides into view after an arrow/swipe, or the one tapped.
    :hover is limited to real mouse devices, otherwise a tap would leave a second card "stuck" open. */
 .review.is-active,
-.review:focus-within {
+.review:has(:focus-visible) {
   z-index: 2;
   transition-delay: 0s;
 }
@@ -1068,7 +1069,7 @@ footer[id] {
 }
 
 .review.is-active .review__photo--sketch,
-.review:focus-within .review__photo--sketch {
+.review:has(:focus-visible) .review__photo--sketch {
   opacity: 0;
   transition: opacity var(--dur-hover) var(--ease-figma) 0s;
 }
@@ -1085,7 +1086,7 @@ footer[id] {
   justify-content: center;
   width: 280px;
   height: 280px;
-  padding: 32px 30px;
+  padding: 0 28px;          /* text block is centred vertically; sides leave room for the 223px quote */
   border-radius: var(--radius-round);
   background: var(--color-brown);
   color: var(--color-white);
@@ -1096,25 +1097,43 @@ footer[id] {
 }
 
 .review.is-active .review__card,
-.review:focus-within .review__card {
+.review:has(:focus-visible) .review__card {
   opacity: 1;
   visibility: visible;
   /* appears together with the colour photo, no delay */
   transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
 }
 
+/* Mouse: JS adds .is-hover on pointerenter and removes it on pointerleave (main.js).
+   Plain :hover is only a fallback for when JS hasn't loaded. */
+.review.is-hover {
+  z-index: 2;
+  transition-delay: 0s;
+}
+
+.review.is-hover .review__photo--sketch {
+  opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease-figma) 0s;
+}
+
+.review.is-hover .review__card {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
+}
+
 @media (hover: hover) {
-  .review:hover {
+  html:not(.js) .review:hover {
     z-index: 2;
     transition-delay: 0s;
   }
 
-  .review:hover .review__photo--sketch {
+  html:not(.js) .review:hover .review__photo--sketch {
     opacity: 0;
     transition: opacity var(--dur-hover) var(--ease-figma) 0s;
   }
 
-  .review:hover .review__card {
+  html:not(.js) .review:hover .review__card {
     opacity: 1;
     visibility: visible;
     transition: opacity var(--dur-hover) var(--ease-figma), visibility 0s 0s;
@@ -1125,15 +1144,17 @@ footer[id] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s-28);
+  gap: 55px;                /* 67 × 0.814 */
   width: 100%;
 }
 
+/* Text in the circle: the Figma card is 344px with 16/12px text; our circle is 280px,
+   so every size and gap is the layout's value × 0.814 (280 / 344) — same composition, just smaller */
 .review__text {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s-20);
+  gap: 30px;
   width: 100%;
 }
 
@@ -1141,29 +1162,37 @@ footer[id] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s-8);
-  width: 146px;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .review__name {
   font-style: normal;
-  font-size: var(--fs-body);
+  font-size: 13px;          /* 16 × 0.814 */
   color: var(--color-white-80);
 }
 
 .review__city {
-  font-size: var(--fs-small);
+  font-size: 10px;          /* 12 × 0.814 */
   color: var(--color-white-40);
 }
 
 .review__quote {
   width: 100%;
+  max-width: 223px;         /* 274 × 0.814 */
   font-weight: 600;
-  font-size: var(--fs-body);
+  font-size: 13px;
 }
 
 .review__link {
+  gap: 6px;
+  font-size: 13px;
   color: var(--color-white);
+}
+
+.review__link .link-arrow__icon {
+  width: 10.2px;
+  height: 9.8px;
 }
 
 .review__link:hover,
@@ -1646,7 +1675,7 @@ textarea.field {
 }
 
 .footer__tagline {
-  font-weight: 600;
+  font-weight: 400; /* regular everywhere: 600 from Figma read too heavy next to the light footer text */
   white-space: pre;
 }
 
@@ -1985,15 +2014,12 @@ textarea.field {
     height: 396px;
   }
 
-  /* full-size arch, centred: it bleeds past both screen edges equally on any phone */
-  /* Arch as in the mobile layout: the oval frame stays where it was (420×520, 108px below the panel top,
-     bleeding past the screen edges), but the photo inside is raised and slightly enlarged (×1.25, 230px up),
-     so the table and chairs fill the visible top of the arch. The frame is cut with clip-path
-     in the enlarged image's coordinates; these numbers stay hole-free on every phone width */
+  /* Arch as in the mobile prototype: the whole oval, scaled down and centred under the text,
+     so the table and chairs (56–91% of the photo height) fit above the bottom of the 396px panel;
+     only a strip of floor goes under the panel edge */
   .hero__arch {
-    top: -122px;              /* 108 − 230 */
-    width: 525px;             /* 420 × 1.25 */
-    clip-path: ellipse(210px 260px at 262.5px 490px); /* the 420×520 frame: centre 108+260 below the panel top */
+    top: 104px;
+    width: 256px;             /* 256×317: chairs end ~393px, inside the panel */
   }
 
   .hero__title {
@@ -2100,8 +2126,13 @@ textarea.field {
   }
 
   .benefits__text {
+    /* the desktop 373px basis would turn into a 373px height in this column layout
+       and push the label away from the title; here the block is just as tall as its text */
+    flex: none;
+    justify-content: flex-start;
     gap: var(--s-36);
     width: 100%;
+    height: auto;
   }
 
   .benefits__content {
@@ -2183,7 +2214,7 @@ textarea.field {
 
   .reviews__track {
     gap: var(--s-8);
-    padding: 0 var(--s-16) 150px var(--reviews-left); /* bottom = how far the card sticks out */
+    padding: 0 var(--s-16) 120px var(--reviews-left); /* bottom = how far the card sticks out (150 + 240 - 270) */
   }
 
   .review {
@@ -2192,36 +2223,42 @@ textarea.field {
   }
 
   .review__card {
-    /* straight below the face: covers only the shoulders and never sticks out sideways */
+    /* smaller circle straight below the face: covers only the shoulders, centred under the photo */
     top: 150px;
-    left: 0;
-    width: 270px;
-    height: 270px;
-    padding: 45px 32px;
+    left: 15px;               /* (270 - 240) / 2 */
+    width: 240px;
+    height: 240px;
+    padding: 0 20px;
   }
 
+  /* same idea on the phone: the mobile layout's 270px card scaled to our 240px (× 0.889) */
   .review__body {
-    gap: 33px;
+    gap: 28px;
     width: 100%;
-    height: 174px;
   }
 
   .review__text {
     display: contents;
   }
 
-  .review__author {
-    white-space: nowrap;
+  .review__name {
+    font-size: 12.5px;        /* 14 × 0.889 */
   }
 
-  .review__name {
-    font-size: var(--fs-body-m);
+  .review__city {
+    font-size: 10.5px;        /* 12 × 0.889 */
   }
 
   .review__quote {
-    width: 100%;
+    max-width: 180px;
     font-weight: 400;
-    font-size: var(--fs-body-m);
+    font-size: 12.5px;
+    line-height: 1.2;
+    text-wrap: balance;       /* even lines instead of one long + one short */
+  }
+
+  .review__link {
+    font-size: 14px;          /* 16 × 0.889 */
   }
 
   /* Section 6 */
@@ -2366,10 +2403,6 @@ textarea.field {
 
   .footer__subscribe-text {
     max-width: 293px;
-    font-weight: 400;
-  }
-
-  .footer__tagline {
     font-weight: 400;
   }
 
