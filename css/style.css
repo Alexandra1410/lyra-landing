@@ -2124,16 +2124,20 @@ textarea.field {
     height: 396px;
   }
 
-  /* Arch as in the mobile layout: the 420×520 oval frame starts 108px below the panel top and bleeds
-     past the screen edges; the photo inside is 520px square, raised 92px, so the table sits ~207px
-     down and the floor fills the panel's bottom edge to edge. The frame is cut with clip-path
-     in the photo's own coordinates: centre 108 + 260 + 92 = 460px from its top */
+  /* Arch as in the mobile layout: the 420×520 oval frame starts 108px below the panel top (centre at 368px)
+     and bleeds past the screen edges. The square photo inside is 500px, and shrinks with the screen
+     below 375px (133.33vw), so the chairs always keep ~30px of air on both sides; it is shifted 2px left
+     to centre the chair group. Its bottom stays 24px under the panel edge (top = 420 − size), so the
+     floor fills the panel to the edge. The frame is cut with clip-path in the photo's own coordinates:
+     centre x back on the screen centre (+2px), centre y = 368 − top = size − 52px */
   .hero__arch {
-    top: -92px;
-    width: 520px;
+    --arch-size: min(500px, 133.33vw);
+    top: calc(420px - var(--arch-size));
+    width: var(--arch-size);
     aspect-ratio: 1;
     border-radius: 0;
-    clip-path: ellipse(210px 260px at 50% 460px);
+    transform: translateX(calc(-50% - 2px));
+    clip-path: ellipse(210px 260px at calc(50% + 2px) calc(var(--arch-size) - 52px));
   }
 
   .hero__title {
