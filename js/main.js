@@ -453,16 +453,31 @@
 
     var closeLightbox = function () { lightbox.close(); };
 
+    var openCase = function (card) {
+      fillCase(cases.indexOf(card));
+      lightbox.showModal();
+      lightbox.scrollTop = 0;
+      document.documentElement.classList.add('has-lightbox');
+      if (window.lyraLenis) window.lyraLenis.stop();
+    };
+
+    // the photo of a case
     document.querySelectorAll('[data-lightbox-open]').forEach(function (link) {
       link.addEventListener('click', function (e) {
         var card = link.closest('.case');
         if (!card) return;
         e.preventDefault();
-        fillCase(cases.indexOf(card));
-        lightbox.showModal();
-        lightbox.scrollTop = 0;
-        document.documentElement.classList.add('has-lightbox');
-        if (window.lyraLenis) window.lyraLenis.stop();
+        openCase(card);
+      });
+    });
+
+    // «открыть проект» in a review: the card of that client's project (data-case-open = case number)
+    document.querySelectorAll('[data-case-open]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var card = document.querySelector('.case--' + link.dataset.caseOpen);
+        if (!card) return;
+        e.preventDefault();
+        openCase(card);
       });
     });
 

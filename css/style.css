@@ -1193,8 +1193,9 @@ footer[id],
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 55px;                /* 67 × 0.814 */
+  gap: 26px;                /* quote → «открыть проект»: with the 15px text a bigger gap pushed the link to the circle's edge */
   width: 100%;
+  translate: 0 -1px;        /* optical centring: the font's line boxes sit ~2px low in the circle */
 }
 
 /* Text in the circle: the Figma card is 344px with 16/12px text; our circle is 280px,
@@ -1239,6 +1240,17 @@ footer[id],
   gap: 6px;
   font-size: 0.8125rem;
   color: var(--color-white);
+}
+
+/* the link is only ~10px tall: a 44px tap area around it, nothing visible changes */
+.review__link {
+  position: relative;
+}
+
+.review__link::before {
+  content: "";
+  position: absolute;
+  inset: calc((44px - 100%) / -2) -8px;
 }
 
 .review__link .link-arrow__icon {
@@ -2369,7 +2381,7 @@ textarea.field {
 
   /* same idea on the phone: the mobile layout's 270px card scaled to our 240px (× 0.889) */
   .review__body {
-    gap: 20px;
+    gap: 16px;
     width: 100%;
   }
 
@@ -2394,7 +2406,7 @@ textarea.field {
   }
 
   .review__link {
-    font-size: 0.875rem;          /* 16 × 0.889 */
+    font-size: 0.8125rem;     /* 13px, as on desktop: keeps «открыть проект ↗» clear of the circle's edge */
   }
 
   /* Section 6 */

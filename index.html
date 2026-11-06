@@ -9,7 +9,7 @@
   <!-- brand font for the preloader and logo: fetch early so LYRA never shows in a fallback font -->
   <link rel="preload" href="fonts/NonBureau-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=84">
+  <link rel="stylesheet" href="css/style.css?v=87">
   <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
@@ -201,7 +201,7 @@
               <dl class="case__facts">
                 <div><dt>Площадь</dt><dd>32 м²</dd></div>
                 <div><dt>Срок</dt><dd>3 месяца</dd></div>
-                <div><dt>Город</dt><dd>Москва</dd></div>
+                <div><dt>Город</dt><dd>Казань</dd></div>
               </dl>
               <p class="case__about">На 32 метрах поместились спальное место, рабочий стол и гардероб. Мебель сделана на заказ под каждую нишу — ни одного пустого угла.</p>
             </div>
@@ -240,7 +240,7 @@
               <dl class="case__facts">
                 <div><dt>Площадь</dt><dd>136 м²</dd></div>
                 <div><dt>Срок</dt><dd>7 месяцев</dd></div>
-                <div><dt>Город</dt><dd>Казань</dd></div>
+                <div><dt>Город</dt><dd>Москва</dd></div>
               </dl>
               <p class="case__about">Дерево, камень, известковая штукатурка и живые растения. Материалы, которые приятно трогать и которые красиво стареют.</p>
             </div>
@@ -253,7 +253,7 @@
               <dl class="case__facts">
                 <div><dt>Площадь</dt><dd>180 м²</dd></div>
                 <div><dt>Срок</dt><dd>9 месяцев</dd></div>
-                <div><dt>Город</dt><dd>Подмосковье</dd></div>
+                <div><dt>Город</dt><dd>Сочи</dd></div>
               </dl>
               <p class="case__about">Два уровня для большой семьи: общая гостиная с камином внизу, тихие спальни наверху и прямой выход в сад.</p>
             </div>
@@ -289,7 +289,7 @@
                   </footer>
                   <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
                 </div>
-                <a class="review__link link-arrow" href="#cases" hidden>
+                <a class="review__link link-arrow" href="images/thumb-1.webp" data-case-open="1">
                   <span class="u-trim">открыть проект</span>
                   <span class="link-arrow__icon" aria-hidden="true"></span>
                 </a>
@@ -309,7 +309,7 @@
                   </footer>
                   <p class="review__quote">В маленькой студии нашлось место и для работы, и для гостей. Каждый метр продуман!</p>
                 </div>
-                <a class="review__link link-arrow" href="#cases" hidden>
+                <a class="review__link link-arrow" href="images/case-3.webp" data-case-open="3">
                   <span class="u-trim">открыть проект</span>
                   <span class="link-arrow__icon" aria-hidden="true"></span>
                 </a>
@@ -329,14 +329,15 @@
                   </footer>
                   <p class="review__quote">Смета не выросла ни на рубль, а ремонт закончили на неделю раньше. Рекомендую!</p>
                 </div>
-                <a class="review__link link-arrow" href="#cases" hidden>
+                <a class="review__link link-arrow" href="images/case-7.webp" data-case-open="7">
                   <span class="u-trim">открыть проект</span>
                   <span class="link-arrow__icon" aria-hidden="true"></span>
                 </a>
               </div>
             </blockquote>
           </li>
-          <!-- TODO: отзывы 4–5 — копии 1–2, чтобы слайдер прокручивался; заменить на новые отзывы -->
+          <!-- TODO: отзывы 4–5 — копии 1–2, чтобы слайдер прокручивался; заменить на новые отзывы.
+               «Открыть проект» (data-case-open = номер кейса) — черновое сопоставление по смыслу отзыва, согласовать с заказчиком -->
           <li class="review review--4" tabindex="0">
             <img loading="lazy" decoding="async" class="review__photo" src="images/review-1.webp" alt="Екатерина Иванова, клиентка студии">
             <img loading="lazy" decoding="async" class="review__photo review__photo--sketch" src="images/review-1-sketch.webp" alt="" aria-hidden="true" onerror="this.remove()">
@@ -349,7 +350,7 @@
                   </footer>
                   <p class="review__quote">Очень понравился подход: слушают клиента, предлагают классные решения, всё в срок!</p>
                 </div>
-                <a class="review__link link-arrow" href="#cases" hidden>
+                <a class="review__link link-arrow" href="images/thumb-1.webp" data-case-open="1">
                   <span class="u-trim">открыть проект</span>
                   <span class="link-arrow__icon" aria-hidden="true"></span>
                 </a>
@@ -368,7 +369,7 @@
                   </footer>
                   <p class="review__quote">В маленькой студии нашлось место и для работы, и для гостей. Каждый метр продуман!</p>
                 </div>
-                <a class="review__link link-arrow" href="#cases" hidden>
+                <a class="review__link link-arrow" href="images/case-3.webp" data-case-open="3">
                   <span class="u-trim">открыть проект</span>
                   <span class="link-arrow__icon" aria-hidden="true"></span>
                 </a>
@@ -571,7 +572,7 @@
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=26" defer></script>
+  <script src="js/main.js?v=27" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>
