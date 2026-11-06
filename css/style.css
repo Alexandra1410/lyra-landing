@@ -908,6 +908,12 @@ footer[id] {
 .case--6 { --case-h: 660px; grid-column: span 3; }
 .case--7 { --case-h: 460px; }
 
+/* case 07: the furniture sits low in the photo — in wide frames show the lower part
+   so the armchair and the sofa aren't cut off */
+.case--7 .case__img {
+  object-position: 50% 70%;
+}
+
 /* ---------- Section 5: Reviews ---------- */
 .reviews {
   --reviews-left: var(--indent-reviews);
@@ -2120,7 +2126,9 @@ textarea.field {
   }
 
   .case {
-    height: var(--case-h-m);
+    /* heights are from the 375px layout; on wider phones they grow with the screen,
+       otherwise the frames get wide and low and the photos over-zoomed */
+    height: max(var(--case-h-m), calc(var(--case-h-m) * 100vw / 375px));
     min-height: 0;
   }
 
@@ -2141,10 +2149,9 @@ textarea.field {
   .case--6 { --case-h-m: 245px; grid-column: span 1; }
   .case--7 { --case-h-m: 245px; grid-column: span 2; }
 
+  /* same crop as the mobile layout (sofa and table in the middle), without stretching the photo */
   .case--1 .case__img {
-    top: -64.66%;
-    height: 181.68%;
-    object-fit: fill;
+    object-position: 50% 79%;
   }
 
   /* Section 5 */
