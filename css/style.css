@@ -986,6 +986,30 @@ footer[id] {
   display: none;
 }
 
+/* Touch screens: after a swipe the strip settles on the nearest review, aligned to the left edge,
+   so the open review (and its text circle) is never half off-screen */
+@media (hover: none) {
+  .reviews__track {
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--reviews-left);
+  }
+
+  .review {
+    scroll-snap-align: start;
+  }
+}
+
+/* finger-sized tap area (44px) around the arrows without changing how they look */
+.reviews__arrow {
+  position: relative;
+}
+
+.reviews__arrow::before {
+  content: "";
+  position: absolute;
+  inset: max(-7px, calc((44px - 100%) / -2));
+}
+
 .review {
   position: relative;
   z-index: 1;

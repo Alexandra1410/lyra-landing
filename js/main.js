@@ -78,6 +78,7 @@
     if (scrollAnim) cancelAnimationFrame(scrollAnim);
     scrollTarget = to;
     track.style.scrollBehavior = 'auto'; // frames are set by hand
+    track.style.scrollSnapType = 'none'; // snapping would fight the hand-made frames
     var start = null;
     var duration = 650;
     function step(now) {
@@ -89,6 +90,7 @@
       } else {
         scrollAnim = null;
         track.style.scrollBehavior = '';
+        track.style.scrollSnapType = '';
         updateArrows();
         activateVisibleReview();
       }
