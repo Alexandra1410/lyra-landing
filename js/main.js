@@ -373,6 +373,46 @@
     ]);
   }
 
+  // «смотреть проект»: the case photo full screen with its caption.
+  // Without JS (or without <dialog>) the link simply opens the photo file.
+  var lightbox = document.querySelector('[data-lightbox]');
+  if (lightbox && typeof lightbox.showModal === 'function') {
+    var lbImg = lightbox.querySelector('[data-lightbox-img]');
+    var lbCaption = lightbox.querySelector('[data-lightbox-caption]');
+    var closeLightbox = function () { lightbox.close(); };
+
+    document.querySelectorAll('[data-lightbox-open]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var card = link.closest('.case');
+        var img = card && card.querySelector('.case__img');
+        if (!img) return;
+        e.preventDefault();
+        lbImg.srcset = img.srcset;
+        lbImg.sizes = 'min(1200px, 100vw)';
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        // line breaks in the caption (<br>) become spaces, so words don't stick together
+        var cap = card.querySelector('.case__caption').cloneNode(true);
+        cap.querySelectorAll('br').forEach(function (br) { br.replaceWith(' '); });
+        lbCaption.textContent = cap.textContent.replace(/\s+/g, ' ').trim();
+        lightbox.showModal();
+        document.documentElement.classList.add('has-lightbox');
+        if (window.lyraLenis) window.lyraLenis.stop();
+      });
+    });
+
+    lightbox.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
+    // a click on the dark area around the photo closes it (the photo and caption don't)
+    lightbox.addEventListener('click', function (e) {
+      if (!e.target.closest('.lightbox__figure') && !e.target.closest('[data-lightbox-close]')) closeLightbox();
+    });
+    // Esc, the close button or a click outside: unlock the page; focus returns to the photo link by itself
+    lightbox.addEventListener('close', function () {
+      document.documentElement.classList.remove('has-lightbox');
+      if (window.lyraLenis) window.lyraLenis.start();
+    });
+  }
+
   // Comment grows with the text (browsers without CSS field-sizing)
   document.querySelectorAll('[data-autogrow]').forEach(function (area) {
     if (window.CSS && CSS.supports('field-sizing', 'content')) return;
