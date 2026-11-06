@@ -1717,12 +1717,13 @@ textarea.field {
     transition: clip-path var(--transition), visibility 0s;
   }
 
+  /* logo and ✕ on the same line as the page header's logo and burger (centre 24px from the top) */
   .nav__top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--s-16) var(--s-12) 0;
-    height: 49px;
+    padding: 0 var(--s-12);
+    height: 48px;
   }
 
   .nav__top .logo {
@@ -1746,14 +1747,14 @@ textarea.field {
     flex-direction: column;
     align-items: stretch;
     justify-content: space-between;
-    padding: 49px var(--s-16) var(--s-16);
+    padding: 52px var(--s-16) var(--s-16); /* first item ~97px from the top, as in the layout */
   }
 
   .nav__list {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 45px;
+    gap: 39px; /* 61px from item to item, as in the layout */
   }
 
   .nav__link {

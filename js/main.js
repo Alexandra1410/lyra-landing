@@ -23,22 +23,25 @@
   var closeBtn = document.querySelector('[data-menu-close]');
   var mq = window.matchMedia('(max-width: 1279px)');
 
-  function setMenu(open) {
+  // byKeyboard: move focus into / out of the menu only for keyboard users —
+  // after a tap or a click the browser would otherwise draw a focus frame around the ✕
+  function setMenu(open, byKeyboard) {
     nav.classList.toggle('is-open', open);
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
     document.body.classList.toggle('is-locked', open);
     if (lenis) { if (open) lenis.stop(); else lenis.start(); }
-    if (open) closeBtn.focus();
+    if (open && byKeyboard) closeBtn.focus();
   }
 
-  burger.addEventListener('click', function () {
-    setMenu(!nav.classList.contains('is-open'));
+  // a click fired by Enter/Space has detail === 0
+  burger.addEventListener('click', function (e) {
+    setMenu(!nav.classList.contains('is-open'), e.detail === 0);
   });
 
-  closeBtn.addEventListener('click', function () {
+  closeBtn.addEventListener('click', function (e) {
     setMenu(false);
-    burger.focus();
+    if (e.detail === 0) burger.focus();
   });
 
   nav.addEventListener('click', function (e) {
