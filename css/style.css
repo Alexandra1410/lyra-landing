@@ -690,6 +690,7 @@ footer[id],
 }
 
 .benefits__title {
+  min-height: 4.8em;   /* 4 lines × 1.2: slides with 3-line titles keep the same place, nothing jumps */
   color: var(--color-sand);
   white-space: nowrap; /* line breaks come from <br>, like in Figma */
 }
@@ -2275,6 +2276,8 @@ textarea.field {
 
   .benefits__title {
     white-space: normal;
+    /* 32px from ~330px up; narrower phones shrink it so «в которой хочется» stays on one line (4 lines, no jump) */
+    font-size: min(var(--fs-h2-m), calc((100vw - 32px) * 0.104));
   }
 
   /* Section 4 */
