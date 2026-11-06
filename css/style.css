@@ -979,6 +979,33 @@ footer[id],
   cursor: default;
 }
 
+/* wider than the 1440 layout the review circles grow with the screen, so do the arrows
+   (30px at 1440 → 53px at 2560), otherwise they get lost in the corner */
+@media (min-width: 1441px) {
+  .reviews__arrow {
+    width: calc(30 / 1440 * 100vw);
+    height: calc(30 / 1440 * 100vw);
+  }
+
+  .reviews__controls {
+    gap: calc(8 / 1440 * 100vw);
+  }
+}
+
+/* mouse: the strip can be dragged like a finger swipe */
+.reviews__track.is-draggable {
+  cursor: grab;
+}
+
+.reviews__track.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.reviews__track img {
+  -webkit-user-drag: none;
+}
+
 .reviews__arrow-icon {
   display: block;
   width: 100%;
@@ -3409,9 +3436,13 @@ html.has-lightbox {
     justify-content: center;
   }
 
+  /* the card scrolls under it and the photo is often light: a solid brown circle keeps the cross visible */
   .lightbox__close {
-    top: var(--s-4, 4px);
-    right: var(--s-4, 4px);
+    top: var(--s-8);
+    right: var(--s-8);
+    z-index: 1;
+    border-radius: 50%;
+    background: var(--color-brown);
   }
 }
 

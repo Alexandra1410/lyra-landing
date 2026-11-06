@@ -212,6 +212,39 @@
   setActiveReview(reviewItems[0]); // phone: the first review is open from the start
   syncDefault(0);                   // mouse: the same one is open by default
 
+  // Mouse: drag the strip like a finger swipe (a PC wheel only scrolls the page up and down).
+  // A drag longer than a few pixels doesn't count as a click on a review or its link.
+  var drag = null;
+  var dragMoved = false;
+  track.classList.add('is-draggable');
+  track.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    drag = { x: e.clientX, scroll: track.scrollLeft };
+    dragMoved = false;
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var dx = e.clientX - drag.x;
+    if (!dragMoved && Math.abs(dx) < 5) return;
+    if (!dragMoved) {
+      dragMoved = true;
+      if (scrollAnim) { cancelAnimationFrame(scrollAnim); scrollAnim = null; }
+      track.style.scrollBehavior = 'auto';
+      track.classList.add('is-dragging');
+    }
+    track.scrollLeft = drag.scroll - dx;
+  }, { passive: true });
+  window.addEventListener('pointerup', function () {
+    if (!drag) return;
+    drag = null;
+    track.classList.remove('is-dragging');
+    track.style.scrollBehavior = '';
+    if (dragMoved) activateVisibleReview();
+  });
+  track.addEventListener('click', function (e) {
+    if (dragMoved) { e.preventDefault(); e.stopPropagation(); dragMoved = false; }
+  }, true);
+
   prevBtn.addEventListener('click', function () { scrollReviews(-1); });
   nextBtn.addEventListener('click', function () { scrollReviews(1); });
   track.addEventListener('scroll', updateArrows, { passive: true });
@@ -510,7 +543,12 @@
     var openCase = function (card) {
       fillCase(cases.indexOf(card));
       lightbox.showModal();
+      // showModal() focuses the first button («обсудить похожий проект») and the phone layout
+      // scrolls down to it, hiding the photo and the close cross: start at the top, on the cross
+      var closeCross = lightbox.querySelector('[data-lightbox-close]');
+      if (closeCross) closeCross.focus({ preventScroll: true });
       lightbox.scrollTop = 0;
+      requestAnimationFrame(function () { lightbox.scrollTop = 0; });
       document.documentElement.classList.add('has-lightbox');
       if (window.lyraLenis) window.lyraLenis.stop();
     };
@@ -691,13 +729,17 @@
     });
   }
 
+  // Which photo each thumb shows (photos[] index). A click swaps: the clicked photo becomes the slide,
+  // the slide takes its place among the thumbs, the other thumbs stay where they are —
+  // so clicking the same thumb again brings the previous photo back.
+  var thumbSlides = [1, 2, 3, 4];
   function goToSlide(index) {
     if (index === current) return;
+    var slot = thumbSlides.indexOf(index);
+    thumbSlides[slot] = current;
+    swapImage(thumbs[slot], photos[current], false);
     current = index;
     swapImage(bigPhoto, photos[index], true);
-    // Thumbs show the other four photos in their original order
-    var rest = photos.filter(function (_, i) { return i !== index; });
-    thumbs.forEach(function (thumb, i) { swapImage(thumb, rest[i], false); });
     swapTitle(titles[index]);
     dots.forEach(function (dot, i) {
       var active = i === index;
@@ -707,23 +749,19 @@
     });
   }
 
+  // dots 01–05: open that photo (it swaps with the slide in the same way)
   dots.forEach(function (dot) {
     dot.addEventListener('click', function () { goToSlide(Number(dot.dataset.slide)); });
   });
 
-  // A click on a small photo opens that photo as the slide.
-  // Thumbs show the other four slides in order, so thumb i = i-th slide that isn't current
-  function slideForThumb(i) {
-    return photos.map(function (_, k) { return k; }).filter(function (k) { return k !== current; })[i];
-  }
   thumbs.forEach(function (thumb, i) {
     thumb.setAttribute('role', 'button');
     thumb.setAttribute('tabindex', '0');
-    thumb.addEventListener('click', function () { goToSlide(slideForThumb(i)); });
+    thumb.addEventListener('click', function () { goToSlide(thumbSlides[i]); });
     thumb.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        goToSlide(slideForThumb(i));
+        goToSlide(thumbSlides[i]);
       }
     });
   });
