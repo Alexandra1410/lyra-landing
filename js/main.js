@@ -108,8 +108,8 @@
   // Two modes, chosen by what the visitor actually uses, not by what the browser claims
   // ((hover: none) is wrong on some laptops with touchpads/touchscreens and in DevTools device mode):
   // — mouse: the review at the start of the strip is open by default (.is-default) so its words
-  //   are readable without hovering; hovering another one opens it instead (.is-hover) and the
-  //   default closes; when the cursor leaves, the default opens again;
+  //   are readable without hovering; hovering another one opens it and it becomes the new default,
+  //   so when the cursor leaves, the last hovered review stays open (not the first one);
   // — touch (a phone has no cursor): one review is always open (.is-active) — the first on load,
   //   then the one an arrow or a swipe brings into view, or the one tapped. Opening/closing uses
   //   the same CSS transitions as the mouse hover, so the animation is identical.
@@ -165,6 +165,7 @@
     r.addEventListener('pointerenter', function (e) {
       if (e.pointerType !== 'mouse') return;
       r.classList.add('is-hover');
+      defaultReview = r; // stays open after the cursor leaves
       syncDefault(0);
     });
     r.addEventListener('pointerleave', function () {
@@ -172,8 +173,12 @@
       syncDefault(150);
     });
   });
-  // keyboard: Tab onto a review opens it (CSS :focus-visible), the default steps aside meanwhile
-  track.addEventListener('focusin', function () { syncDefault(0); });
+  // keyboard: Tab onto a review opens it (CSS :focus-visible) and, like hover, makes it the default
+  track.addEventListener('focusin', function (e) {
+    var r = e.target.closest('.review');
+    if (r) defaultReview = r;
+    syncDefault(0);
+  });
   track.addEventListener('focusout', function () { syncDefault(150); });
   // safety net: the cursor left the browser window — close hovered ones, the default stays
   document.documentElement.addEventListener('pointerleave', function () {

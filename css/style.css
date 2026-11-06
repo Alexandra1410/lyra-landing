@@ -2309,7 +2309,7 @@ textarea.field {
   }
 
   .cases__title {
-    gap: 0;
+    gap: var(--s-8); /* «53» must not touch the last letter */
   }
 
   .cases__head {
