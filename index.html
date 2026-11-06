@@ -48,7 +48,7 @@
       setTimeout(reveal, 3000);
     })(document);
   </script>
-  <link rel="stylesheet" href="css/style.css?v=95">
+  <link rel="stylesheet" href="css/style.css?v=97">
 </head>
 <body>
   <!-- Preloader: shown only with JS, removed once the first screen has loaded -->
@@ -68,7 +68,7 @@
             <img src="icons/burger.svg" width="30" height="9" alt="">
           </button>
 
-          <nav class="nav" id="site-nav" aria-label="Основная навигация">
+          <nav class="nav" id="site-nav" aria-label="Основная навигация" data-lenis-prevent>
             <div class="nav__top">
               <a class="logo logo--brown u-trim" href="#" aria-label="LYRA — на главную">LYRA</a>
               <button class="nav__close" type="button" aria-label="Закрыть меню" data-menu-close>
@@ -582,7 +582,8 @@
   </div>
 
   <!-- Project card ("смотреть проект"): photo + details. Native <dialog>: Esc closes it, focus stays inside and returns to the photo -->
-  <dialog class="lightbox" aria-labelledby="lightbox-title" data-lightbox>
+  <!-- data-lenis-prevent: the page scroll is stopped while the card is open, but the card itself must scroll (wheel and finger) -->
+  <dialog class="lightbox" aria-labelledby="lightbox-title" tabindex="-1" data-lightbox data-lenis-prevent>
     <div class="lightbox__layout">
       <div class="lightbox__media">
         <img class="lightbox__img" src="" alt="" data-lightbox-img>
@@ -615,7 +616,7 @@
   </dialog>
 
   <script src="js/vendor/lenis.min.js" defer></script>
-  <script src="js/main.js?v=34" defer></script>
+  <script src="js/main.js?v=35" defer></script>
   <script src="js/site.js?v=1" defer></script>
 </body>
 </html>

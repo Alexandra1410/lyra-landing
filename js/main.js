@@ -540,13 +540,15 @@
 
     var closeLightbox = function () { lightbox.close(); };
 
-    var openCase = function (card) {
+    var openCase = function (card, byKeyboard) {
       fillCase(cases.indexOf(card));
       lightbox.showModal();
       // showModal() focuses the first button («обсудить похожий проект») and the phone layout
       // scrolls down to it, hiding the photo and the close cross: start at the top, on the cross
+      // keyboard: focus (with its ring) goes to the cross; click/tap: to the card itself, no ring
       var closeCross = lightbox.querySelector('[data-lightbox-close]');
-      if (closeCross) closeCross.focus({ preventScroll: true });
+      if (byKeyboard && closeCross) closeCross.focus({ preventScroll: true });
+      else lightbox.focus({ preventScroll: true });
       lightbox.scrollTop = 0;
       requestAnimationFrame(function () { lightbox.scrollTop = 0; });
       document.documentElement.classList.add('has-lightbox');
@@ -559,7 +561,7 @@
         var card = link.closest('.case');
         if (!card) return;
         e.preventDefault();
-        openCase(card);
+        openCase(card, e.detail === 0); // detail 0 = Enter on the keyboard, not a click or tap
       });
     });
 
@@ -569,7 +571,7 @@
         var card = document.querySelector('.case--' + link.dataset.caseOpen);
         if (!card) return;
         e.preventDefault();
-        openCase(card);
+        openCase(card, e.detail === 0); // detail 0 = Enter on the keyboard, not a click or tap
       });
     });
 

@@ -3179,6 +3179,10 @@ html.lenis body {
   justify-content: center;
 }
 
+.lightbox:focus {
+  outline: none; /* focused itself only after a click/tap open, so the first Tab lands inside */
+}
+
 .lightbox::backdrop {
   background: var(--color-brown); /* solid: the page behind would only distract from the project */
 }
@@ -3436,13 +3440,23 @@ html.has-lightbox {
     justify-content: center;
   }
 
-  /* the card scrolls under it and the photo is often light: a solid brown circle keeps the cross visible */
-  .lightbox__close {
-    top: var(--s-8);
-    right: var(--s-8);
+  /* a brown strip across the top, like the site header: the cross lives in it and the card
+     scrolls under it, so the cross is always visible and never sits on the (often light) photo */
+  .lightbox[open]::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1;
-    border-radius: 50%;
+    height: 56px;
     background: var(--color-brown);
+  }
+
+  .lightbox__close {
+    top: 6px;
+    right: var(--s-8);
+    z-index: 2;
   }
 }
 
