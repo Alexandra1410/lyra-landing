@@ -475,10 +475,15 @@ footer[id],
   position: absolute;
   top: 140px;
   left: 50%;
-  /* 420×520 by design; on narrow tablets it shrinks to fit its half with 20px each side */
+  /* 420×520 oval by design; on narrow tablets it shrinks to fit its half with 20px each side.
+     The square photo fills the oval's height and is centred: exactly the layout's crop
+     (pixel-matched against the old oval cut-out) */
   width: min(420px, calc(100% - 40px));
   height: auto;
   aspect-ratio: 420 / 520;
+  object-fit: cover;
+  object-position: 50% 0;
+  border-radius: 50%;
   transform: translateX(-50%);
 }
 
@@ -2148,12 +2153,16 @@ textarea.field {
     height: 396px;
   }
 
-  /* Arch as in the mobile prototype: the whole oval, scaled down and centred under the text,
-     so the table and chairs (56–91% of the photo height) fit above the bottom of the 396px panel;
-     only a strip of floor goes under the panel edge */
+  /* Arch as in the mobile layout: the 420×520 oval frame starts 108px below the panel top and bleeds
+     past the screen edges; the photo inside is 520px square, raised 92px, so the table sits ~207px
+     down and the floor fills the panel's bottom edge to edge. The frame is cut with clip-path
+     in the photo's own coordinates: centre 108 + 260 + 92 = 460px from its top */
   .hero__arch {
-    top: 104px;
-    width: 256px;             /* 256×317: chairs end ~393px, inside the panel */
+    top: -92px;
+    width: 520px;
+    aspect-ratio: 1;
+    border-radius: 0;
+    clip-path: ellipse(210px 260px at 50% 460px);
   }
 
   .hero__title {
